@@ -5,6 +5,7 @@ import Providers from './providers';
 import { CTAProvider } from '@/context/CTAContext';
 import CTAForm from '@/components/CTAForm';
 import MetaPixelProvider from '@/components/MetaPixel';
+import GoogleTagManagerProvider from '@/components/GoogleTagManager';
 
 export const metadata = {
   title: 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
@@ -33,6 +34,19 @@ export const metadata = {
   metadataBase: new URL('https://eduexpress.info'),
   alternates: {
     canonical: '/',
+  },
+  icons: {
+    icon: [
+      { url: '/brand/icon.png', sizes: 'any' },
+      { url: '/brand/icon.png', sizes: '32x32', type: 'image/png' },
+      { url: '/brand/icon.png', sizes: '16x16', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/brand/icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      { rel: 'icon', url: '/brand/icon.png' },
+    ],
   },
   openGraph: {
     title: 'EduExpress International — Study Abroad & Scholarships',
@@ -149,14 +163,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-white text-brand-dark" suppressHydrationWarning>
         <Providers>
-          <MetaPixelProvider>
-            <CTAProvider>
-              <Navbar />
-              <main className="pt-20">{children}</main>
-              <Footer />
-              <CTAForm />
-            </CTAProvider>
-          </MetaPixelProvider>
+          <GoogleTagManagerProvider>
+            <MetaPixelProvider>
+              <CTAProvider>
+                <Navbar />
+                <main className="pt-0 min-h-screen">{children}</main>
+                <Footer />
+                <CTAForm />
+              </CTAProvider>
+            </MetaPixelProvider>
+          </GoogleTagManagerProvider>
         </Providers>
       </body>
     </html>

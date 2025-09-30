@@ -1,5 +1,6 @@
 // src/components/Footer.tsx
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaWhatsapp, FaEnvelope, FaPhone, FaMapMarkerAlt, FaStar } from 'react-icons/fa';
 
 export default function Footer() {
@@ -14,10 +15,16 @@ export default function Footer() {
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {/* Company Info */}
             <div className="text-center md:text-left">
-              {/* Logo Placeholder - Replace with your logo */}
+              {/* Logo */}
               <div className="mb-4 flex items-center justify-center md:justify-start">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-xl">E</span>
+                <div className="w-32 h-20 relative">
+                  <Image
+                    src="/brand/white-logo.png"
+                    alt="EduExpress International Logo"
+                    width={128}
+                    height={80}
+                    className="w-full h-full object-contain"
+                  />
                 </div>
               </div>
               <p className="text-white/90 mb-4 max-w-sm">

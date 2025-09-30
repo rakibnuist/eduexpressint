@@ -2,6 +2,8 @@
 
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
+import FloatingElements from '@/components/FloatingElements';
+import { useRouter } from 'next/navigation';
 import { 
   FaGraduationCap, 
   FaGlobe, 
@@ -19,6 +21,7 @@ import {
 
 export default function AboutPage() {
   const { openCTA } = useCTA();
+  const router = useRouter();
 
   const handleCTAClick = (source: string) => {
     trackViewContent('About Page CTA Click', {
@@ -29,8 +32,20 @@ export default function AboutPage() {
     openCTA(source);
   };
 
+  const handleServicesClick = () => {
+    trackViewContent('About Page Services Click', {
+      content_category: 'About Page',
+      content_ids: ['about-services'],
+      value: 1
+    });
+    router.push('/services');
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50" style={{ paddingTop: '35px' }}>
+      {/* Floating Elements */}
+      <FloatingElements variant="about" intensity="medium" />
+      
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -60,7 +75,7 @@ export default function AboutPage() {
                 Get Free Consultation
               </button>
               <button
-                onClick={() => handleCTAClick('About Hero - Our Services')}
+                onClick={handleServicesClick}
                 className="bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 flex items-center gap-3"
               >
                 <FaHandshake className="h-5 w-5" />

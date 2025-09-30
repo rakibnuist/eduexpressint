@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
+import FloatingElements from '@/components/FloatingElements';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
@@ -32,7 +33,10 @@ import {
   FaAward,
   FaBuilding,
   FaMicroscope,
-  FaLaptopCode
+  FaLaptopCode,
+  FaHandshake,
+  FaPassport,
+  FaCrown
 } from 'react-icons/fa';
 
 export default function UKPage() {
@@ -64,94 +68,150 @@ export default function UKPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden">
+    <div className="min-h-screen bg-gray-50 pt-8">
+      {/* Floating Elements */}
+      <FloatingElements variant="destinations" intensity="medium" />
+      
+      {/* Enhanced Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden min-h-screen flex items-center">
+        {/* Enhanced Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-blue-400/15 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-purple-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-indigo-400/15 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-56 h-56 bg-purple-400/10 rounded-full blur-3xl animate-pulse delay-300"></div>
+        </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-20 animate-float-slow opacity-20">
+            <FaCrown className="h-12 w-12 text-blue-400" />
+          </div>
+          <div className="absolute top-40 right-32 animate-float-slow delay-1000 opacity-20">
+            <FaGraduationCap className="h-10 w-10 text-purple-400" />
+          </div>
+          <div className="absolute bottom-32 left-40 animate-float-slow delay-500 opacity-20">
+            <FaUniversity className="h-14 w-14 text-indigo-400" />
+          </div>
+          <div className="absolute bottom-20 right-20 animate-float-slow delay-700 opacity-20">
+            <FaCertificate className="h-8 w-8 text-blue-400" />
+          </div>
+        </div>
+        
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
-                <FaStar className="h-5 w-5" />
-                January 2026, May 2026 & September 2026 Intakes Available
-              </div>
-              
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Study in the <span className="text-yellow-400">United Kingdom</span>
-              </h1>
-              
-              <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-                Experience world-class education at prestigious UK universities with excellent scholarship opportunities and global recognition.
-              </p>
-
-              <div className="flex flex-wrap gap-4 mb-8">
-                <button
-                  onClick={() => handleCTAClick('UK Hero - Explore Scholarships')}
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
-                >
-                  <FaTrophy className="h-5 w-5" />
-                  Explore Scholarships
-                </button>
-                <button
-                  onClick={() => handleCTAClick('UK Hero - Free Consultation')}
-                  className="bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 flex items-center gap-3"
-                >
-                  <FaPhone className="h-5 w-5" />
-                  Get Free Consultation
-                </button>
-              </div>
-
-              {/* Key Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">£15k-£35k</div>
-                  <div className="text-sm text-gray-300">Tuition per year</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">160+</div>
-                  <div className="text-sm text-gray-300">Universities</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">98%</div>
-                  <div className="text-sm text-gray-300">Success Rate</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">£800-£1200</div>
-                  <div className="text-sm text-gray-300">Monthly Living</div>
-                </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-20 w-full">
+          <div className="text-center">
+            {/* Enhanced Intake Badge */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
+                <FaCalendarAlt className="h-6 w-6" />
+                January, May & September 2026 Intakes Available
+                <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
 
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold mb-6 text-center">🎓🇬🇧 STUDY IN THE UK – EXCELLENT OPPORTUNITIES!</h3>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <FaTrophy className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">Chevening & Commonwealth Scholarships</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaAward className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">University Merit Scholarships up to £10,000/year</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaUniversity className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">Russell Group Universities - World Rankings</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaRocket className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">Post-Study Work Visa Available</span>
-                  </div>
+            {/* Enhanced Main Heading */}
+            <h1 className="text-6xl lg:text-8xl font-bold mb-8 leading-tight">
+              Study in the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-indigo-400 animate-pulse">United Kingdom</span>
+            </h1>
+            
+            {/* Enhanced Subheading */}
+            <div className="mb-8">
+              <p className="text-3xl lg:text-4xl text-blue-100 mb-4 font-bold">
+                👑 World-Class Education
+              </p>
+              <p className="text-2xl lg:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400 font-bold">
+                From £15,000 Per Year!
+              </p>
+            </div>
+            
+            {/* Enhanced Description */}
+            <p className="text-xl lg:text-2xl text-blue-200 mb-12 leading-relaxed max-w-5xl mx-auto">
+              Experience <span className="font-bold text-blue-400">world-class education</span> at 
+              <span className="font-bold text-purple-400"> Russell Group universities</span> with 
+              <span className="font-bold text-indigo-400"> excellent scholarship opportunities</span> and global recognition.
+            </p>
+            
+            {/* Enhanced Key Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaDollarSign className="h-10 w-10 text-white" />
                 </div>
+                <div className="text-5xl font-bold text-blue-400 mb-2">£15k-£35k</div>
+                <div className="text-lg text-blue-200 font-medium">Annual Tuition</div>
+                <div className="text-sm text-blue-300 mt-2">With Scholarships Available</div>
+                </div>
+              
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaTrophy className="h-10 w-10 text-white" />
+                </div>
+                <div className="text-5xl font-bold text-purple-400 mb-2">160+</div>
+                <div className="text-lg text-blue-200 font-medium">Universities</div>
+                <div className="text-sm text-blue-300 mt-2">Russell Group Excellence</div>
+              </div>
 
-                <div className="mt-8 p-6 bg-gradient-to-r from-blue-500/30 to-purple-500/30 rounded-xl border-2 border-blue-400/50">
-                  <div className="text-center">
-                    <div className="text-lg text-blue-200 mb-2 font-bold">🎯 JANUARY, MAY & SEPTEMBER 2026 INTAKES!</div>
-                    <div className="text-xl font-bold text-yellow-400 mb-2">Apply now for world-class UK education!</div>
-                    <div className="text-sm text-blue-200">Multiple intake opportunities available</div>
-                  </div>
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaHome className="h-10 w-10 text-white" />
                 </div>
+                <div className="text-5xl font-bold text-indigo-400 mb-2">£800-£1200</div>
+                <div className="text-lg text-blue-200 font-medium">Monthly Living</div>
+                <div className="text-sm text-blue-300 mt-2">Including London</div>
+              </div>
+            </div>
+
+            {/* Enhanced CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+                <button 
+                  onClick={() => handleCTAClick('uk-hero')}
+                className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-6 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-4 shadow-2xl text-xl group"
+                >
+                <FaRocket className="h-6 w-6 group-hover:animate-bounce" />
+                Apply Now - Start Your Journey!
+                <FaStar className="h-5 w-5 animate-pulse" />
+                </button>
+                <button 
+                  onClick={() => handleCTAClick('uk-hero-consultation')}
+                className="bg-white/15 backdrop-blur-sm border-2 border-white/40 hover:bg-white/25 text-white font-bold py-6 px-12 rounded-2xl transition-all duration-300 flex items-center justify-center gap-4 text-xl group"
+                >
+                <FaPhone className="h-6 w-6 group-hover:animate-pulse" />
+                  Free Consultation
+                <FaHandshake className="h-5 w-5" />
+                </button>
+            </div>
+            
+            {/* Additional Benefits */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaCrown className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-blue-200">Russell Group</div>
+                <div className="text-sm text-blue-300">24 Elite Universities</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaTrophy className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-blue-200">Scholarships</div>
+                <div className="text-sm text-blue-300">Chevening & Commonwealth</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaRocket className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-blue-200">Post-Study Work</div>
+                <div className="text-sm text-blue-300">2-Year Graduate Route</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaPassport className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-blue-200">Global Recognition</div>
+                <div className="text-sm text-blue-300">World-Class Degrees</div>
               </div>
             </div>
           </div>
@@ -163,9 +223,11 @@ export default function UKPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
-              <FaCalendarAlt className="h-5 w-5" />
-              January, May & September 2026 Intakes Available
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">
+                <FaCalendarAlt className="h-5 w-5" />
+                January, May & September 2026 Intakes Available
+              </div>
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Study in the UK with <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">World-Class Education</span>
@@ -276,25 +338,25 @@ export default function UKPage() {
         </div>
       </section>
 
-      {/* Navigation Tabs */}
+      {/* Enhanced Navigation Tabs */}
       <section className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex overflow-x-auto">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex justify-center overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 font-semibold whitespace-nowrap transition-all duration-300 border-b-2 hover:bg-gray-50 ${
-                    activeTab === tab.id
-                      ? 'text-red-600 border-red-600 bg-red-50 shadow-sm'
-                      : 'text-gray-600 border-transparent hover:text-red-600 hover:border-red-300'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
-                </button>
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-3 px-6 py-4 font-semibold whitespace-nowrap transition-all duration-300 border-b-2 hover:bg-gray-50 ${
+                  activeTab === tab.id
+                      ? 'text-blue-600 border-blue-600 bg-blue-50 shadow-sm'
+                      : 'text-gray-600 border-transparent hover:text-blue-600 hover:border-blue-300'
+                }`}
+              >
+                  <Icon className="h-5 w-5" />
+                {tab.label}
+              </button>
               );
             })}
           </div>
@@ -302,64 +364,117 @@ export default function UKPage() {
       </section>
 
       {/* Tab Content */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className="space-y-12">
-            {/* Why Study in the UK */}
-            <section>
-              <h2 className="text-4xl font-bold text-center mb-12">Why Study in the UK?</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                  { icon: FaTrophy, title: "World-Class Universities", desc: "Russell Group institutions with global rankings" },
-                  { icon: FaDollarSign, title: "Scholarship Opportunities", desc: "Chevening, Commonwealth & university scholarships" },
-                  { icon: FaHome, title: "Post-Study Work Visa", desc: "2-year work opportunity after graduation" },
-                  { icon: FaLanguage, title: "English Language", desc: "Native English-speaking environment" },
-                  { icon: FaGlobe, title: "Global Recognition", desc: "Degrees recognized worldwide with excellent reputation" },
-                  { icon: FaRocket, title: "Career Opportunities", desc: "Strong job market and networking opportunities" },
-                  { icon: FaBookOpen, title: "Diverse Programs", desc: "From traditional arts to cutting-edge technology" },
-                  { icon: FaUsers, title: "International Community", desc: "500K+ international students from 180+ countries" }
-                ].map((feature, index) => {
-                  const Icon = feature.icon;
-                  return (
-                    <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-                      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Icon className="h-8 w-8 text-red-600" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.desc}</p>
-                    </div>
-                  );
-                })}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          {/* Enhanced Overview Tab */}
+          {activeTab === 'overview' && (
+            <div className="space-y-16">
+              <div className="text-center">
+                <h2 className="text-4xl lg:text-5xl font-bold mb-6">Why Study in the UK?</h2>
+                <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                  🌟 The UK offers the perfect combination of <span className="font-bold text-blue-600">world-class education</span>, 
+                  <span className="font-bold text-purple-600"> Russell Group universities</span>, and 
+                  <span className="font-bold text-indigo-600"> excellent scholarship opportunities</span> with global recognition.
+                </p>
               </div>
-            </section>
 
-            {/* Intakes */}
-            <section>
-              <h3 className="text-3xl font-bold text-center mb-8">Available Intakes</h3>
-              <div className="grid md:grid-cols-3 gap-8">
-                <div className="bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl p-8 text-white text-center">
-                  <FaCalendarAlt className="h-16 w-16 mx-auto mb-4" />
-                  <h4 className="text-3xl font-bold mb-4">January Intake</h4>
-                  <p className="text-xl mb-4">Spring Semester</p>
-                  <p className="text-blue-100">Available for 2026</p>
+              {/* Enhanced Feature Cards */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-blue-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaCrown className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Russell Group Universities</h3>
+                  <p className="text-gray-600 mb-4">24 elite universities with world-class rankings and global recognition.</p>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <p className="text-blue-800 font-semibold text-sm">👑 Oxford, Cambridge, Imperial & More</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl p-8 text-white text-center">
-                  <FaCalendarAlt className="h-16 w-16 mx-auto mb-4" />
-                  <h4 className="text-3xl font-bold mb-4">May Intake</h4>
-                  <p className="text-xl mb-4">Summer Semester</p>
-                  <p className="text-purple-100">Available for 2026</p>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-purple-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaTrophy className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Scholarship Opportunities</h3>
+                  <p className="text-gray-600 mb-4">Chevening, Commonwealth, and university-specific scholarships available.</p>
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <p className="text-purple-800 font-semibold text-sm">🎓 Full Funding Available</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-r from-indigo-500 to-blue-600 rounded-2xl p-8 text-white text-center">
-                  <FaCalendarAlt className="h-16 w-16 mx-auto mb-4" />
-                  <h4 className="text-3xl font-bold mb-4">September Intake</h4>
-                  <p className="text-xl mb-4">Autumn Semester</p>
-                  <p className="text-indigo-100">Available for 2026</p>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-indigo-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaRocket className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Post-Study Work Visa</h3>
+                  <p className="text-gray-600 mb-4">2-year Graduate Route visa allowing work opportunities after graduation.</p>
+                  <div className="bg-indigo-50 p-4 rounded-lg">
+                    <p className="text-indigo-800 font-semibold text-sm">💼 Career Opportunities</p>
+                  </div>
                 </div>
               </div>
-            </section>
-          </div>
-        )}
+
+              {/* Enhanced Special Features Section */}
+              <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-indigo-50 p-12 rounded-3xl border border-blue-100">
+                <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">🌟 Special Features & Benefits</h3>
+                <div className="grid lg:grid-cols-2 gap-12">
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                      <FaStar className="h-6 w-6 text-blue-500" />
+                      Key Benefits
+                    </h4>
+                    <div className="space-y-4">
+                      {[
+                        "Russell Group & world-class universities",
+                        "Chevening & Commonwealth scholarships", 
+                        "No entrance exams for most programs",
+                        "Direct UCAS application process",
+                        "Affordable living costs (£800-1200/month)",
+                        "English-speaking environment",
+                        "Modern facilities and technology",
+                        "Strong international community"
+                      ].map((feature, index) => (
+                        <div key={index} className="flex items-start gap-3 p-4 bg-white rounded-xl shadow-sm">
+                          <FaCheckCircle className="h-6 w-6 text-blue-500 mt-1 flex-shrink-0" />
+                          <span className="text-gray-700 font-medium">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                      <FaCalendarAlt className="h-6 w-6 text-blue-500" />
+                      Intake Information
+                    </h4>
+                    <div className="space-y-6">
+                      <div className="bg-white p-6 rounded-xl shadow-sm">
+                        <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
+                        <div className="space-y-2">
+                          {["January 2026", "May 2026", "September 2026"].map((intake, index) => (
+                            <div key={index} className="flex items-center gap-3">
+                              <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                              <span className="text-gray-700 font-medium">{intake}</span>
+                  </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-6 rounded-xl text-white">
+                        <h5 className="font-bold mb-2">Visa Success Rate</h5>
+                        <p className="text-blue-100">98%+ success rate with our expert guidance and proven application process</p>
+                      </div>
+                      
+                      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 p-6 rounded-xl text-white">
+                        <h5 className="font-bold mb-2">Processing Time</h5>
+                        <p className="text-purple-100">Quick 2-3 week visa processing with streamlined documentation</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         {/* Scholarships Tab */}
         {activeTab === 'scholarships' && (
@@ -1047,52 +1162,76 @@ export default function UKPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Ready to Start Your Journey in the UK?</h2>
-            <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-              Join thousands of international students who have chosen the UK for their education. 
-              Get expert guidance and support throughout your application process.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <button
-                onClick={() => handleCTAClick('UK Bottom CTA - Free Consultation')}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg"
-              >
-                <FaPhone className="h-5 w-5" />
-                Get Free Consultation
-              </button>
-              <button
-                onClick={() => handleCTAClick('UK Bottom CTA - Scholarship Info')}
-                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg"
-              >
-                <FaTrophy className="h-5 w-5" />
-                Scholarship Information
-              </button>
+      {/* Enhanced CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-purple-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-indigo-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
+        
+        <div className="relative mx-auto max-w-6xl px-6 text-center">
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
+              <FaStar className="h-5 w-5" />
+              Limited Time Opportunity - Apply Now!
             </div>
+          </div>
+          
+          <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+            🚀 Start Your Education Journey in the <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">United Kingdom</span>
+          </h2>
+          
+          <p className="text-xl text-blue-100 mb-8 max-w-4xl mx-auto leading-relaxed">
+            Join thousands of students who are already pursuing <span className="font-bold text-blue-400">world-class education</span> at 
+            <span className="font-bold text-purple-400"> Russell Group universities</span>. Get cutting-edge education with excellent scholarship opportunities!
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+            <button 
+              onClick={() => handleCTAClick('uk-cta')}
+              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-5 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-xl text-lg"
+            >
+              <FaRocket className="h-6 w-6" />
+              Apply Now - Start Your Journey!
+            </button>
+            <button 
+              onClick={() => handleCTAClick('uk-cta-consultation')}
+              className="bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white font-bold py-5 px-10 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-lg"
+            >
+              <FaPhone className="h-6 w-6" />
+              Free Consultation
+            </button>
+          </div>
 
-            {/* Key Benefits */}
-            <div className="grid md:grid-cols-3 gap-6 mt-12">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaTrophy className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">Scholarships Available</h3>
-                <p className="text-sm text-gray-300">Chevening, Commonwealth & university scholarships</p>
+          {/* Key Benefits Grid */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaTrophy className="h-8 w-8 text-white" />
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaUniversity className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">World-Class Universities</h3>
-                <p className="text-sm text-gray-300">Russell Group & top-ranked institutions globally</p>
+              <h3 className="text-xl font-bold mb-2">Scholarships Available</h3>
+              <p className="text-blue-200 text-sm">Chevening, Commonwealth & university scholarships</p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaShieldAlt className="h-8 w-8 text-white" />
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaRocket className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">98% Success Rate</h3>
-                <p className="text-sm text-gray-300">Proven track record with expert guidance</p>
+              <h3 className="text-xl font-bold mb-2">98%+ Visa Success</h3>
+              <p className="text-blue-200 text-sm">High approval rate with our expertise</p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaCertificate className="h-8 w-8 text-white" />
               </div>
+              <h3 className="text-xl font-bold mb-2">Global Recognition</h3>
+              <p className="text-blue-200 text-sm">World-class degrees from Russell Group</p>
             </div>
           </div>
         </div>

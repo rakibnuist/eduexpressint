@@ -1,6 +1,6 @@
 'use client';
 
-import { FaCheckCircle, FaTimes, FaPhone, FaEnvelope } from 'react-icons/fa';
+import { FaCheckCircle, FaPhone, FaEnvelope } from 'react-icons/fa';
 import Link from 'next/link';
 
 interface PricingPlan {

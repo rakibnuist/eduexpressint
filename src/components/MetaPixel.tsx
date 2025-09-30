@@ -3,11 +3,11 @@
 import { useEffect, useState } from 'react';
 
 // Meta Pixel configuration
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID || 'YOUR_PIXEL_ID_HERE';
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
 // Initialize Meta Pixel
 export const initMetaPixel = async () => {
-  if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+  if (typeof window !== 'undefined' && PIXEL_ID) {
     try {
       // Dynamically import react-facebook-pixel only on client side
       const ReactPixel = (await import('react-facebook-pixel')).default;
@@ -50,7 +50,7 @@ export default function MetaPixelProvider({ children }: { children: React.ReactN
 export const metaPixel = {
   // Track page views
   pageView: async () => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.pageView();
@@ -73,7 +73,7 @@ export const metaPixel = {
     program?: string;
     source?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track('Lead', {
@@ -104,7 +104,7 @@ export const metaPixel = {
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track('CompleteRegistration', {
@@ -124,7 +124,7 @@ export const metaPixel = {
 
   // Track custom events
   trackCustomEvent: async (eventName: string, eventData: Record<string, any> = {}) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track(eventName, eventData);
@@ -143,7 +143,7 @@ export const metaPixel = {
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track('ViewContent', {
@@ -166,7 +166,7 @@ export const metaPixel = {
     search_string?: string;
     content_category?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track('Search', {
@@ -189,7 +189,7 @@ export const metaPixel = {
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID && PIXEL_ID !== 'YOUR_PIXEL_ID_HERE') {
+    if (typeof window !== 'undefined' && PIXEL_ID) {
       try {
         const ReactPixel = (await import('react-facebook-pixel')).default;
         ReactPixel.track('AddToCart', {

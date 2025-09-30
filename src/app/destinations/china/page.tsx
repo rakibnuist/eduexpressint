@@ -4,35 +4,30 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
+import FloatingElements from '@/components/FloatingElements';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
   FaBriefcase, 
   FaGlobe, 
   FaHome, 
-  FaLanguage, 
-  FaPlane, 
   FaCheckCircle,
   FaPhone,
-  FaEnvelope,
   FaMapMarkerAlt,
   FaCalendarAlt,
   FaFileAlt,
-  FaMoneyBillWave,
-  FaUsers,
   FaUniversity,
   FaCertificate,
-  FaBookOpen,
   FaClipboardList,
   FaStar,
   FaRocket,
   FaShieldAlt,
-  FaDownload,
   FaTrophy,
   FaAward,
   FaBuilding,
   FaMicroscope,
-  FaLaptopCode
+  FaHandshake,
+  FaPassport
 } from 'react-icons/fa';
 
 export default function ChinaPage() {
@@ -64,94 +59,150 @@ export default function ChinaPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 text-white overflow-hidden">
+    <div className="min-h-screen bg-gray-50 pt-8">
+      {/* Floating Elements */}
+      <FloatingElements variant="destinations" intensity="medium" />
+      
+      {/* Enhanced Hero Section */}
+      <section className="relative bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 text-white overflow-hidden min-h-screen flex items-center">
+        {/* Enhanced Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-yellow-400/15 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-orange-400/15 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-400/15 rounded-full blur-3xl animate-pulse delay-500"></div>
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl animate-pulse delay-700"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-56 h-56 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-300"></div>
+        </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-20 animate-float-slow opacity-20">
+            <FaTrophy className="h-12 w-12 text-yellow-400" />
+          </div>
+          <div className="absolute top-40 right-32 animate-float-slow delay-1000 opacity-20">
+            <FaGraduationCap className="h-10 w-10 text-orange-400" />
+          </div>
+          <div className="absolute bottom-32 left-40 animate-float-slow delay-500 opacity-20">
+            <FaUniversity className="h-14 w-14 text-red-400" />
+          </div>
+          <div className="absolute bottom-20 right-20 animate-float-slow delay-700 opacity-20">
+            <FaCertificate className="h-8 w-8 text-yellow-400" />
+          </div>
+        </div>
+        
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-20">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg animate-pulse">
-                <FaStar className="h-5 w-5" />
-                🚨 MARCH 2026 INTAKE - APPLY NOW! 🚨
-              </div>
-              
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Study in <span className="text-yellow-400">China</span>
-              </h1>
-              
-              <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-                {destination.summary}
-              </p>
-
-              <div className="flex flex-wrap gap-4 mb-8">
-                <button
-                  onClick={() => handleCTAClick('China Hero - Explore Scholarships')}
-                  className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3"
-                >
-                  <FaTrophy className="h-5 w-5" />
-                  Explore Scholarships
-                </button>
-                <button
-                  onClick={() => handleCTAClick('China Hero - Free Consultation')}
-                  className="bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 flex items-center gap-3"
-                >
-                  <FaPhone className="h-5 w-5" />
-                  Get Free Consultation
-                </button>
-              </div>
-
-              {/* Key Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">¥15k-¥35k</div>
-                  <div className="text-sm text-gray-300">Tuition per year</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">180+</div>
-                  <div className="text-sm text-gray-300">Universities</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">95%</div>
-                  <div className="text-sm text-gray-300">Success Rate</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">¥600-¥1200</div>
-                  <div className="text-sm text-gray-300">Monthly Living</div>
-                </div>
+        <div className="relative mx-auto max-w-7xl px-6 py-20 w-full">
+          <div className="text-center">
+            {/* Enhanced Intake Badge */}
+            <div className="flex justify-center mb-8">
+              <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
+                <FaCalendarAlt className="h-6 w-6" />
+                March 2026 & September 2026 Intakes Available
+                <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
 
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
-                <h3 className="text-2xl font-bold mb-6 text-center">🎓🇨🇳 STUDY IN CHINA – FULL SCHOLARSHIPS AVAILABLE!</h3>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center gap-3">
-                    <FaTrophy className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">CSC Full Scholarships - Tuition + Living + Stipend</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaAward className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">Provincial Scholarships up to 40,000 CNY/year</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaUniversity className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">University Scholarships - Full & Partial Coverage</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <FaRocket className="h-6 w-6 text-yellow-400" />
-                    <span className="text-lg">World-class universities with English programs</span>
-                  </div>
+            {/* Enhanced Main Heading */}
+            <h1 className="text-6xl lg:text-8xl font-bold mb-8 leading-tight">
+              Study in <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-400 to-red-400 animate-pulse">China</span>
+            </h1>
+            
+            {/* Enhanced Subheading */}
+            <div className="mb-8">
+              <p className="text-3xl lg:text-4xl text-yellow-100 mb-4 font-bold">
+                🎓 Full Scholarship Programs
+              </p>
+              <p className="text-2xl lg:text-3xl text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400 font-bold">
+                Diploma, Bachelor, Masters, PhD & Language Programs
+              </p>
+            </div>
+            
+            {/* Enhanced Description */}
+            <p className="text-xl lg:text-2xl text-yellow-200 mb-12 leading-relaxed max-w-5xl mx-auto">
+              Experience <span className="font-bold text-yellow-400">world-class education</span> with 
+              <span className="font-bold text-orange-400"> full scholarship opportunities</span> and 
+              <span className="font-bold text-red-400"> English-medium programs</span> in the world's fastest-growing economy.
+            </p>
+            
+            {/* Enhanced Key Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-w-4xl mx-auto">
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaDollarSign className="h-10 w-10 text-white" />
                 </div>
+                <div className="text-5xl font-bold text-yellow-400 mb-2">¥15k-¥35k</div>
+                <div className="text-lg text-yellow-200 font-medium">Annual Tuition</div>
+                <div className="text-sm text-yellow-300 mt-2">With Scholarships Available</div>
+                </div>
+              
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaTrophy className="h-10 w-10 text-white" />
+                </div>
+                <div className="text-5xl font-bold text-green-400 mb-2">100%</div>
+                <div className="text-lg text-yellow-200 font-medium">Scholarship Coverage</div>
+                <div className="text-sm text-yellow-300 mt-2">CSC & University Programs</div>
+              </div>
 
-                <div className="mt-8 p-6 bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-xl border-2 border-red-400/50">
-                  <div className="text-center">
-                    <div className="text-lg text-red-200 mb-2 font-bold">🎯 MARCH 2026 INTAKE - LIMITED SPOTS!</div>
-                    <div className="text-xl font-bold text-yellow-400 mb-2">Application Deadline: December 2025</div>
-                    <div className="text-sm text-yellow-200">Don't miss out on scholarship opportunities!</div>
-                  </div>
+              <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
+                <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <FaHome className="h-10 w-10 text-white" />
                 </div>
+                <div className="text-5xl font-bold text-red-400 mb-2">¥600-¥1200</div>
+                <div className="text-lg text-yellow-200 font-medium">Monthly Living</div>
+                <div className="text-sm text-yellow-300 mt-2">Very Affordable</div>
+              </div>
+            </div>
+
+            {/* Enhanced CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+                <button 
+                  onClick={() => handleCTAClick('china-hero')}
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-6 px-12 rounded-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-4 shadow-2xl text-xl group"
+                >
+                <FaRocket className="h-6 w-6 group-hover:animate-bounce" />
+                Apply Now - Start Your Journey!
+                <FaStar className="h-5 w-5 animate-pulse" />
+                </button>
+                <button 
+                  onClick={() => handleCTAClick('china-hero-consultation')}
+                className="bg-white/15 backdrop-blur-sm border-2 border-white/40 hover:bg-white/25 text-white font-bold py-6 px-12 rounded-2xl transition-all duration-300 flex items-center justify-center gap-4 text-xl group"
+                >
+                <FaPhone className="h-6 w-6 group-hover:animate-pulse" />
+                  Free Consultation
+                <FaHandshake className="h-5 w-5" />
+                </button>
+            </div>
+            
+            {/* Additional Benefits */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaTrophy className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-yellow-200">Full Scholarships</div>
+                <div className="text-sm text-yellow-300">CSC & University Programs</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaGlobe className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-yellow-200">English Programs</div>
+                <div className="text-sm text-yellow-300">1000+ Universities</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaRocket className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-yellow-200">Growing Economy</div>
+                <div className="text-sm text-yellow-300">Career Opportunities</div>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-3">
+                  <FaPassport className="h-8 w-8 text-white" />
+                </div>
+                <div className="text-lg font-bold text-yellow-200">Easy Visa Process</div>
+                <div className="text-sm text-yellow-300">High Success Rate</div>
               </div>
             </div>
           </div>
@@ -276,25 +327,25 @@ export default function ChinaPage() {
         </div>
       </section>
 
-      {/* Navigation Tabs */}
+      {/* Enhanced Navigation Tabs */}
       <section className="bg-white shadow-sm sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex overflow-x-auto">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex justify-center overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-6 py-4 font-semibold whitespace-nowrap transition-all duration-300 border-b-2 hover:bg-gray-50 ${
-                    activeTab === tab.id
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                  className={`flex items-center gap-3 px-6 py-4 font-semibold whitespace-nowrap transition-all duration-300 border-b-2 hover:bg-gray-50 ${
+                  activeTab === tab.id
                       ? 'text-red-600 border-red-600 bg-red-50 shadow-sm'
                       : 'text-gray-600 border-transparent hover:text-red-600 hover:border-red-300'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
-                </button>
+                }`}
+              >
+                  <Icon className="h-5 w-5" />
+                {tab.label}
+              </button>
               );
             })}
           </div>
@@ -302,58 +353,117 @@ export default function ChinaPage() {
       </section>
 
       {/* Tab Content */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        {/* Overview Tab */}
-        {activeTab === 'overview' && (
-          <div className="space-y-12">
-            {/* Why Study in China */}
-            <section>
-              <h2 className="text-4xl font-bold text-center mb-12">Why Study in China?</h2>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[
-                  { icon: FaTrophy, title: "Full Scholarship Programs", desc: "CSC & provincial scholarships covering tuition and living" },
-                  { icon: FaDollarSign, title: "Affordable Education", desc: "Low tuition fees with generous scholarship opportunities" },
-                  { icon: FaHome, title: "Low Cost of Living", desc: "Approximately 600-1,200 CNY per month" },
-                  { icon: FaLanguage, title: "English Programs", desc: "1000+ universities offer English-taught programs" },
-                  { icon: FaGlobe, title: "Global Recognition", desc: "Degrees recognized worldwide with excellent reputation" },
-                  { icon: FaRocket, title: "Rapidly Growing Economy", desc: "Strong job market and career opportunities" },
-                  { icon: FaBookOpen, title: "Diverse Programs", desc: "From traditional medicine to cutting-edge technology" },
-                  { icon: FaUsers, title: "International Community", desc: "500K+ international students from 180+ countries" }
-                ].map((feature, index) => {
-                  const Icon = feature.icon;
-                  return (
-                    <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 text-center">
-                      <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Icon className="h-8 w-8 text-red-600" />
-                      </div>
-                      <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-                      <p className="text-gray-600">{feature.desc}</p>
-                    </div>
-                  );
-                })}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-6">
+          {/* Enhanced Overview Tab */}
+          {activeTab === 'overview' && (
+            <div className="space-y-16">
+              <div className="text-center">
+                <h2 className="text-4xl lg:text-5xl font-bold mb-6">Why Study in China?</h2>
+                <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+                  🌟 China offers the perfect combination of <span className="font-bold text-red-600">world-class education</span>, 
+                  <span className="font-bold text-orange-600"> full scholarship opportunities</span>, and 
+                  <span className="font-bold text-yellow-600"> English-medium programs</span> in the world's fastest-growing economy.
+                </p>
               </div>
-            </section>
 
-            {/* Intakes */}
-            <section>
-              <h3 className="text-3xl font-bold text-center mb-8">Available Intakes</h3>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div className="bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-8 text-white text-center">
-                  <FaCalendarAlt className="h-16 w-16 mx-auto mb-4" />
-                  <h4 className="text-3xl font-bold mb-4">March Intake</h4>
-                  <p className="text-xl mb-4">Spring Semester</p>
-                  <p className="text-red-100">Application Deadline: December</p>
+              {/* Enhanced Feature Cards */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-red-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaTrophy className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Full Scholarship Programs</h3>
+                  <p className="text-gray-600 mb-4">CSC & provincial scholarships covering tuition, living expenses, and monthly stipends.</p>
+                  <div className="bg-red-50 p-4 rounded-lg">
+                    <p className="text-red-800 font-semibold text-sm">🎓 100% Tuition Coverage Available</p>
+                  </div>
                 </div>
-                <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl p-8 text-white text-center">
-                  <FaCalendarAlt className="h-16 w-16 mx-auto mb-4" />
-                  <h4 className="text-3xl font-bold mb-4">September Intake</h4>
-                  <p className="text-xl mb-4">Fall Semester</p>
-                  <p className="text-orange-100">Application Deadline: June</p>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-orange-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaDollarSign className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">Affordable Education</h3>
+                  <p className="text-gray-600 mb-4">Low tuition fees with generous scholarship opportunities and very affordable living costs.</p>
+                  <div className="bg-orange-50 p-4 rounded-lg">
+                    <p className="text-orange-800 font-semibold text-sm">💰 From ¥15,000 per year</p>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-yellow-500 group">
+                  <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <FaGlobe className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-4 text-gray-900">English Programs</h3>
+                  <p className="text-gray-600 mb-4">1000+ universities offer English-taught programs with no Chinese language requirement.</p>
+                  <div className="bg-yellow-50 p-4 rounded-lg">
+                    <p className="text-yellow-800 font-semibold text-sm">🌍 No Language Barrier</p>
+                  </div>
                 </div>
               </div>
-            </section>
-          </div>
-        )}
+
+              {/* Enhanced Special Features Section */}
+              <div className="bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 p-12 rounded-3xl border border-red-100">
+                <h3 className="text-3xl font-bold text-center mb-12 text-gray-900">🌟 Special Features & Benefits</h3>
+                <div className="grid lg:grid-cols-2 gap-12">
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                      <FaStar className="h-6 w-6 text-red-500" />
+                      Key Benefits
+                    </h4>
+                    <div className="space-y-4">
+                      {[
+                        "CSC & provincial full scholarships",
+                        "1000+ English-taught programs", 
+                        "No entrance exams for most programs",
+                        "Direct admission process",
+                        "Affordable living costs (¥600-1200/month)",
+                        "World-class universities",
+                        "Modern facilities and technology",
+                        "Strong international community"
+                      ].map((feature, index) => (
+                        <div key={index} className="flex items-start gap-3 p-4 bg-white rounded-xl shadow-sm">
+                          <FaCheckCircle className="h-6 w-6 text-red-500 mt-1 flex-shrink-0" />
+                          <span className="text-gray-700 font-medium">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                      <FaCalendarAlt className="h-6 w-6 text-red-500" />
+                      Intake Information
+                    </h4>
+                    <div className="space-y-6">
+                      <div className="bg-white p-6 rounded-xl shadow-sm">
+                        <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
+                        <div className="space-y-2">
+                          {["March 2026", "September 2026"].map((intake, index) => (
+                            <div key={index} className="flex items-center gap-3">
+                              <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                              <span className="text-gray-700 font-medium">{intake}</span>
+                  </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gradient-to-r from-red-500 to-orange-600 p-6 rounded-xl text-white">
+                        <h5 className="font-bold mb-2">Visa Success Rate</h5>
+                        <p className="text-red-100">95%+ success rate with our expert guidance and proven application process</p>
+                      </div>
+                      
+                      <div className="bg-gradient-to-r from-orange-500 to-yellow-600 p-6 rounded-xl text-white">
+                        <h5 className="font-bold mb-2">Processing Time</h5>
+                        <p className="text-orange-100">Quick 2-3 week visa processing with streamlined documentation</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         {/* Scholarships Tab */}
         {activeTab === 'scholarships' && (
@@ -783,10 +893,10 @@ export default function ChinaPage() {
                   rank: "Regional University", 
                   programs: "Computer Science, International Trade and Economics", 
                   city: "Wuzhou, Guangxi", 
-                  scholarship: "80% Scholarship (2,000 CNY/year)", 
+                  scholarship: "After Scholarship Tuition + Hostel fee: 6000 CNY", 
                   march2026: true,
-                  foundation: "Direct Bachelor",
-                  bachelor: "2,000 CNY/year (after scholarship)",
+                  foundation: "No Foundation Course",
+                  bachelor: "Direct Bachelor from March 2026",
                   deadline: "Jan 20, 2026"
                 }
               ].map((university, index) => (
@@ -811,16 +921,22 @@ export default function ChinaPage() {
                     {university.city}
                   </div>
                   
-                  {/* Foundation Program */}
-                  <div className="bg-blue-50 rounded-lg p-3 mb-3">
-                    <div className="text-sm font-semibold text-blue-800">Foundation Program (March-July)</div>
-                    <div className="text-xs text-blue-600">Tuition: {university.foundation}</div>
-                  </div>
+                  {/* Foundation Program - Only show if not "No Foundation Course" */}
+                  {university.foundation !== "No Foundation Course" && (
+                    <div className="bg-blue-50 rounded-lg p-3 mb-3">
+                      <div className="text-sm font-semibold text-blue-800">Foundation Program (March-July)</div>
+                      <div className="text-xs text-blue-600">Tuition: {university.foundation}</div>
+                    </div>
+                  )}
                   
                   {/* Bachelor Program */}
                   <div className="bg-green-50 rounded-lg p-3 mb-3">
-                    <div className="text-sm font-semibold text-green-800">Bachelor Program (Sept Start)</div>
-                    <div className="text-xs text-green-600">Tuition: {university.bachelor}</div>
+                    <div className="text-sm font-semibold text-green-800">
+                      {university.foundation === "No Foundation Course" ? "Bachelor Program (March Start)" : "Bachelor Program (Sept Start)"}
+                    </div>
+                    <div className="text-xs text-green-600">
+                      {university.foundation === "No Foundation Course" ? "Direct Entry Available" : `Tuition: ${university.bachelor}`}
+                    </div>
                   </div>
                   
                   {/* Scholarship */}
@@ -1062,52 +1178,76 @@ export default function ChinaPage() {
             </div>
           </div>
         )}
-      </div>
+        </div>
+      </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-red-900 via-orange-900 to-yellow-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">Ready to Start Your Journey in China?</h2>
-            <p className="text-xl text-gray-200 mb-8 leading-relaxed">
-              Join thousands of international students who have chosen China for their education. 
-              Get expert guidance and support throughout your application process.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <button
-                onClick={() => handleCTAClick('China Bottom CTA - Free Consultation')}
-                className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg"
-              >
-                <FaPhone className="h-5 w-5" />
-                Get Free Consultation
-              </button>
-              <button
-                onClick={() => handleCTAClick('China Bottom CTA - Scholarship Info')}
-                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg"
-              >
-                <FaTrophy className="h-5 w-5" />
-                Scholarship Information
-              </button>
+      {/* Enhanced CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 text-white relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-10 left-10 w-64 h-64 bg-yellow-400/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-80 h-80 bg-orange-400/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-red-400/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+        </div>
+        
+        <div className="relative mx-auto max-w-6xl px-6 text-center">
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
+              <FaStar className="h-5 w-5" />
+              Limited Time Opportunity - Apply Now!
             </div>
+          </div>
+          
+          <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
+            🚀 Start Your Education Journey in <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">China</span>
+          </h2>
+          
+          <p className="text-xl text-yellow-100 mb-8 max-w-4xl mx-auto leading-relaxed">
+            Join thousands of students who are already pursuing <span className="font-bold text-yellow-400">world-class education</span> with 
+            <span className="font-bold text-orange-400"> full scholarship opportunities</span>. Get cutting-edge education with English-medium programs!
+          </p>
+          
+          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
+            <button 
+              onClick={() => handleCTAClick('china-cta')}
+              className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black font-bold py-5 px-10 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-xl text-lg"
+            >
+              <FaRocket className="h-6 w-6" />
+              Apply Now - Start Your Journey!
+            </button>
+            <button 
+              onClick={() => handleCTAClick('china-cta-consultation')}
+              className="bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:bg-white/20 text-white font-bold py-5 px-10 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-lg"
+            >
+              <FaPhone className="h-6 w-6" />
+              Free Consultation
+            </button>
+          </div>
 
-            {/* Key Benefits */}
-            <div className="grid md:grid-cols-3 gap-6 mt-12">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaTrophy className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">Full Scholarships Available</h3>
-                <p className="text-sm text-gray-300">CSC and provincial scholarships covering tuition and living</p>
+          {/* Key Benefits Grid */}
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaTrophy className="h-8 w-8 text-white" />
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaUniversity className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">World-Class Universities</h3>
-                <p className="text-sm text-gray-300">Top-ranked institutions with English-taught programs</p>
+              <h3 className="text-xl font-bold mb-2">Full Scholarships</h3>
+              <p className="text-yellow-200 text-sm">CSC and university scholarships available</p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaShieldAlt className="h-8 w-8 text-white" />
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <FaRocket className="h-8 w-8 text-yellow-400 mx-auto mb-3" />
-                <h3 className="text-lg font-semibold mb-2">95% Success Rate</h3>
-                <p className="text-sm text-gray-300">Proven track record with expert guidance</p>
+              <h3 className="text-xl font-bold mb-2">95%+ Visa Success</h3>
+              <p className="text-yellow-200 text-sm">High approval rate with our expertise</p>
+            </div>
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:bg-white/20 transition-all duration-300">
+              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <FaCertificate className="h-8 w-8 text-white" />
               </div>
+              <h3 className="text-xl font-bold mb-2">Global Recognition</h3>
+              <p className="text-yellow-200 text-sm">Internationally recognized degrees</p>
             </div>
           </div>
         </div>

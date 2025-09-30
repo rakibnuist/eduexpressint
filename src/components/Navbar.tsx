@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaGraduationCap,
@@ -81,7 +82,7 @@ const Navbar = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
-          : 'bg-transparent'
+          : 'bg-white/90 backdrop-blur-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -93,8 +94,15 @@ const Navbar = () => {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <Link href="/" className="flex items-center">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 rounded-xl flex items-center justify-center shadow-lg">
-                <FaGraduationCap className="h-6 w-6 text-white" />
+              <div className="w-24 h-12 relative">
+                <Image
+                  src="/brand/logo.png"
+                  alt="EduExpress International Logo"
+                  width={96}
+                  height={48}
+                  className="w-full h-full object-contain"
+                  priority
+                />
               </div>
             </Link>
           </motion.div>

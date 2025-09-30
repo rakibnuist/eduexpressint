@@ -9,6 +9,14 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   isActive: boolean;
+  permissions: {
+    canManageLeads: boolean;
+    canManageUniversities: boolean;
+    canManageB2BLeads: boolean;
+    canManageUpdates: boolean;
+    canManageAdmins: boolean;
+    canManageSuccessStories: boolean;
+  };
   lastLogin?: Date;
   createdBy?: mongoose.Types.ObjectId;
   createdAt: Date;
@@ -57,6 +65,32 @@ const UserSchema: Schema = new Schema({
     type: Boolean,
     default: true
   },
+  permissions: {
+    canManageLeads: {
+      type: Boolean,
+      default: false
+    },
+    canManageUniversities: {
+      type: Boolean,
+      default: false
+    },
+    canManageB2BLeads: {
+      type: Boolean,
+      default: false
+    },
+    canManageUpdates: {
+      type: Boolean,
+      default: false
+    },
+    canManageAdmins: {
+      type: Boolean,
+      default: false
+    },
+    canManageSuccessStories: {
+      type: Boolean,
+      default: false
+    }
+  },
   lastLogin: {
     type: Date
   },
@@ -91,6 +125,29 @@ UserSchema.methods.toJSON = function() {
   const userObject = this.toObject();
   delete userObject.password;
   return userObject;
+};
+
+// Indexes for better performance
+UserSchema.index({ email: 1 });
+UserSchema.index({ username: 1 });
+UserSchema.index({ role: 1 });
+UserSchema.index({ isActive: 1 });
+UserSchema.index({ createdAt: -1 });
+UserSchema.index({ lastLogin: -1 });
+
+// Static method to get active users
+UserSchema.statics.getActive = function() {
+  return this.find({ isActive: true }).select('-password');
+};
+
+// Static method to get users by role
+UserSchema.statics.getByRole = function(role: string) {
+  return this.find({ role, isActive: true }).select('-password');
+};
+
+// Static method to update last login
+UserSchema.statics.updateLastLogin = function(userId: string) {
+  return this.findByIdAndUpdate(userId, { lastLogin: new Date() });
 };
 
 export default mongoose.models.User || mongoose.model<IUser>('User', UserSchema);

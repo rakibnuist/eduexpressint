@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { FaGraduationCap, FaUsers, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBookOpen, FaStar, FaRocket, FaArrowRight, FaTimes, FaCheckCircle } from 'react-icons/fa';
-import { trackLead, trackFormSubmission } from '@/components/TrackLead';
+import { useLeadTracker } from '@/components/LeadTracker';
 import { useCTA } from '@/context/CTAContext';
 import FloatingElements from '@/components/FloatingElements';
 
 export default function CTAForm() {
-  const { isOpen, openCTA, closeCTA, source } = useCTA();
+  const { isOpen, closeCTA, source } = useCTA();
   const [showCongratulationPopup, setShowCongratulationPopup] = useState(false);
+  const { trackLead, trackFormSubmission } = useLeadTracker();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,29 +42,46 @@ export default function CTAForm() {
         throw new Error(result.error || 'Failed to save lead');
       }
 
-      console.log('Lead saved successfully:', result);
 
       // Track form submission
-      await trackFormSubmission('CTA Consultation Form', {
-        form_type: 'Lead Generation',
-        lead_data: leadData
+      trackFormSubmission({
+        name: leadData.name,
+        email: leadData.email,
+        phone: leadData.phone,
+        country: leadData.countryOfInterest,
+        program: leadData.programType,
+        leadType: 'consultation',
+        leadSource: 'website',
+        leadMedium: 'organic',
+        leadCampaign: 'CTA Form',
+        leadContent: 'Free Consultation',
+        formName: 'CTA Consultation Form',
+        formType: 'Lead Generation',
+        notes: leadData.message,
+        budget: 1000,
+        currency: 'USD'
       });
 
       // Track lead generation with detailed data
-      await trackLead('CTA Form Lead Generated', {
+      trackLead({
+        name: leadData.name,
         email: leadData.email,
         phone: leadData.phone,
-        destination: leadData.countryOfInterest,
+        country: leadData.countryOfInterest,
         program: leadData.programType,
-        source: leadData.source,
-        value: 1,
+        leadType: 'consultation',
+        leadSource: 'website',
+        leadMedium: 'organic',
+        leadCampaign: 'CTA Form',
+        leadContent: 'Free Consultation',
+        notes: leadData.message,
+        budget: 1000,
         currency: 'USD'
       });
 
       // Show congratulation popup first, then close form when popup is dismissed
       setShowCongratulationPopup(true);
     } catch (error) {
-      console.error('Error submitting form:', error);
       
       // Show more specific error message
       let errorMessage = 'There was an error submitting your form. Please try again or contact us directly.';

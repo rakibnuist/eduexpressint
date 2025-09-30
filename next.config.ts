@@ -17,11 +17,13 @@ const csp = [
 ].join('; ');
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: __dirname,
-  },
+  output: 'export',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
+  distDir: 'dist',
   images: {
-    dangerouslyAllowSVG: false,
+    unoptimized: true,
+    dangerouslyAllowSVG: true,
     remotePatterns: [
       { protocol: 'https', hostname: '**' },
       { protocol: 'http', hostname: '**' },

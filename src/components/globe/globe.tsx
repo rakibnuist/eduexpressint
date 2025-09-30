@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import createGlobe from 'cobe';
 import { cn } from '@/lib/utils';
 interface EarthProps {
@@ -22,9 +22,9 @@ const Earth: React.FC<EarthProps> = ({
   diffuse = 1.2,
   mapSamples = 40000,
   mapBrightness = 6,
-  baseColor = [0.2, 0.4, 0.8], // Darker blue base
-  markerColor = [0.8, 0.4, 1], // Purple markers
-  glowColor = [0.3, 0.5, 0.9], // Blue glow
+  baseColor = [1, 1, 1], // White base
+  markerColor = [0.8, 0.8, 0.8], // Light gray markers
+  glowColor = [0.9, 0.9, 0.9], // Light gray glow
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 

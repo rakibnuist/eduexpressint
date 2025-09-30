@@ -26,6 +26,17 @@ import {
 import { useState, useEffect } from 'react';
 import Earth from '@/components/globe/globe';
 import { useCTA } from '@/context/CTAContext';
+import {
+  EduexpertFadeInUp,
+  EduexpertSlideInRight,
+  EduexpertScaleIn,
+  EduexpertBounceIn,
+  EduexpertTextReveal,
+  EduexpertStaggered,
+  EduexpertCard,
+  EduexpertButton,
+  EduexpertIcon
+} from '@/components/EduexpertAnimations';
 
 // Animated Text Component for Hero Section
 const AnimatedHeroText = () => {
@@ -211,7 +222,6 @@ const TextReveal = ({ text, className = "", style }: TextRevealProps) => {
 
 // Simple trackLead function
 const trackLead = (label: string) => {
-  console.log('Lead tracked:', label);
 };
 
 // FAQ Item Component with Dropdown
@@ -256,13 +266,54 @@ const FAQItem = ({ faq, index }: { faq: { question: string; answer: string }; in
 
 const DEST = '/brand/destinations';
 
+interface StudentSuccessStory {
+  _id?: string;
+  studentName: string;
+  studentImage?: string;
+  studentNationality: string;
+  university: string;
+  universityCountry: string;
+  program: string;
+  programLevel: string;
+  title: string;
+  story: string;
+  shortDescription: string;
+  testimonialQuote?: string;
+  isPublished: boolean;
+  isFeatured: boolean;
+  priority: number;
+  views: number;
+  likes: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export default function HomePage() {
   const [currentDestinationIndex, setCurrentDestinationIndex] = useState(0);
   const [currentTestimonialIndex, setCurrentTestimonialIndex] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isUserInteracting, setIsUserInteracting] = useState(false);
+  const [successStories, setSuccessStories] = useState<StudentSuccessStory[]>([]);
+  const [storiesLoading, setStoriesLoading] = useState(true);
   const { openCTA } = useCTA();
 
+  // Fetch success stories from API
+  useEffect(() => {
+    const fetchSuccessStories = async () => {
+      try {
+        const response = await fetch('/api/success-stories?featured=true&limit=10');
+        if (response.ok) {
+          const data = await response.json();
+          setSuccessStories(data.data?.stories || []);
+        }
+      } catch (error) {
+      } finally {
+        setStoriesLoading(false);
+      }
+    };
+
+    fetchSuccessStories();
+  }, []);
 
   // Sample data
   const stats = [
@@ -354,7 +405,22 @@ export default function HomePage() {
     }
   ];
 
-  const testimonials = [
+  // Transform success stories to testimonials format
+  const transformStoriesToTestimonials = (stories: StudentSuccessStory[]) => {
+    return stories.map(story => ({
+      name: story.studentName,
+      country: `Studying in ${story.universityCountry}`,
+      image: story.studentImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(story.studentName)}&background=random&color=fff&size=150`,
+      rating: 5,
+      text: story.testimonialQuote || story.shortDescription || story.story.substring(0, 150) + "...",
+      university: story.university,
+      program: story.program,
+      programLevel: story.programLevel
+    }));
+  };
+
+  // Fallback testimonials if no success stories are available
+  const fallbackTestimonials = [
     {
       name: "Sarah Ahmed",
       country: "Studying in UK",
@@ -391,6 +457,11 @@ export default function HomePage() {
       text: "Croatia is beautiful and the education quality is excellent. EduExpress made my transition seamless."
     }
   ];
+
+  // Use success stories if available, otherwise fallback to hardcoded testimonials
+  const testimonials = successStories.length > 0 
+    ? transformStoriesToTestimonials(successStories)
+    : fallbackTestimonials;
 
   const faqs = [
     {
@@ -689,65 +760,57 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-7xl px-6 py-20 sm:py-24 lg:py-32">
           <div className="text-center">
-            <FadeIn delay={200} duration={1200}>
+            <EduexpertFadeInUp delay={0.2} duration={1.2}>
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-6xl lg:text-7xl">
-                <SlideIn direction="right" delay={400} duration={800}>
+                <EduexpertSlideInRight delay={0.4} duration={0.8}>
                   <span className="text-white">Your Gateway to</span>
-                </SlideIn>
+                </EduexpertSlideInRight>
                 <div className="mt-2">
                   <AnimatedHeroText />
                 </div>
             </h1>
-            </FadeIn>
+            </EduexpertFadeInUp>
             
-            <SlideIn delay={1000} duration={1000}>
+            <EduexpertTextReveal delay={1.0} duration={1.0}>
               <p className="mx-auto mt-8 max-w-3xl text-lg sm:text-xl text-white/90 leading-relaxed">
                 Connect with world-class universities worldwide. Expert counseling, scholarship opportunities, and personalized support for your academic journey abroad.
               </p>
-            </SlideIn>
+            </EduexpertTextReveal>
               
             {/* Hero Section Buttons - Fixed Layout */}
-            <div className="hero-button-container mt-12 flex flex-col items-center gap-6 sm:flex-row sm:gap-8 sm:justify-center max-w-4xl mx-auto px-4" style={{ zIndex: 1000, position: 'relative' }}>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('Hero consultation button clicked');
+             <EduexpertStaggered delay={0.2} className="hero-button-container mt-12 flex flex-col items-center gap-6 sm:flex-row sm:gap-8 sm:justify-center max-w-4xl mx-auto px-4">
+              <EduexpertButton
+                onClick={() => {
                   openCTA('Hero Section Get Free Consultation');
                 }}
-                className="hero-button group relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold px-8 py-4 sm:px-12 sm:py-6 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-emerald-500/30 transform-gpu border border-emerald-400/20 cursor-pointer w-full sm:w-auto min-w-[280px] sm:min-w-[320px]"
+                className="group relative bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold px-8 py-4 sm:px-12 sm:py-6 rounded-2xl shadow-2xl border border-emerald-400/20 cursor-pointer w-full sm:w-auto min-w-[280px] sm:min-w-[320px]"
               >
                 <span className="flex items-center justify-center gap-3 sm:gap-4 text-lg sm:text-xl">
                   <FaPhone className="h-5 w-5 sm:h-6 sm:w-6" />
                   Get Free Consultation
                   <FaArrowRight className="h-4 w-4 sm:h-5 sm:w-5 transition-transform group-hover:translate-x-1" />
                 </span>
-              </button>
+              </EduexpertButton>
               
-              <Link
-                href="/universities"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('Hero universities button clicked');
+              <EduexpertButton
+                onClick={() => {
                   trackLead('Hero CTA - Browse Universities');
                   window.location.href = '/universities';
                 }}
-                className="hero-button group bg-white/20 backdrop-blur-lg border-2 border-white/30 text-white hover:bg-white hover:text-gray-800 font-bold px-8 py-4 sm:px-12 sm:py-6 rounded-2xl shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-white/20 transform-gpu cursor-pointer w-full sm:w-auto min-w-[280px] sm:min-w-[320px]"
+                className="group bg-white/20 backdrop-blur-lg border-2 border-white/30 text-white hover:bg-white hover:text-gray-800 font-bold px-8 py-4 sm:px-12 sm:py-6 rounded-2xl shadow-2xl cursor-pointer w-full sm:w-auto min-w-[280px] sm:min-w-[320px]"
               >
                 <span className="flex items-center justify-center gap-3 sm:gap-4 text-lg sm:text-xl">
                   <FaGraduationCap className="h-5 w-5 sm:h-6 sm:w-6" />
                   Browse Universities
                 </span>
-              </Link>
-            </div>
+              </EduexpertButton>
+            </EduexpertStaggered>
 
             {/* Enhanced Key Benefits */}
-            <SlideIn delay={1500} duration={800}>
+            <EduexpertFadeInUp delay={1.5} duration={0.8}>
               <div className="mt-16 grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                <BounceIn delay={1800} duration={600}>
-                  <div className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 relative">
+                <EduexpertBounceIn delay={1.8} duration={0.6}>
+                  <EduexpertCard className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 relative">
                     <BorderBeam 
                       size={120} 
                       duration={10} 
@@ -756,18 +819,18 @@ export default function HomePage() {
                       colorTo="#06B6D4"
                       delay={0}
                     />
-                    <div className="p-4 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 group-hover:rotate-12 transition-transform duration-300">
+                    <EduexpertIcon className="p-4 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 group-hover:rotate-12 transition-transform duration-300">
                       <Pulse>
                         <FaCheckCircle className="h-6 w-6 text-white" />
                       </Pulse>
-                    </div>
+                    </EduexpertIcon>
                     <span className="text-white font-semibold text-lg">Free Consultation</span>
                     <span className="text-white/70 text-sm text-center">Expert guidance at no cost</span>
-                  </div>
-                </BounceIn>
+                  </EduexpertCard>
+                </EduexpertBounceIn>
                 
-                <BounceIn delay={2000} duration={600}>
-                  <div className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 relative">
+                <EduexpertBounceIn delay={2.0} duration={0.6}>
+                  <EduexpertCard className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 relative">
                     <BorderBeam 
                       size={120} 
                       duration={12} 
@@ -776,18 +839,18 @@ export default function HomePage() {
                       colorTo="#EC4899"
                       delay={2}
                     />
-                    <div className="p-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 group-hover:rotate-12 transition-transform duration-300">
+                    <EduexpertIcon className="p-4 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 group-hover:rotate-12 transition-transform duration-300">
                       <Pulse>
                         <FaShieldAlt className="h-6 w-6 text-white" />
                       </Pulse>
-                    </div>
+                    </EduexpertIcon>
                     <span className="text-white font-semibold text-lg">Visa Support</span>
                     <span className="text-white/70 text-sm text-center">95% success rate</span>
-                  </div>
-                </BounceIn>
+                  </EduexpertCard>
+                </EduexpertBounceIn>
                 
-                <BounceIn delay={2200} duration={600}>
-                  <div className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 hover:scale-105 relative">
+                <EduexpertBounceIn delay={2.2} duration={0.6}>
+                  <EduexpertCard className="group flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 relative">
                     <BorderBeam 
                       size={120} 
                       duration={14} 
@@ -796,17 +859,17 @@ export default function HomePage() {
                       colorTo="#F97316"
                       delay={4}
                     />
-                    <div className="p-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 group-hover:rotate-12 transition-transform duration-300">
+                    <EduexpertIcon className="p-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 group-hover:rotate-12 transition-transform duration-300">
                       <Pulse>
                         <FaAward className="h-6 w-6 text-white" />
                       </Pulse>
-                    </div>
+                    </EduexpertIcon>
                     <span className="text-white font-semibold text-lg">Scholarship Access</span>
                     <span className="text-white/70 text-sm text-center">Exclusive opportunities</span>
-                  </div>
-                </BounceIn>
+                  </EduexpertCard>
+                </EduexpertBounceIn>
               </div>
-            </SlideIn>
+            </EduexpertFadeInUp>
 
           </div>
         </div>
@@ -862,28 +925,28 @@ export default function HomePage() {
         </div>
         
         <div className="relative mx-auto max-w-7xl px-6">
-          <FadeIn delay={200} duration={1000}>
+          <EduexpertFadeInUp delay={0.2} duration={1.0}>
             <div className="text-center mb-20">
-              <SlideIn direction="up" delay={400} duration={800}>
+              <EduexpertTextReveal delay={0.4} duration={0.8}>
                 <h2 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
               <span className="shiny-text">Trusted by Students</span>{' '}
                   <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Worldwide
               </span>
             </h2>
-              </SlideIn>
-              <SlideIn direction="up" delay={600} duration={800}>
+              </EduexpertTextReveal>
+              <EduexpertTextReveal delay={0.6} duration={0.8}>
                 <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
                   Join thousands of successful students who achieved their study abroad dreams with our expert guidance
                 </p>
-              </SlideIn>
+              </EduexpertTextReveal>
           </div>
-          </FadeIn>
+          </EduexpertFadeInUp>
           
-          <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+          <EduexpertStaggered delay={0.1} className="grid grid-cols-2 gap-8 lg:grid-cols-4">
             {stats.map((stat, index) => (
-              <BounceIn key={stat.label} delay={800 + index * 200} duration={600}>
-                <div className="group relative text-center p-8 rounded-3xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg cursor-pointer h-[200px] flex flex-col justify-center card-hover-effect stats-card">
+              <EduexpertBounceIn key={stat.label} delay={0.8 + index * 0.2} duration={0.6}>
+                <EduexpertCard className="group relative text-center p-8 rounded-3xl bg-white/80 backdrop-blur-sm border border-white/50 shadow-lg cursor-pointer h-[200px] flex flex-col justify-center stats-card">
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   
                   {/* Animated background particles */}
@@ -913,10 +976,10 @@ export default function HomePage() {
                   <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:animate-bounce">
                     <FaArrowRight className="h-3 w-3 text-white m-auto mt-1.5" />
                   </div>
-                </div>
-              </BounceIn>
+                </EduexpertCard>
+              </EduexpertBounceIn>
             ))}
-          </div>
+          </EduexpertStaggered>
         </div>
       </section>
 
@@ -943,28 +1006,28 @@ export default function HomePage() {
         <FloatingElements variant="services" intensity="high" />
         
         <div className="relative mx-auto max-w-7xl px-6">
-          <FadeIn delay={200} duration={1000}>
+          <EduexpertFadeInUp delay={0.2} duration={1.0}>
             <div className="text-center mb-20">
-              <SlideIn direction="up" delay={400} duration={800}>
+              <EduexpertTextReveal delay={0.4} duration={0.8}>
                 <h2 className="text-4xl font-bold text-gray-900 sm:text-5xl lg:text-6xl">
                   <span className="shiny-text">Our</span>{' '}
                   <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                     Services
               </span>
             </h2>
-              </SlideIn>
-              <SlideIn direction="up" delay={600} duration={800}>
+              </EduexpertTextReveal>
+              <EduexpertTextReveal delay={0.6} duration={0.8}>
                 <p className="mt-6 text-xl text-gray-600 max-w-3xl mx-auto">
                   Comprehensive support for your study abroad journey with personalized guidance every step of the way
                 </p>
-              </SlideIn>
+              </EduexpertTextReveal>
           </div>
-          </FadeIn>
+          </EduexpertFadeInUp>
           
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          <EduexpertStaggered delay={0.1} className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
             {services.map((service, index) => (
-              <SlideIn key={service.title} delay={800 + index * 200} duration={600}>
-                <Card className="group h-[400px] border-0 shadow-xl bg-white/80 backdrop-blur-sm cursor-pointer card-hover-effect service-card relative">
+              <EduexpertScaleIn key={service.title} delay={0.8 + index * 0.2} duration={0.6}>
+                <EduexpertCard className="group h-[400px] border-0 shadow-xl bg-white/80 backdrop-blur-sm cursor-pointer service-card relative">
                   <BorderBeam 
                     size={200} 
                     duration={15} 
@@ -986,12 +1049,12 @@ export default function HomePage() {
             </div>
             
                     <div className="relative z-10">
-                      <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 group-hover:rotate-12 transition-transform duration-500 shadow-lg relative">
+                      <EduexpertIcon className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 group-hover:rotate-12 transition-transform duration-500 shadow-lg relative">
                         <service.icon className="h-10 w-10 text-white group-hover:scale-110 transition-transform duration-300" />
                         
                         {/* Icon glow effect */}
                         <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 opacity-0 group-hover:opacity-30 blur-md transition-opacity duration-500"></div>
-                      </div>
+                      </EduexpertIcon>
                       
                       <h3 className="text-2xl font-bold text-gray-900 mb-4 group-hover:text-purple-600 transition-colors duration-300">
                         {service.title}
@@ -1019,10 +1082,10 @@ export default function HomePage() {
                     <div className="absolute bottom-2 left-2 w-4 h-4 border-b-2 border-l-2 border-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     <div className="absolute bottom-2 right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                   </CardContent>
-                </Card>
-              </SlideIn>
+                </EduexpertCard>
+              </EduexpertScaleIn>
             ))}
-          </div>
+          </EduexpertStaggered>
         </div>
       </section>
 
@@ -1149,7 +1212,6 @@ export default function HomePage() {
                             <div className="flex flex-col sm:flex-row gap-4">
                               <button 
                                 onClick={() => {
-                                  console.log('Explore destination button clicked for:', destination.name);
                                   const countrySlug = destination.name.toLowerCase().replace(/\s+/g, '-');
                                   window.location.href = `/destinations/${countrySlug}`;
                                 }}
@@ -1164,7 +1226,6 @@ export default function HomePage() {
                               
                               <button 
                                 onClick={() => {
-                                  console.log('Universities button clicked for:', destination.name);
                                   window.location.href = `/universities?country=${encodeURIComponent(destination.name)}`;
                                 }}
                                 className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 border border-white/30 flex items-center justify-center gap-2"
@@ -1197,10 +1258,8 @@ export default function HomePage() {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Previous button clicked, current index:', currentDestinationIndex);
                 setCurrentDestinationIndex((prev) => {
                   const newIndex = (prev - 1 + destinations.length) % destinations.length;
-                  console.log('Setting index to:', newIndex);
                   return newIndex;
                 });
               }}
@@ -1216,10 +1275,8 @@ export default function HomePage() {
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Next button clicked, current index:', currentDestinationIndex);
                 setCurrentDestinationIndex((prev) => {
                   const newIndex = (prev + 1) % destinations.length;
-                  console.log('Setting index to:', newIndex);
                   return newIndex;
                 });
               }}
@@ -1239,7 +1296,6 @@ export default function HomePage() {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('Dot clicked, index:', index);
                     setCurrentDestinationIndex(index);
                   }}
                   className={`w-4 h-4 rounded-full transition-all duration-300 cursor-pointer ${
@@ -1301,11 +1357,19 @@ export default function HomePage() {
 
           <div className="relative">
             <div className="overflow-hidden rounded-2xl">
-              <div
-                className="flex transition-transform duration-500 ease-in-out"
-                style={{ transform: `translateX(-${currentTestimonialIndex * 100}%)` }}
-              >
-                {testimonials.map((testimonial, index) => (
+              {storiesLoading ? (
+                <div className="flex items-center justify-center h-[400px]">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Loading success stories...</p>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="flex transition-transform duration-500 ease-in-out"
+                  style={{ transform: `translateX(-${currentTestimonialIndex * 100}%)` }}
+                >
+                  {testimonials.map((testimonial, index) => (
                   <div key={index} className="w-full flex-shrink-0">
                     <Card className="mx-4 border-0 shadow-xl bg-white/90 backdrop-blur-sm h-[400px] card-hover-effect testimonial-card relative">
                       <BorderBeam 
@@ -1352,7 +1416,8 @@ export default function HomePage() {
                     </Card>
                   </div>
                 ))}
-              </div>
+                </div>
+              )}
             </div>
 
             {/* Navigation */}

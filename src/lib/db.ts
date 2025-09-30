@@ -2,30 +2,64 @@
 import mongoose from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI!;
-if (!MONGODB_URI) throw new Error('Missing MONGODB_URI');
+const MONGODB_DB = process.env.MONGODB_DB;
+
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+}
 
 interface MongooseCache {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
-const cached = (global as unknown as { _mongoose?: MongooseCache })._mongoose || { 
+declare global {
+  var _mongoose: MongooseCache | undefined;
+}
+
+const cached = global._mongoose || { 
   conn: null, 
   promise: null 
 };
 
 export async function dbConnect() {
-  if (cached.conn) return cached.conn;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
   if (!cached.promise) {
-    console.log('Connecting to MongoDB:', MONGODB_URI);
-    console.log('Database name:', process.env.MONGODB_DB || 'default');
-    cached.promise = mongoose.connect(MONGODB_URI, { dbName: process.env.MONGODB_DB || undefined })
-      .then((m) => {
-        console.log('MongoDB connected to database:', m.connection.db.databaseName);
-        return m;
+    const opts = {
+      bufferCommands: false,
+      dbName: MONGODB_DB || undefined,
+    };
+
+    console.log('Connecting to MongoDB...');
+    if (MONGODB_DB) {
+      console.log('Database name:', MONGODB_DB);
+    }
+
+    cached.promise = mongoose.connect(MONGODB_URI, opts)
+      .then((mongoose) => {
+        console.log('MongoDB connected successfully to database:', mongoose.connection.db?.databaseName || 'unknown');
+        return mongoose;
+      })
+      .catch((error) => {
+        console.error('MongoDB connection error:', error);
+        cached.promise = null;
+        throw error;
       });
   }
-  cached.conn = await cached.promise;
-  (global as unknown as { _mongoose: MongooseCache })._mongoose = cached;
+
+  try {
+    cached.conn = await cached.promise;
+  } catch (error) {
+    cached.promise = null;
+    throw error;
+  }
+
+  global._mongoose = cached;
   return cached.conn;
 }
+
+// Export default for backward compatibility
+export default dbConnect;

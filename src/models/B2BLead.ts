@@ -61,4 +61,38 @@ const B2BLeadSchema: Schema = new Schema({
   }
 }, { timestamps: true });
 
+// Indexes for better performance
+B2BLeadSchema.index({ email: 1 });
+B2BLeadSchema.index({ companyName: 1 });
+B2BLeadSchema.index({ status: 1, priority: 1 });
+B2BLeadSchema.index({ industry: 1 });
+B2BLeadSchema.index({ country: 1 });
+B2BLeadSchema.index({ assignedTo: 1 });
+B2BLeadSchema.index({ dealStage: 1 });
+B2BLeadSchema.index({ createdAt: -1 });
+B2BLeadSchema.index({ lastContact: -1 });
+B2BLeadSchema.index({ expectedValue: -1 });
+
+// Virtual for deal age in days
+B2BLeadSchema.virtual('dealAge').get(function(this: any) {
+  return Math.floor((Date.now() - this.createdAt.getTime()) / (1000 * 60 * 60 * 24));
+});
+
+// Static method to get B2B leads by status
+B2BLeadSchema.statics.getByStatus = function(status: string, limit = 50) {
+  return this.find({ status })
+    .sort({ priority: -1, expectedValue: -1 })
+    .limit(limit);
+};
+
+// Static method to get high-value deals
+B2BLeadSchema.statics.getHighValue = function(minValue = 10000, limit = 20) {
+  return this.find({ 
+    expectedValue: { $gte: minValue },
+    status: { $nin: ['Closed Won', 'Closed Lost'] }
+  })
+    .sort({ expectedValue: -1, priority: -1 })
+    .limit(limit);
+};
+
 export default mongoose.models.B2BLead || mongoose.model<IB2BLead>('B2BLead', B2BLeadSchema);

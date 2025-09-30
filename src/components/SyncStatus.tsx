@@ -13,7 +13,7 @@ import { updateSyncService, type SyncStatus } from '@/lib/updateSync';
 
 interface SyncStatusProps {
   showControls?: boolean;
-  onSyncComplete?: (result: any) => void;
+  onSyncComplete?: (result: { success: boolean; message: string; data?: unknown }) => void;
   className?: string;
 }
 
