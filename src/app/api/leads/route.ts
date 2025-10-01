@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import Lead from '@/models/Lead';
-import { extractTrackingFromForm, extractTrackingFromRequest } from '@/lib/trackingUtils';
 
 export async function POST(request: Request) {
   try {
@@ -65,9 +64,6 @@ export async function POST(request: Request) {
       }, { status: 429 });
     }
 
-    // Extract tracking data from request
-    const trackingData = extractTrackingFromRequest(request);
-    
     // Create new lead
     const leadData = {
       name: name.trim(),
@@ -85,9 +81,7 @@ export async function POST(request: Request) {
         action: 'Lead created from CTA Form',
         timestamp: new Date(),
         notes: `Source: ${source || 'CTA Form'}`
-      }],
-      // Add tracking data
-      ...trackingData
+      }]
     };
 
     const newLead = new Lead(leadData);

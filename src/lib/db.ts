@@ -31,17 +31,14 @@ export async function dbConnect() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      dbName: MONGODB_DB || 'edu-express', // Ensure database name is always set
-      serverSelectionTimeoutMS: 15000, // Increased timeout for production
+      dbName: MONGODB_DB || undefined,
+      serverSelectionTimeoutMS: 10000, // Increased timeout for production
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
-      maxPoolSize: 10, // Maintain up to 10 socket connections
-      serverSelectionRetryDelayMS: 5000, // How long to wait before retrying
     };
 
     console.log('Attempting to connect to MongoDB...');
     console.log('MONGODB_URI:', MONGODB_URI ? 'Set' : 'Not set');
     console.log('MONGODB_DB:', MONGODB_DB);
-    console.log('Connection options:', JSON.stringify(opts, null, 2));
 
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
