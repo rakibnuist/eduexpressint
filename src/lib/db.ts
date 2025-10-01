@@ -32,36 +32,41 @@ export async function dbConnect() {
     const opts = {
       bufferCommands: false,
       dbName: MONGODB_DB || undefined,
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      serverSelectionTimeoutMS: 10000, // Increased timeout for production
       socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     };
 
     console.log('Attempting to connect to MongoDB...');
+    console.log('MONGODB_URI:', MONGODB_URI ? 'Set' : 'Not set');
+    console.log('MONGODB_DB:', MONGODB_DB);
 
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
         console.log('MongoDB connected successfully');
+        console.log('Database name:', mongoose.connection.db.databaseName);
         return mongoose;
       })
       .catch((error) => {
         console.error('MongoDB connection error:', error.message);
+        console.error('Full error:', error);
         console.log('Make sure MongoDB is running locally or provide a valid MONGODB_URI');
-        console.log('Application will continue in offline mode');
         cached.promise = null;
-        // Don't throw error, return a mock connection for offline mode
-        return null;
+        // Throw error instead of returning null to properly handle connection failures
+        throw error;
       });
   }
 
   try {
     cached.conn = await cached.promise;
+    return cached.conn;
   } catch (error) {
     cached.promise = null;
-    cached.conn = null; // Set to null for offline mode
+    cached.conn = null;
+    console.error('Failed to establish database connection:', error);
+    throw error;
+  } finally {
+    global._mongoose = cached;
   }
-
-  global._mongoose = cached;
-  return cached.conn;
 }
 
 // Check if database is connected

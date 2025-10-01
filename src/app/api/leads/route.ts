@@ -39,10 +39,10 @@ export async function POST(request: Request) {
     }
 
     // Ensure database connection
-    const dbConnection = await dbConnect();
-    
-    if (!dbConnection) {
-      console.error('Database connection failed');
+    try {
+      await dbConnect();
+    } catch (error) {
+      console.error('Database connection failed:', error);
       return NextResponse.json({
         ok: false,
         error: 'Database connection failed',
