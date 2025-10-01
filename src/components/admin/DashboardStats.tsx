@@ -93,7 +93,7 @@ export default function DashboardStats({ stats, loading = false }: DashboardStat
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">
-                {loading ? '...' : stat.value.toLocaleString()}
+                {loading ? '...' : (stat.value ?? 0).toLocaleString()}
               </div>
               {stat.recent !== undefined && (
                 <p className="text-xs text-green-600 mt-1">

@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
-import FloatingElements from '@/components/FloatingElements';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
@@ -72,7 +71,6 @@ export default function SouthKoreaPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Floating Elements */}
-      <FloatingElements variant="destinations" intensity="medium" />
       
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-900 via-red-900 to-blue-800 text-white overflow-hidden min-h-screen flex items-center">
@@ -108,7 +106,7 @@ export default function SouthKoreaPage() {
             <div className="flex justify-center mb-8">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-blue-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
                 <FaStar className="h-6 w-6" />
-                🇰🇷 EAP/KAP Programs - March & September 2026 Intakes
+                🇰🇷 EAP/KAP Programs - Multiple Intakes Available
                 <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
@@ -333,7 +331,7 @@ export default function SouthKoreaPage() {
                       <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
                         <div className="space-y-2">
-                          {["March 2026", "September 2026"].map((intake, index) => (
+                          {["Multiple Intakes Available"].map((intake, index) => (
                             <div key={index} className="flex items-center gap-3">
                               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                               <span className="text-gray-700 font-medium">{intake}</span>

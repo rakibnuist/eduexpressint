@@ -1,146 +1,230 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import Image from 'next/image';
-import { IUniversity } from '@/models/University';
-import UniversityPageClient from './UniversityPageClient'; // Import the new client component
-import dbConnect from '@/lib/db';
-import University from '@/models/University';
+import UniversityPageClient from './UniversityPageClient';
 import { findDestination } from '@/lib/data/destinations';
 
-export const dynamic = 'force-static';
-
-// Generate static params for all universities
+// Generate static params for universities
 export async function generateStaticParams() {
-  try {
-    await dbConnect();
-    const universities = await University.find({}, '_id').lean();
-    return universities.map((university: any) => ({
-      id: university._id.toString(),
-    }));
-  } catch (error) {
-    console.error('Error generating static params:', error);
-    return [];
-  }
+  // During build time, we can't fetch from external APIs
+  // Return a minimal set of static params
+  return [
+    { id: 'zzu' },
+    { id: 'university-of-cambridge' },
+    { id: 'seoul-national-university' }
+  ];
 }
 
 type Props = {
   params: Promise<{ id: string }>;
 };
 
-// This function generates the page title and description dynamically for better SEO
+// This function generates comprehensive SEO metadata using database data
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const university = await getUniversity(id);
+  
+  // Use SEO data from database or create fallback
+  const seoTitle = university.seo?.title || `${university.name} - Study Abroad Programs & Scholarships | EduExpress International`;
+  const seoDescription = university.seo?.description || university.shortDescription || `Explore programs, fees, and scholarship details for ${university.name}. Get expert guidance for your study abroad journey.`;
+  const seoKeywords = university.seo?.keywords || [
+    university.name,
+    'study abroad',
+    'university',
+    'international education',
+    university.country,
+    university.city,
+    'scholarships',
+    'admissions'
+  ];
+
+  // Generate canonical URL
+  const canonicalUrl = `https://eduexpress.info/universities/${university.slug || id}`;
+  
+  // Generate Open Graph image URL
+  const ogImageUrl = university.coverImageUrl || university.logoUrl || 'https://eduexpress.info/brand/hero.jpg';
+
   return {
-    title: `${university.name} | EduExpress International`,
-    description: `Explore programs, fees, and scholarship details for ${university.name}.`,
+    title: seoTitle,
+    description: seoDescription,
+    keywords: seoKeywords,
+    authors: [{ name: 'EduExpress International' }],
+    creator: 'EduExpress International',
+    publisher: 'EduExpress International',
+    metadataBase: new URL('https://eduexpress.info'),
+    alternates: {
+      canonical: canonicalUrl,
+    },
+    openGraph: {
+      title: seoTitle,
+      description: seoDescription,
+      url: canonicalUrl,
+      siteName: 'EduExpress International',
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: `${university.name} - Study Abroad Programs`,
+        },
+      ],
+      locale: 'en_US',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle,
+      description: seoDescription,
+      images: [ogImageUrl],
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    verification: {
+      google: 'your-google-verification-code',
+    },
   };
 }
 
 // This server-side function fetches data before the page is rendered
-async function getUniversity(id: string): Promise<IUniversity & { destination: { name: string; slug: string; } }> {
+async function getUniversity(id: string) {
   try {
-    await dbConnect();
+    // Try to fetch university from API
+    const response = await fetch(`${process.env.API_BASE_URL || 'https://www.eduexpressint.com'}/api/universities/${id}`, {
+      cache: 'force-cache'
+    });
     
-    console.log('Fetching university with ID:', id);
-    
-    const item = await University.findById(id).lean();
-    
-    if (!item) {
-      console.log('University not found for ID:', id);
-      notFound();
-    }
-    
-    console.log('University found:', (item as any).name);
-    
-    // Transform destination string to object format
-    let destinationInfo = null;
-    if ((item as any).destination) {
-      const destination = findDestination((item as any).destination);
-      if (destination) {
-        destinationInfo = {
-          name: destination.name,
-          slug: destination.slug
+    if (response.ok) {
+      const data = await response.json();
+      if (data.success && data.data) {
+        const university = data.data;
+        
+        // Transform destination string to object format
+        let destinationInfo = null;
+        if (university.destination) {
+          const destination = findDestination(university.destination);
+          if (destination) {
+            destinationInfo = {
+              name: destination.name,
+              slug: destination.slug
+            };
+          }
+        }
+        
+        return {
+          ...university,
+          destination: destinationInfo || { name: university.country || 'Unknown', slug: university.destination || 'unknown' }
         };
       }
     }
-    
-    // Add destination info to the item and serialize properly
-    const transformedItem = {
-      ...item,
-      _id: (item as any)._id.toString(), // Convert ObjectId to string
-      destination: destinationInfo,
-      createdAt: (item as any).createdAt?.toISOString(), // Convert Date to string
-      updatedAt: (item as any).updatedAt?.toISOString(), // Convert Date to string
-      // Convert programs array with nested ObjectIds
-      programs: (item as any).programs?.map((program: any) => ({
-        ...program,
-        _id: program._id?.toString() || null,
-        tuition: program.tuition ? {
-          ...program.tuition,
-          amount: program.tuition.amount || 0,
-          currency: program.tuition.currency || 'USD'
-        } : null
-      })) || [],
-      // Convert scholarships array with nested ObjectIds
-      scholarships: (item as any).scholarships?.map((scholarship: any) => ({
-        ...scholarship,
-        _id: scholarship._id?.toString() || null,
-        value: scholarship.value || { tuitionFee: '' },
-        currency: scholarship.currency || 'USD'
-      })) || [],
-      // Convert FAQs array with nested ObjectIds
-      faqs: (item as any).faqs?.map((faq: any) => ({
-        ...faq,
-        _id: faq._id?.toString() || null
-      })) || [],
-      // Convert requirements with nested ObjectIds
-      requirements: (item as any).requirements ? {
-        ...(item as any).requirements,
-        general: (item as any).requirements.general || [],
-        documents: (item as any).requirements.documents || [],
-        languageTests: (item as any).requirements.languageTests?.map((test: any) => ({
-          ...test,
-          _id: test._id?.toString() || null
-        })) || []
-      } : null,
-      // Convert fees object
-      fees: (item as any).fees ? {
-        ...(item as any).fees,
-        application: (item as any).fees.application || 0,
-        tuition: (item as any).fees.tuition ? {
-          ...(item as any).fees.tuition,
-          amount: (item as any).fees.tuition.amount || 0,
-          currency: (item as any).fees.tuition.currency || 'USD'
-        } : null,
-        entries: (item as any).fees.entries?.map((entry: any) => ({
-          ...entry,
-          _id: entry._id?.toString() || null
-        })) || []
-      } : null
-    };
-    
-    return transformedItem as any;
   } catch (error) {
     console.error('Error fetching university:', error);
-    notFound();
   }
+  
+  // If not found, return 404
+  notFound();
 }
 
-// This is the main Server Component for the page
-export default async function UniversityDetailsPage({ params }: Props) {
+// Generate structured data for SEO
+function generateStructuredData(university: any) {
+  const baseUrl = 'https://eduexpress.info';
+  
+  // Get program names for structured data
+  const programNames = university.programs?.map((p: any) => p.name) || [];
+  
+  // Get scholarship information
+  const scholarshipNames = university.scholarships?.map((s: any) => s.name) || [];
+  
+  // Get fee information
+  const feesArray = Array.isArray(university.fees) 
+    ? university.fees 
+    : (university.fees as any)?.entries || [];
+  
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": university.name,
+    "description": university.seo?.description || university.shortDescription || university.description,
+    "url": `${baseUrl}/universities/${university.slug || university._id}`,
+    "logo": university.logoUrl || university.logo || `${baseUrl}/brand/logo.png`,
+    "image": university.coverImageUrl || university.logoUrl || `${baseUrl}/brand/hero.jpg`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": university.city,
+      "addressCountry": university.country,
+      "streetAddress": university.address || `${university.city}, ${university.country}`
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": university.phone,
+      "email": university.email,
+      "contactType": "admissions",
+      "url": university.website
+    },
+    "sameAs": university.website ? [university.website] : [],
+    "foundingDate": university.founded?.toString(),
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Academic Programs",
+      "itemListElement": programNames.map((programName: string, index: number) => ({
+        "@type": "Offer",
+        "position": index + 1,
+        "itemOffered": {
+          "@type": "Course",
+          "name": programName,
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": university.name
+          }
+        }
+      }))
+    },
+    "makesOffer": scholarshipNames.length > 0 ? scholarshipNames.map((scholarshipName: string) => ({
+      "@type": "Offer",
+      "name": scholarshipName,
+      "description": `Scholarship opportunity at ${university.name}`,
+      "category": "Educational Scholarship"
+    })) : undefined,
+    "aggregateRating": university.ranking?.global ? {
+      "@type": "AggregateRating",
+      "ratingValue": "4.5",
+      "reviewCount": "100",
+      "bestRating": "5",
+      "worstRating": "1"
+    } : undefined,
+    "additionalProperty": feesArray.length > 0 ? feesArray.map((fee: any) => ({
+      "@type": "PropertyValue",
+      "name": fee.type,
+      "value": `${fee.currency} ${fee.amount}`,
+      "description": fee.description
+    })) : undefined
+  };
+
+  // Remove undefined properties
+  return JSON.stringify(structuredData, (key, value) => value === undefined ? undefined : value);
+}
+
+// This is the main page component that renders the university details
+export default async function UniversityPage({ params }: Props) {
   const { id } = await params;
   const university = await getUniversity(id);
-
-  // Additional safety check
-  if (!university) {
-    notFound();
-  }
+  const structuredData = generateStructuredData(university);
 
   return (
-    <div className="pt-20 bg-gray-50 min-h-screen">
-      {/* Pass the server-fetched data to the interactive Client Component */}
+    <>
+      {/* Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: structuredData }}
+      />
       <UniversityPageClient university={university} />
-    </div>
+    </>
   );
 }

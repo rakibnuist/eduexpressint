@@ -2,6 +2,30 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Line clamp utility */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Toast notification animations */
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
+}
+
 /* Fix dropdown visibility issues */
 [data-radix-popper-content-wrapper] {
   z-index: 9999 !important;
@@ -79,6 +103,15 @@ html, body {
 ::-webkit-scrollbar-thumb { background: #0B3A5D; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #0A2C48; }
 
+/* Hide scrollbar for tab navigation */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
 /* Custom Animations */
 @keyframes fade-in-up {
   from {
@@ -138,38 +171,7 @@ html, body {
   }
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
 
-@keyframes wiggle {
-  0%, 7% {
-    transform: rotateZ(0);
-  }
-  15% {
-    transform: rotateZ(-15deg);
-  }
-  20% {
-    transform: rotateZ(10deg);
-  }
-  25% {
-    transform: rotateZ(-10deg);
-  }
-  30% {
-    transform: rotateZ(6deg);
-  }
-  35% {
-    transform: rotateZ(-4deg);
-  }
-  40%, 100% {
-    transform: rotateZ(0);
-  }
-}
 
 @keyframes slide-in-up {
   from {
@@ -413,80 +415,6 @@ html, body {
   animation: wave 8s ease-in-out infinite;
 }
 
-/* Professional Shiny Button Animation */
-@keyframes shiny-gradient {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-@keyframes shiny-sweep {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.shiny-button {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899, #F59E0B, #10B981, #3B82F6);
-  background-size: 400% 400%;
-  animation: shiny-gradient 6s ease-in-out infinite;
-}
-
-.shiny-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, 
-    transparent 0%, 
-    transparent 30%, 
-    rgba(255, 255, 255, 0.6) 50%, 
-    transparent 70%, 
-    transparent 100%
-  );
-  transform: translateX(-100%);
-  animation: shiny-sweep 3s ease-in-out infinite;
-  animation-delay: 1s;
-}
-
-.shiny-button:hover::before {
-  animation-duration: 1.5s;
-}
-
-/* Professional Shiny Text Animation */
-@keyframes shiny-text {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.shiny-text {
-  background: linear-gradient(45deg, #3B82F6, #8B5CF6, #EC4899, #F59E0B, #10B981, #3B82F6);
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shiny-text 8s ease-in-out infinite;
-}
 
 /* Professional Typewriter Effect */
 @keyframes typewriter {
@@ -2293,12 +2221,6 @@ html, body {
   animation: happy-bounce 2s ease-in-out infinite;
 }
 
-/* Rainbow gradient animation */
-.rainbow-gradient {
-  background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef, #a8edea, #fed6e3, #d299c2);
-  background-size: 400% 400%;
-  animation: rainbow-shift 8s ease infinite;
-}
 
 /* Bright and cheerful shadows */
 .cheerful-shadow {
@@ -2459,6 +2381,43 @@ html, body {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: gradient-shift 3s ease infinite;
+}
+
+/* Shiny Button Styles */
+.shiny-button {
+  background: linear-gradient(135deg, #3B82F6, #1D4ED8, #1E40AF);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.shiny-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.shiny-button:hover::before {
+  left: 100%;
+}
+
+.shiny-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+}
+
+.shiny-button:active {
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 /* Performance Optimizations */

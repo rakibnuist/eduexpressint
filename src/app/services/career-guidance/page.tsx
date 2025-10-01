@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import FloatingElements from '@/components/FloatingElements';
 import { 
   FaHandshake, 
   FaCheckCircle, 
@@ -149,7 +148,6 @@ export default function CareerGuidancePage() {
 
   return (
     <div className="pt-32 pb-16 px-4 max-w-7xl mx-auto min-h-screen relative overflow-hidden">
-      <FloatingElements variant="services" intensity="medium" />
       
       <div className="relative z-10">
         {/* Hero Section */}

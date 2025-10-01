@@ -20,6 +20,7 @@ import {
 } from 'react-icons/fa';
 import { trackLead, trackFormSubmission } from '@/components/TrackLead';
 import { metaPixel } from '@/components/MetaPixel';
+import { addTrackingToJsonData } from '@/components/TrackingCapture';
 
 interface B2BPartnershipFormProps {
   onSuccess?: () => void;
@@ -285,12 +286,10 @@ export default function B2BPartnershipForm({ onSuccess, compact = false }: B2BPa
   const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('Form submission started');
-    console.log('Form data:', formData);
-    console.log('Form valid:', isFormValid);
+    // Form submission started
     
     if (!validateForm()) {
-      console.log('Form validation failed');
+      // Form validation failed
       return;
     }
 
@@ -321,7 +320,10 @@ Additional Message: ${formData.message}
         dealStage: 'Lead'
       };
 
-      console.log('Submitting data:', submissionData);
+      // Submitting data
+
+      // Add tracking data to submission data
+      const submissionDataWithTracking = addTrackingToJsonData(submissionData);
 
       // Submit to API first
       const response = await fetch('/api/admin/b2b-leads', {
@@ -329,11 +331,11 @@ Additional Message: ${formData.message}
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(submissionData),
+        body: JSON.stringify(submissionDataWithTracking),
       });
 
       const data = await response.json();
-      console.log('API response:', data);
+      // API response received
 
       if (!data.success) {
         throw new Error(data.error || 'Failed to submit partnership inquiry');
@@ -373,7 +375,7 @@ Additional Message: ${formData.message}
         // Don't fail the form submission if tracking fails
       }
 
-      console.log('Setting isSubmitted to true');
+      // Setting isSubmitted to true
       setIsSubmitted(true);
       onSuccess?.();
       
@@ -409,7 +411,7 @@ Additional Message: ${formData.message}
       console.error('Error submitting form:', error);
       
       // Show success message even if API fails (for demo purposes)
-      console.log('API failed, but showing success message anyway');
+      // API failed, but showing success message anyway
       setIsSubmitted(true);
       onSuccess?.();
       

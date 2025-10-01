@@ -116,3 +116,4 @@ current_nuist.json
 
 # Build artifacts
 edu-express-static.zip
+.env*.local

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
-import FloatingElements from '@/components/FloatingElements';
+import { usePageTracking } from '@/hooks/usePageTracking';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
@@ -33,6 +33,7 @@ import {
 export default function ChinaPage() {
   const { openCTA } = useCTA();
   const [activeTab, setActiveTab] = useState('overview');
+  usePageTracking(); // Track page view
 
   const destination = findDestination('china');
   
@@ -61,7 +62,6 @@ export default function ChinaPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Floating Elements */}
-      <FloatingElements variant="destinations" intensity="medium" />
       
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 text-white overflow-hidden min-h-screen flex items-center">
@@ -97,7 +97,7 @@ export default function ChinaPage() {
             <div className="flex justify-center mb-8">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
                 <FaCalendarAlt className="h-6 w-6" />
-                March 2026 & September 2026 Intakes Available
+                Multiple Intakes Available
                 <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
@@ -130,27 +130,27 @@ export default function ChinaPage() {
                 <div className="w-20 h-20 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <FaDollarSign className="h-10 w-10 text-white" />
                 </div>
-                <div className="text-5xl font-bold text-yellow-400 mb-2">¥15k-¥35k</div>
-                <div className="text-lg text-yellow-200 font-medium">Annual Tuition</div>
-                <div className="text-sm text-yellow-300 mt-2">With Scholarships Available</div>
+                <div className="text-5xl font-bold text-yellow-400 mb-2">100% Free</div>
+                <div className="text-lg text-yellow-200 font-medium">Tuition Fee</div>
+                <div className="text-sm text-yellow-300 mt-2">Full Scholarship</div>
                 </div>
               
               <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
                 <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <FaTrophy className="h-10 w-10 text-white" />
                 </div>
-                <div className="text-5xl font-bold text-green-400 mb-2">100%</div>
-                <div className="text-lg text-yellow-200 font-medium">Scholarship Coverage</div>
-                <div className="text-sm text-yellow-300 mt-2">CSC & University Programs</div>
+                <div className="text-5xl font-bold text-green-400 mb-2">100% Free</div>
+                <div className="text-lg text-yellow-200 font-medium">Accommodation Fee</div>
+                <div className="text-sm text-yellow-300 mt-2">Full Scholarship</div>
               </div>
 
               <div className="text-center bg-white/15 backdrop-blur-sm rounded-3xl p-8 border border-white/30 hover:bg-white/25 transition-all duration-300 transform hover:scale-105 group">
                 <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <FaHome className="h-10 w-10 text-white" />
                 </div>
-                <div className="text-5xl font-bold text-red-400 mb-2">¥600-¥1200</div>
-                <div className="text-lg text-yellow-200 font-medium">Monthly Living</div>
-                <div className="text-sm text-yellow-300 mt-2">Very Affordable</div>
+                <div className="text-5xl font-bold text-red-400 mb-2">¥500-¥3,500</div>
+                <div className="text-lg text-yellow-200 font-medium">Monthly Stipend</div>
+                <div className="text-sm text-yellow-300 mt-2">Scholarship Support</div>
               </div>
             </div>
 
@@ -209,21 +209,21 @@ export default function ChinaPage() {
         </div>
       </section>
 
-      {/* March 2026 Intake Highlight Section */}
+      {/* Intake Highlight Section */}
       <section className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
               <FaCalendarAlt className="h-5 w-5" />
-              March 2026 Intake - Application Deadline: January 20, 2026
+              Multiple Intakes Available
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Study in China with <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">Full Scholarships</span>
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               Join 9 prestigious universities offering Foundation + Bachelor programs with comprehensive scholarship opportunities. 
-              Start your academic journey in March 2026 with full financial support.
+              Start your academic journey with full financial support.
             </p>
           </div>
 
@@ -241,13 +241,13 @@ export default function ChinaPage() {
                 </div>
                 <div className="flex justify-between items-center p-4 bg-green-500/20 rounded-lg">
                   <span className="font-semibold">Monthly Stipend</span>
-                  <span className="text-2xl font-bold text-green-400">1,500</span>
+                  <span className="text-2xl font-bold text-green-400">500-3,500</span>
                   <span className="text-sm">CNY/month</span>
                 </div>
                 <div className="flex justify-between items-center p-4 bg-blue-500/20 rounded-lg">
-                  <span className="font-semibold">Application Deadline</span>
-                  <span className="text-2xl font-bold text-blue-400">Jan 20</span>
-                  <span className="text-sm">2026</span>
+                  <span className="font-semibold">Apply Early</span>
+                  <span className="text-2xl font-bold text-blue-400">Early</span>
+                  <span className="text-sm">Application</span>
                 </div>
               </div>
             </div>
@@ -277,17 +277,17 @@ export default function ChinaPage() {
               </div>
             </div>
 
-            {/* Why Choose March 2026 */}
+            {/* Why Choose Our Programs */}
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
               <h3 className="text-2xl font-bold mb-6 text-center text-blue-400">
-                Why March 2026?
+                Why Choose Our Programs?
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <FaCheckCircle className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
                   <div>
                     <div className="font-semibold">Higher Success Rate</div>
-                    <div className="text-sm text-gray-300">Less competition than September intake</div>
+                    <div className="text-sm text-gray-300">Less competition for admission</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -317,11 +317,11 @@ export default function ChinaPage() {
 
           <div className="text-center">
             <button
-              onClick={() => handleCTAClick('March 2026 Intake - Apply Now')}
+              onClick={() => handleCTAClick('China Intake - Apply Now')}
               className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-12 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3 mx-auto shadow-xl text-lg"
             >
               <FaRocket className="h-6 w-6" />
-              Apply for March 2026 Intake
+              Apply for China Programs
             </button>
           </div>
         </div>
@@ -440,7 +440,7 @@ export default function ChinaPage() {
                       <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
                         <div className="space-y-2">
-                          {["March 2026", "September 2026"].map((intake, index) => (
+                          {["Multiple Intakes Available"].map((intake, index) => (
                             <div key={index} className="flex items-center gap-3">
                               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                               <span className="text-gray-700 font-medium">{intake}</span>
@@ -481,7 +481,7 @@ export default function ChinaPage() {
                 <div className="mt-4 p-4 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
                   <div className="text-center">
                     <div className="text-sm text-yellow-200 mb-1">CSC Scholarship Available Only For</div>
-                    <div className="text-lg font-bold text-yellow-400">September 2026 Intake - Application Deadline: March 2026</div>
+                    <div className="text-lg font-bold text-yellow-400">Multiple Intakes Available - Apply Early</div>
                   </div>
                 </div>
               </div>
@@ -496,7 +496,7 @@ export default function ChinaPage() {
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
                       <FaCheckCircle className="h-5 w-5 text-red-600" />
-                      <span className="font-medium">Monthly stipend: 2,500-3,500 CNY</span>
+                      <span className="font-medium">Monthly stipend: 500-3,500 CNY</span>
                     </div>
                     <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
                       <FaCheckCircle className="h-5 w-5 text-red-600" />
@@ -679,7 +679,7 @@ export default function ChinaPage() {
               <h3 className="text-3xl font-bold text-center mb-8">Scholarship Application Tips & Timeline</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {[
-                  "Start application 6-8 months before intake (Dec 2025 for March 2026, Mar 2026 for Sept 2026 CSC)",
+                  "Start application well in advance for best results",
                   "Maintain excellent academic records (GPA 3.0+ for CSC)",
                   "Prepare strong personal statement and 2-3 recommendation letters",
                   "Obtain HSK level 3+ or IELTS 6.0+ for English programs",
@@ -696,17 +696,17 @@ export default function ChinaPage() {
               </div>
               
               <div className="mt-8 p-6 bg-red-50 rounded-2xl border border-red-200">
-                <h4 className="text-xl font-bold text-red-800 mb-4 text-center">Important Application Deadlines 2026</h4>
+                <h4 className="text-xl font-bold text-red-800 mb-4 text-center">Application Timeline</h4>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600 mb-2">March Intake</div>
-                    <div className="text-lg text-red-700">Application Deadline: December 2025</div>
-                    <div className="text-sm text-red-600">Results: January 2026</div>
+                    <div className="text-2xl font-bold text-red-600 mb-2">Early Application</div>
+                    <div className="text-lg text-red-700">Apply well in advance for best results</div>
+                    <div className="text-sm text-red-600">Results announced in due time</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600 mb-2">September Intake</div>
-                    <div className="text-lg text-red-700">CSC Deadline: March 2026</div>
-                    <div className="text-sm text-red-600">Results: July 2026</div>
+                    <div className="text-2xl font-bold text-red-600 mb-2">Multiple Intakes</div>
+                    <div className="text-lg text-red-700">Various intake periods available</div>
+                    <div className="text-sm text-red-600">Flexible application periods</div>
                   </div>
                 </div>
               </div>
@@ -794,7 +794,7 @@ export default function ChinaPage() {
               <h2 className="text-4xl font-bold mb-4">Top Universities in China</h2>
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-8 shadow-lg">
                 <FaCalendarAlt className="h-5 w-5" />
-                🚨 MARCH 2026 INTAKE - SCHOLARSHIPS AVAILABLE! 🚨
+                🚨 SCHOLARSHIPS AVAILABLE! 🚨
               </div>
             </div>
             
@@ -806,10 +806,10 @@ export default function ChinaPage() {
                   programs: "AI, Computer Science, Electronic Engineering, International Economics", 
                   city: "Nanjing, Jiangsu", 
                   scholarship: "100% Tuition Free (Top 40%)", 
-                  march2026: true,
+                  available: true,
                   foundation: "7,500 CNY",
                   bachelor: "18,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Zhengzhou University (ZZU)", 
@@ -817,10 +817,10 @@ export default function ChinaPage() {
                   programs: "International Economics, Tourism, Civil Engineering, Pharmacy, MBBS", 
                   city: "Zhengzhou, Henan", 
                   scholarship: "100% Tuition Free (Category 1)", 
-                  march2026: true,
+                  available: true,
                   foundation: "5,000 CNY",
                   bachelor: "23,000-36,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "China Pharmaceutical University (CPU)", 
@@ -828,10 +828,10 @@ export default function ChinaPage() {
                   programs: "International Economics, Pharmacy, Clinical Pharmacy", 
                   city: "Nanjing, Jiangsu", 
                   scholarship: "100% Tuition Free + 10,000 CNY", 
-                  march2026: true,
+                  available: true,
                   foundation: "5,000 CNY",
                   bachelor: "19,000-25,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Nanjing University of Aeronautics and Astronautics (NUAA)", 
@@ -839,10 +839,10 @@ export default function ChinaPage() {
                   programs: "Aeronautical Engineering, AI, Mechanical, Electrical, International Business", 
                   city: "Nanjing, Jiangsu", 
                   scholarship: "100% Tuition Free + Monthly Stipend", 
-                  march2026: true,
+                  available: true,
                   foundation: "8,000 CNY",
                   bachelor: "22,900-23,900 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "China Three Gorges University (CTGU)", 
@@ -850,10 +850,10 @@ export default function ChinaPage() {
                   programs: "Aeronautical, Computer Science, Business, Pharmacy, Civil Engineering", 
                   city: "Yichang, Hubei", 
                   scholarship: "100% Tuition Free (Hubei Scholarship)", 
-                  march2026: true,
+                  available: true,
                   foundation: "5,000 CNY",
                   bachelor: "10,000-15,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Nantong University (NTU)", 
@@ -861,10 +861,10 @@ export default function ChinaPage() {
                   programs: "AI, Electronics, Mechanical, Civil Engineering", 
                   city: "Nantong, Jiangsu", 
                   scholarship: "8,000 CNY/year Tuition", 
-                  march2026: true,
+                  available: true,
                   foundation: "8,000 CNY",
                   bachelor: "16,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Linyi University (LYU)", 
@@ -872,10 +872,10 @@ export default function ChinaPage() {
                   programs: "E-Commerce, Civil Engineering, Computer Science, International Business", 
                   city: "Linyi, Shandong", 
                   scholarship: "100% Tuition Free (1st Class)", 
-                  march2026: true,
+                  available: true,
                   foundation: "4,000 CNY",
                   bachelor: "12,000 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Xi'an Shiyou University (XSYU)", 
@@ -883,10 +883,10 @@ export default function ChinaPage() {
                   programs: "Civil Engineering, Computer Science, Petroleum Engineering, Geology", 
                   city: "Xi'an, Shaanxi", 
                   scholarship: "100% Tuition Free + Monthly Stipend", 
-                  march2026: true,
+                  available: true,
                   foundation: "3,000 CNY",
                   bachelor: "18,500 CNY/year",
-                  deadline: "Jan 20, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Wuzhou University (WZU)", 
@@ -894,16 +894,16 @@ export default function ChinaPage() {
                   programs: "Computer Science, International Trade and Economics", 
                   city: "Wuzhou, Guangxi", 
                   scholarship: "After Scholarship Tuition + Hostel fee: 6000 CNY", 
-                  march2026: true,
+                  available: true,
                   foundation: "No Foundation Course",
-                  bachelor: "Direct Bachelor from March 2026",
-                  deadline: "Jan 20, 2026"
+                  bachelor: "Direct Bachelor Program Available",
+                  deadline: "Apply Early"
                 }
               ].map((university, index) => (
-                <div key={index} className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group ${university.march2026 ? 'border-2 border-red-200' : ''}`}>
-                  {university.march2026 && (
+                <div key={index} className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group ${university.available ? 'border-2 border-red-200' : ''}`}>
+                  {university.available && (
                     <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                      MARCH 2026
+                      AVAILABLE
                     </div>
                   )}
                   <div className="flex items-center justify-between mb-4">
@@ -924,7 +924,7 @@ export default function ChinaPage() {
                   {/* Foundation Program - Only show if not "No Foundation Course" */}
                   {university.foundation !== "No Foundation Course" && (
                     <div className="bg-blue-50 rounded-lg p-3 mb-3">
-                      <div className="text-sm font-semibold text-blue-800">Foundation Program (March-July)</div>
+                      <div className="text-sm font-semibold text-blue-800">Foundation Program Available</div>
                       <div className="text-xs text-blue-600">Tuition: {university.foundation}</div>
                     </div>
                   )}
@@ -932,7 +932,7 @@ export default function ChinaPage() {
                   {/* Bachelor Program */}
                   <div className="bg-green-50 rounded-lg p-3 mb-3">
                     <div className="text-sm font-semibold text-green-800">
-                      {university.foundation === "No Foundation Course" ? "Bachelor Program (March Start)" : "Bachelor Program (Sept Start)"}
+                      {university.foundation === "No Foundation Course" ? "Bachelor Program Available" : "Bachelor Program Available"}
                     </div>
                     <div className="text-xs text-green-600">
                       {university.foundation === "No Foundation Course" ? "Direct Entry Available" : `Tuition: ${university.bachelor}`}
@@ -946,7 +946,7 @@ export default function ChinaPage() {
                   
                   {/* Deadline */}
                   <div className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                    📅 Deadline: {university.deadline}
+                    📅 Apply: {university.deadline}
                   </div>
                 </div>
               ))}
@@ -961,7 +961,7 @@ export default function ChinaPage() {
             <div className="text-center">
               <h2 className="text-4xl font-bold mb-4">Application Requirements</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Simple requirements for March 2026 intake - we help you with everything
+                Simple requirements for admission - we help you with everything
               </p>
             </div>
             
@@ -1145,7 +1145,7 @@ export default function ChinaPage() {
                 {
                   step: 3,
                   title: "Apply for Scholarship",
-                  description: "We handle all scholarship applications for you. Apply 6-8 months before intake deadline."
+                  description: "We handle all scholarship applications for you. Apply well in advance for best results."
                 },
                 {
                   step: 4,
@@ -1155,7 +1155,7 @@ export default function ChinaPage() {
                 {
                   step: 5,
                   title: "Receive Admission Letter",
-                  description: "Get your admission letter and scholarship confirmation from the university. Results typically announced in January 2026 (March intake) or July 2026 (September intake)."
+                  description: "Get your admission letter and scholarship confirmation from the university. Results are announced in due time after application review."
                 },
                 {
                   step: 6,

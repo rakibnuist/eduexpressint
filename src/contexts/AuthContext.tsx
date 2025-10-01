@@ -26,7 +26,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   hasPermission: (permission: string) => boolean;
   isSuperUser: () => boolean;
@@ -47,6 +47,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuthStatus = async () => {
     try {
+      // Check if we have a token in localStorage
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch('/api/auth/me', {
         credentials: 'include',
       });
@@ -56,16 +64,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(userData.user);
       } else {
         setUser(null);
+        localStorage.removeItem('adminToken');
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
+      localStorage.removeItem('adminToken');
     } finally {
       setLoading(false);
     }
   };
 
-  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+  const login = async (email: string, password: string): Promise<void> => {
     try {
       setLoading(true);
       const response = await fetch('/api/auth/login', {
@@ -81,13 +91,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (response.ok && data.success) {
         setUser(data.user);
-        return { success: true };
+        // Store token in localStorage for API calls
+        localStorage.setItem('adminToken', 'authenticated');
       } else {
-        return { success: false, error: data.error || 'Login failed' };
+        throw new Error(data.error || 'Login failed');
       }
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: 'Network error. Please try again.' };
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -103,6 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Logout error:', error);
     } finally {
       setUser(null);
+      localStorage.removeItem('adminToken');
       router.push('/admin/login');
     }
   };

@@ -28,6 +28,41 @@ export interface ILead extends Document {
     referrer?: string;
     landingPage?: string;
   };
+  // Meta (Facebook) Tracking
+  metaTracking?: {
+    fbclid?: string;
+    campaignId?: string;
+    adsetId?: string;
+    adId?: string;
+    campaignName?: string;
+    adsetName?: string;
+    adName?: string;
+    placement?: string;
+    deviceType?: string;
+    platform?: string;
+  };
+  // Google Tag Manager Tracking
+  gtmTracking?: {
+    gclid?: string;
+    campaignId?: string;
+    adgroupId?: string;
+    keywordId?: string;
+    campaignName?: string;
+    adgroupName?: string;
+    keyword?: string;
+    matchType?: string;
+    deviceType?: string;
+    network?: string;
+    placement?: string;
+  };
+  // UTM Parameters
+  utmParams?: {
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_term?: string;
+    utm_content?: string;
+  };
   timeline?: Array<{
     action: string;
     timestamp: Date;
@@ -75,6 +110,41 @@ const LeadSchema: Schema = new Schema({
     referrer: { type: String },
     landingPage: { type: String }
   },
+  // Meta (Facebook) Tracking
+  metaTracking: {
+    fbclid: { type: String },
+    campaignId: { type: String },
+    adsetId: { type: String },
+    adId: { type: String },
+    campaignName: { type: String },
+    adsetName: { type: String },
+    adName: { type: String },
+    placement: { type: String },
+    deviceType: { type: String },
+    platform: { type: String }
+  },
+  // Google Tag Manager Tracking
+  gtmTracking: {
+    gclid: { type: String },
+    campaignId: { type: String },
+    adgroupId: { type: String },
+    keywordId: { type: String },
+    campaignName: { type: String },
+    adgroupName: { type: String },
+    keyword: { type: String },
+    matchType: { type: String },
+    deviceType: { type: String },
+    network: { type: String },
+    placement: { type: String }
+  },
+  // UTM Parameters
+  utmParams: {
+    utm_source: { type: String },
+    utm_medium: { type: String },
+    utm_campaign: { type: String },
+    utm_term: { type: String },
+    utm_content: { type: String }
+  },
   timeline: [{
     action: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
@@ -91,6 +161,13 @@ LeadSchema.index({ programType: 1 });
 LeadSchema.index({ assignedTo: 1 });
 LeadSchema.index({ createdAt: -1 });
 LeadSchema.index({ lastContact: -1 });
+// Tracking indexes
+LeadSchema.index({ 'metaTracking.fbclid': 1 });
+LeadSchema.index({ 'metaTracking.campaignId': 1 });
+LeadSchema.index({ 'gtmTracking.gclid': 1 });
+LeadSchema.index({ 'gtmTracking.campaignId': 1 });
+LeadSchema.index({ 'utmParams.utm_source': 1 });
+LeadSchema.index({ 'utmParams.utm_campaign': 1 });
 
 // Virtual for lead age in days
 LeadSchema.virtual('leadAge').get(function(this: any) {

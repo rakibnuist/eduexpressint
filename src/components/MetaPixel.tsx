@@ -3,29 +3,19 @@
 import { useEffect, useState } from 'react';
 
 // Meta Pixel configuration
-const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+const PIXEL_ID = '1444050970227269';
 
-// Initialize Meta Pixel
-export const initMetaPixel = async () => {
-  if (typeof window !== 'undefined' && PIXEL_ID) {
-    try {
-      // Dynamically import react-facebook-pixel only on client side
-      const ReactPixel = (await import('react-facebook-pixel')).default;
-      
-      ReactPixel.init(PIXEL_ID, undefined, {
-        autoConfig: true,
-        debug: process.env.NODE_ENV === 'development'
-      });
-      
-      // Track page view
-      ReactPixel.pageView();
-      
-      console.log('Meta Pixel initialized with ID:', PIXEL_ID);
-      return ReactPixel;
-    } catch (error) {
-      console.error('Failed to initialize Meta Pixel:', error);
-      return null;
-    }
+// Declare fbq function for TypeScript
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
+
+// Initialize Meta Pixel (now handled in layout.tsx, this is for utility functions)
+export const initMetaPixel = () => {
+  if (typeof window !== 'undefined' && window.fbq) {
+    return window.fbq;
   }
   return null;
 };
@@ -35,12 +25,14 @@ export default function MetaPixelProvider({ children }: { children: React.ReactN
   const [pixelInstance, setPixelInstance] = useState<any>(null);
 
   useEffect(() => {
-    const initializePixel = async () => {
-      const pixel = await initMetaPixel();
+    const initializePixel = () => {
+      const pixel = initMetaPixel();
       setPixelInstance(pixel);
     };
     
-    initializePixel();
+    // Wait for the pixel to be loaded from layout.tsx
+    const timer = setTimeout(initializePixel, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   return <>{children}</>;
@@ -49,11 +41,10 @@ export default function MetaPixelProvider({ children }: { children: React.ReactN
 // Meta Pixel tracking functions
 export const metaPixel = {
   // Track page views
-  pageView: async () => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+  pageView: () => {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.pageView();
+        window.fbq('track', 'PageView');
       } catch (error) {
         console.error('Failed to track page view:', error);
       }
@@ -61,7 +52,7 @@ export const metaPixel = {
   },
 
   // Track lead generation
-  trackLead: async (leadData: {
+  trackLead: (leadData: {
     content_name?: string;
     content_category?: string;
     value?: number;
@@ -73,10 +64,9 @@ export const metaPixel = {
     program?: string;
     source?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track('Lead', {
+        window.fbq('track', 'Lead', {
           content_name: leadData.content_name || 'Lead Generated',
           content_category: leadData.content_category || 'Education',
           value: leadData.value || 1,
@@ -97,17 +87,16 @@ export const metaPixel = {
   },
 
   // Track form submissions
-  trackFormSubmission: async (formData: {
+  trackFormSubmission: (formData: {
     form_name?: string;
     form_type?: string;
     content_name?: string;
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track('CompleteRegistration', {
+        window.fbq('track', 'CompleteRegistration', {
           content_name: formData.content_name || 'Form Submission',
           form_name: formData.form_name || 'Contact Form',
           form_type: formData.form_type || 'Lead Generation',
@@ -123,11 +112,10 @@ export const metaPixel = {
   },
 
   // Track custom events
-  trackCustomEvent: async (eventName: string, eventData: Record<string, any> = {}) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+  trackCustomEvent: (eventName: string, eventData: Record<string, any> = {}) => {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track(eventName, eventData);
+        window.fbq('track', eventName, eventData);
         console.log('Meta Pixel Custom Event tracked:', eventName, eventData);
       } catch (error) {
         console.error('Failed to track custom event:', error);
@@ -136,17 +124,16 @@ export const metaPixel = {
   },
 
   // Track view content (for university pages, destination pages, etc.)
-  trackViewContent: async (contentData: {
+  trackViewContent: (contentData: {
     content_name?: string;
     content_category?: string;
     content_ids?: string[];
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track('ViewContent', {
+        window.fbq('track', 'ViewContent', {
           content_name: contentData.content_name || 'Content Viewed',
           content_category: contentData.content_category || 'Education',
           content_ids: contentData.content_ids || [],
@@ -162,14 +149,13 @@ export const metaPixel = {
   },
 
   // Track search events
-  trackSearch: async (searchData: {
+  trackSearch: (searchData: {
     search_string?: string;
     content_category?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track('Search', {
+        window.fbq('track', 'Search', {
           search_string: searchData.search_string || '',
           content_category: searchData.content_category || 'Education'
         });
@@ -182,17 +168,16 @@ export const metaPixel = {
   },
 
   // Track add to cart (for programs/universities)
-  trackAddToCart: async (cartData: {
+  trackAddToCart: (cartData: {
     content_name?: string;
     content_category?: string;
     content_ids?: string[];
     value?: number;
     currency?: string;
   }) => {
-    if (typeof window !== 'undefined' && PIXEL_ID) {
+    if (typeof window !== 'undefined' && window.fbq) {
       try {
-        const ReactPixel = (await import('react-facebook-pixel')).default;
-        ReactPixel.track('AddToCart', {
+        window.fbq('track', 'AddToCart', {
           content_name: cartData.content_name || 'Program Added',
           content_category: cartData.content_category || 'Education',
           content_ids: cartData.content_ids || [],

@@ -1,0 +1,82 @@
+{
+  "name": "EduExpress International - Study Abroad & Scholarships",
+  "short_name": "EduExpress",
+  "description": "Transform your future with expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0B3A5D",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": ["education", "business", "productivity"],
+  "icons": [
+    {
+      "src": "/brand/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/brand/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/brand/logo.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "EduExpress International Homepage"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Free Consultation",
+      "short_name": "Consultation",
+      "description": "Get a free study abroad consultation",
+      "url": "/?action=consultation",
+      "icons": [
+        {
+          "src": "/brand/icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Destinations",
+      "short_name": "Destinations",
+      "description": "Explore study destinations",
+      "url": "/destinations",
+      "icons": [
+        {
+          "src": "/brand/icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Universities",
+      "short_name": "Universities",
+      "description": "Browse universities",
+      "url": "/universities",
+      "icons": [
+        {
+          "src": "/brand/icon.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

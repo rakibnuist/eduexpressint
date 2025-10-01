@@ -20,20 +20,8 @@ import {
   FaShieldAlt,
   FaBookOpen
 } from "react-icons/fa";
-import FloatingElements from '@/components/FloatingElements';
 import { useState } from "react";
 import { DESTINATIONS } from "@/lib/data/destinations";
-import {
-  EduexpertFadeInUp,
-  EduexpertSlideInLeft,
-  EduexpertSlideInRight,
-  EduexpertScaleIn,
-  EduexpertCard,
-  EduexpertButton,
-  EduexpertImage,
-  EduexpertStaggered,
-  EduexpertTextReveal
-} from '@/components/EduexpertAnimations';
 
 interface Destination {
   slug: string;
@@ -165,7 +153,6 @@ export default function DestinationsIndex() {
       <div className="absolute top-1/3 right-10 w-8 h-8 bg-gradient-to-br from-yellow-300/20 to-orange-300/20 rounded-full artistic-float blur-md" style={{animationDelay: '5.5s'}}></div>
       
       {/* Floating Elements */}
-      <FloatingElements variant="destinations" intensity="medium" />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-700 text-white overflow-hidden">
@@ -201,22 +188,22 @@ export default function DestinationsIndex() {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative mx-auto max-w-7xl px-6 py-20">
           <div className="text-center">
-            <EduexpertFadeInUp delay={0.2} duration={1.0}>
+            <div>
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Study Abroad <span className="text-yellow-300">Destinations</span>
               </h1>
-            </EduexpertFadeInUp>
-            <EduexpertTextReveal delay={0.6} duration={0.8}>
+            </div>
+            <div>
               <p className="text-xl md:text-2xl text-blue-100 mb-8 max-w-3xl mx-auto">
                 Discover world-class universities in our most sought-after destinations. 
                 Your global education journey starts here.
               </p>
-            </EduexpertTextReveal>
+            </div>
             
             {/* Stats */}
-            <EduexpertStaggered delay={0.1} className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
               {stats.map((stat, index) => (
-                <EduexpertScaleIn key={index} delay={0.8 + index * 0.2} duration={0.6}>
+                <div key={index}>
                   <div className="text-center">
                     <div className="flex justify-center mb-2 text-yellow-300">
                       {stat.icon}
@@ -224,9 +211,9 @@ export default function DestinationsIndex() {
                     <div className="text-2xl md:text-3xl font-bold">{stat.value}</div>
                     <div className="text-sm text-blue-200">{stat.label}</div>
                   </div>
-                </EduexpertScaleIn>
+                </div>
               ))}
-            </EduexpertStaggered>
+            </div>
           </div>
         </div>
       </section>
@@ -284,11 +271,11 @@ export default function DestinationsIndex() {
             {filteredDestinations.length > 0 ? (
               <div role="region" aria-label="Study destinations">
                 <h2 className="sr-only">Available Study Destinations</h2>
-                <EduexpertStaggered delay={0.1} className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {filteredDestinations.map((destination, index) => (
-                  <EduexpertScaleIn key={destination.slug} delay={0.2 + index * 0.1} duration={0.6}>
-                    <EduexpertCard className="group overflow-hidden cheerful-shadow gpu-accelerated positive-hover tilt-3d magnetic-effect uplifting-card enhanced-contrast bg-white/90 backdrop-blur-md border border-white/60 shadow-2xl">
-                      <EduexpertImage className="relative h-64 overflow-hidden floating-particles shimmer-effect">
+                  <div key={destination.slug}>
+                    <div className="group overflow-hidden bg-white/90 backdrop-blur-md border border-white/60 shadow-2xl rounded-lg">
+                      <div className="relative h-64 overflow-hidden">
                         {/* Creative Gradient Background */}
                         <div 
                           className="absolute inset-0 transition-all duration-500 group-hover:scale-110 animated-gradient"
@@ -338,7 +325,7 @@ export default function DestinationsIndex() {
                             </div>
                           )}
                         </div>
-                      </EduexpertImage>
+                      </div>
                       
                       <CardContent className="p-6 bg-gradient-to-br from-white to-blue-50 backdrop-blur-sm shadow-lg border border-blue-100">
                         <div className="space-y-4">
@@ -354,43 +341,29 @@ export default function DestinationsIndex() {
                           </div>
                           
                           <div className="flex gap-2">
-                            <EduexpertButton 
-                              asChild 
-                              variant="gradient" 
-                              size="default"
-                              className="flex-1 group/btn optimized-button min-h-[48px] gpu-accelerated transform-optimized magnetic-effect shimmer-effect button-shadow-enhanced"
-                              loading={loadingStates[`explore-${destination.slug}`]}
+                            <Link 
+                              href={`/destinations/${destination.slug}`}
+                              aria-label={`Explore ${destination.name} destination - Learn about universities, programs, and opportunities`}
+                              onClick={() => handleButtonClick(`explore-${destination.slug}`, () => {})}
+                              className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-md text-center font-semibold hover:from-blue-700 hover:to-purple-700 transition-colors"
                             >
-                              <Link 
-                                href={`/destinations/${destination.slug}`}
-                                aria-label={`Explore ${destination.name} destination - Learn about universities, programs, and opportunities`}
-                                onClick={() => handleButtonClick(`explore-${destination.slug}`, () => {})}
-                              >
-                                <span className="text-sm font-extrabold text-white" style={{textShadow: '1px 1px 2px rgba(0,0,0,0.3)'}}>🌍 Explore</span>
-                              </Link>
-                            </EduexpertButton>
-                            <EduexpertButton 
-                              asChild 
-                              variant="outline" 
-                              size="default"
-                              className="flex-1 group/btn optimized-button min-h-[48px] gpu-accelerated transform-optimized magnetic-effect button-shadow-enhanced border-2 border-green-300 bg-gradient-to-r from-green-50 to-blue-50 hover:from-green-100 hover:to-blue-100"
-                              loading={loadingStates[`universities-${destination.slug}`]}
+                              <span className="text-sm font-extrabold text-white">🌍 Explore</span>
+                            </Link>
+                            <Link 
+                              href="/universities"
+                              aria-label="Browse all universities and programs available"
+                              onClick={() => handleButtonClick(`universities-${destination.slug}`, () => {})}
+                              className="flex-1 border-2 border-green-300 bg-gradient-to-r from-green-50 to-blue-50 hover:from-green-100 hover:to-blue-100 text-green-700 px-4 py-2 rounded-md text-center font-semibold transition-colors"
                             >
-                              <Link 
-                                href="/universities"
-                                aria-label="Browse all universities and programs available"
-                                onClick={() => handleButtonClick(`universities-${destination.slug}`, () => {})}
-                              >
-                                <span className="text-sm font-extrabold text-green-700">🎓 Universities</span>
-                              </Link>
-                            </EduexpertButton>
+                              <span className="text-sm font-extrabold text-green-700">🎓 Universities</span>
+                            </Link>
                           </div>
                         </div>
                       </CardContent>
-                    </EduexpertCard>
-                  </EduexpertScaleIn>
+                    </div>
+                  </div>
                 ))}
-                </EduexpertStaggered>
+              </div>
               </div>
             ) : (
               <div className="text-center py-12" role="status" aria-live="polite">

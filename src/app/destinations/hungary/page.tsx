@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
-import FloatingElements from '@/components/FloatingElements';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
@@ -70,7 +69,6 @@ export default function HungaryPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Floating Elements */}
-      <FloatingElements variant="destinations" intensity="medium" />
       
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-red-900 via-orange-900 to-yellow-900 text-white overflow-hidden min-h-screen flex items-center">
@@ -106,7 +104,7 @@ export default function HungaryPage() {
             <div className="flex justify-center mb-8">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-orange-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
                 <FaStar className="h-6 w-6" />
-                January & September 2026 Intakes - Apply Now!
+                Multiple Intakes Available - Apply Now!
                 <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
@@ -218,21 +216,21 @@ export default function HungaryPage() {
         </div>
       </section>
 
-      {/* 2026 Intakes Highlight Section */}
+      {/* Intakes Highlight Section */}
       <section className="bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white py-20 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20"></div>
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-6 shadow-lg">
               <FaCalendarAlt className="h-5 w-5" />
-              January & September 2026 Intakes - Application Deadlines: October 15, 2025 & January 15, 2026
+              Multiple Intakes Available - Apply Early
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
               Study in Hungary with <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">World-Class Education</span>
             </h2>
             <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
               Join prestigious Hungarian universities offering world-class education with affordable tuition fees. 
-              Start your academic journey in January or September 2026 with excellent support.
+              Start your academic journey with excellent support.
             </p>
           </div>
 
@@ -254,9 +252,9 @@ export default function HungaryPage() {
                   <span className="text-sm">Recognition</span>
                 </div>
                 <div className="flex justify-between items-center p-4 bg-blue-500/20 rounded-lg">
-                  <span className="font-semibold">Application Deadlines</span>
-                  <span className="text-2xl font-bold text-blue-400">Oct/Jan</span>
-                  <span className="text-sm">2025/2026</span>
+                  <span className="font-semibold">Apply Early</span>
+                  <span className="text-2xl font-bold text-blue-400">Early</span>
+                  <span className="text-sm">Application</span>
                 </div>
               </div>
             </div>
@@ -286,17 +284,17 @@ export default function HungaryPage() {
               </div>
             </div>
 
-            {/* Why Choose 2026 Intakes */}
+            {/* Why Choose Our Programs */}
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
               <h3 className="text-2xl font-bold mb-6 text-center text-blue-400">
-                Why Choose 2026 Intakes?
+                Why Choose Our Programs?
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <FaCheckCircle className="h-5 w-5 text-blue-400 mt-1 flex-shrink-0" />
                   <div>
                     <div className="font-semibold">Flexible Start Dates</div>
-                    <div className="text-sm text-gray-300">January and September intake options</div>
+                    <div className="text-sm text-gray-300">Multiple intake options available</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -326,11 +324,11 @@ export default function HungaryPage() {
 
           <div className="text-center">
             <button
-              onClick={() => handleCTAClick('2026 Intakes - Apply Now')}
+              onClick={() => handleCTAClick('Hungary Programs - Apply Now')}
               className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-12 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3 mx-auto shadow-xl text-lg"
             >
               <FaRocket className="h-6 w-6" />
-              Apply for 2026 Intakes
+              Apply for Hungary Programs
             </button>
           </div>
         </div>
@@ -449,7 +447,7 @@ export default function HungaryPage() {
                       <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
                         <div className="space-y-2">
-                          {["January 2026", "September 2026"].map((intake, index) => (
+                          {["Multiple Intakes Available"].map((intake, index) => (
                             <div key={index} className="flex items-center gap-3">
                               <div className="w-3 h-3 bg-red-500 rounded-full"></div>
                               <span className="text-gray-700 font-medium">{intake}</span>
@@ -490,7 +488,7 @@ export default function HungaryPage() {
                 <div className="mt-4 p-4 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
                   <div className="text-center">
                     <div className="text-sm text-yellow-200 mb-1">Scholarships Available For</div>
-                    <div className="text-lg font-bold text-yellow-400">January & September 2026 Intakes</div>
+                    <div className="text-lg font-bold text-yellow-400">Multiple Intakes Available</div>
                   </div>
                 </div>
               </div>
@@ -629,7 +627,7 @@ export default function HungaryPage() {
               <h3 className="text-3xl font-bold text-center mb-8">Scholarship Application Tips & Timeline</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {[
-                  "Start application 6-8 months before intake (July 2025 for Sept 2026, March 2025 for Jan 2026)",
+                  "Start application well in advance for best results",
                   "Maintain excellent academic records (GPA 3.0+ for most scholarships)",
                   "Prepare strong personal statement and 2-3 recommendation letters",
                   "Obtain IELTS 6.0+ or equivalent English proficiency certificate",
@@ -646,17 +644,17 @@ export default function HungaryPage() {
               </div>
               
               <div className="mt-8 p-6 bg-red-50 rounded-2xl border border-red-200">
-                <h4 className="text-xl font-bold text-red-800 mb-4 text-center">Important Application Deadlines 2026</h4>
+                <h4 className="text-xl font-bold text-red-800 mb-4 text-center">Application Timeline</h4>
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600 mb-2">January Intake</div>
-                    <div className="text-lg text-red-700">Application Deadline: October 15, 2025</div>
-                    <div className="text-sm text-red-600">Results: December 2025</div>
+                    <div className="text-2xl font-bold text-red-600 mb-2">Early Application</div>
+                    <div className="text-lg text-red-700">Apply well in advance for best results</div>
+                    <div className="text-sm text-red-600">Results announced in due time</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-red-600 mb-2">September Intake</div>
-                    <div className="text-lg text-red-700">Application Deadline: January 15, 2026</div>
-                    <div className="text-sm text-red-600">Results: May 2026</div>
+                    <div className="text-2xl font-bold text-red-600 mb-2">Multiple Intakes</div>
+                    <div className="text-lg text-red-700">Various intake periods available</div>
+                    <div className="text-sm text-red-600">Flexible application periods</div>
                   </div>
                 </div>
               </div>
@@ -743,7 +741,7 @@ export default function HungaryPage() {
               <h2 className="text-4xl font-bold mb-4">Top Universities in Hungary</h2>
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-orange-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-8 shadow-lg">
                 <FaCalendarAlt className="h-5 w-5" />
-                🚨 JANUARY & SEPTEMBER 2026 INTAKES - SCHOLARSHIPS AVAILABLE! 🚨
+                🚨 MULTIPLE INTAKES AVAILABLE - SCHOLARSHIPS AVAILABLE! 🚨
               </div>
             </div>
             
@@ -755,10 +753,9 @@ export default function HungaryPage() {
                   programs: "General Medicine, Dentistry, Pharmacy, Health Sciences", 
                   city: "Budapest", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-8,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Debrecen", 
@@ -766,10 +763,9 @@ export default function HungaryPage() {
                   programs: "Medicine, Engineering, Business, Agriculture, Arts", 
                   city: "Debrecen", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-6,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Budapest University of Technology and Economics", 
@@ -777,10 +773,9 @@ export default function HungaryPage() {
                   programs: "Engineering, Computer Science, Architecture, Economics", 
                   city: "Budapest", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-6,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Corvinus University of Budapest", 
@@ -788,10 +783,9 @@ export default function HungaryPage() {
                   programs: "Business Administration, Economics, International Relations", 
                   city: "Budapest", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-5,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Eötvös Loránd University (ELTE)", 
@@ -799,10 +793,9 @@ export default function HungaryPage() {
                   programs: "Psychology, Education, Languages, Natural Sciences", 
                   city: "Budapest", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-5,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Szeged", 
@@ -810,16 +803,15 @@ export default function HungaryPage() {
                   programs: "Medicine, Engineering, Business, Arts, Sciences", 
                   city: "Szeged", 
                   scholarship: "Scholarships Available", 
-                  jan2026: true,
-                  sept2026: true,
+                  available: true,
                   tuition: "€3,000-6,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 }
               ].map((university, index) => (
-                <div key={index} className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group ${university.jan2026 || university.sept2026 ? 'border-2 border-red-200' : ''}`}>
-                  {(university.jan2026 || university.sept2026) && (
+                <div key={index} className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group ${university.available ? 'border-2 border-red-200' : ''}`}>
+                  {university.available && (
                     <div className="absolute -top-2 -right-2 bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs px-2 py-1 rounded-full font-bold">
-                      2026
+                      AVAILABLE
                     </div>
                   )}
                   <div className="flex items-center justify-between mb-4">
@@ -850,7 +842,7 @@ export default function HungaryPage() {
                   
                   {/* Deadline */}
                   <div className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                    📅 Deadline: {university.deadline}
+                    📅 Apply: {university.deadline}
                   </div>
                 </div>
               ))}
@@ -865,7 +857,7 @@ export default function HungaryPage() {
             <div className="text-center">
               <h2 className="text-4xl font-bold mb-4">Application Requirements</h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Simple requirements for September 2026 intake - we help you with everything
+                Simple requirements for admission - we help you with everything
               </p>
             </div>
             
@@ -1049,7 +1041,7 @@ export default function HungaryPage() {
                 {
                   step: 3,
                   title: "Apply for Scholarship",
-                  description: "We handle all scholarship applications for you. Apply 6-8 months before intake deadline."
+                  description: "We handle all scholarship applications for you. Apply well in advance for best results."
                 },
                 {
                   step: 4,
@@ -1059,7 +1051,7 @@ export default function HungaryPage() {
                 {
                   step: 5,
                   title: "Receive Admission Letter",
-                  description: "Get your admission letter and scholarship confirmation from the university. Results typically announced in May 2026 (September intake) or December 2025 (January intake)."
+                  description: "Get your admission letter and scholarship confirmation from the university. Results are announced in due time after application review."
                 },
                 {
                   step: 6,

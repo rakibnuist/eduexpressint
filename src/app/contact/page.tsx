@@ -15,7 +15,6 @@ import {
   FaCheckCircle,
   FaExclamationCircle
 } from 'react-icons/fa';
-import FloatingElements from '@/components/FloatingElements';
 import BorderBeam from '@/components/BorderBeam';
 
 export default function ContactPage() {
@@ -78,7 +77,7 @@ export default function ContactPage() {
         "Dhaka - 1209, Bangladesh"
       ],
       color: "from-blue-500 to-cyan-500",
-      action: "https://maps.google.com/?q=12/1+Ground+Floor+Road+4/A+Dhanmondi+Dhaka+1209"
+      action: "https://maps.app.goo.gl/7iVJQ99ztzwxxQPk7"
     },
     {
       icon: FaEnvelope,
@@ -111,7 +110,6 @@ export default function ContactPage() {
 
   return (
     <div className="pt-32 pb-16 px-4 max-w-7xl mx-auto min-h-screen relative overflow-hidden">
-      <FloatingElements variant="contact" intensity="medium" />
       
       <div className="relative z-10">
         {/* Header Section */}
@@ -216,7 +214,7 @@ export default function ContactPage() {
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Find Us</h3>
               <div className="flex-1 rounded-xl overflow-hidden bg-gray-100 relative">
                 {/* Interactive Map Card */}
-                <div className="w-full h-full bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl relative overflow-hidden group cursor-pointer" onClick={() => window.open('https://maps.app.goo.gl/L7TkiPpbWXB6G8S39', '_blank')}>
+                <div className="w-full h-full bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl relative overflow-hidden group cursor-pointer" onClick={() => window.open('https://maps.app.goo.gl/7iVJQ99ztzwxxQPk7', '_blank')}>
                   {/* Map Pattern Background */}
                   <div className="absolute inset-0 opacity-20">
                     <div className="w-full h-full bg-gradient-to-br from-blue-100 via-cyan-100 to-blue-200">
@@ -267,7 +265,7 @@ export default function ContactPage() {
                     <strong>📍 EduExpress International Office</strong>
                   </p>
                   <a 
-                    href="https://maps.app.goo.gl/L7TkiPpbWXB6G8S39" 
+                    href="https://maps.app.goo.gl/7iVJQ99ztzwxxQPk7" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors duration-300 flex items-center gap-1"

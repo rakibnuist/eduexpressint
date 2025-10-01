@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useFormTracking } from '@/hooks/usePageTracking';
 
 interface Lead {
   _id?: string;
@@ -29,6 +30,7 @@ interface LeadFormProps {
 }
 
 export default function LeadForm({ lead, onSubmit, onCancel, isLoading = false }: LeadFormProps) {
+  const { trackFormSubmission } = useFormTracking();
   const [formData, setFormData] = useState<Lead>({
     name: '',
     email: '',
@@ -78,6 +80,20 @@ export default function LeadForm({ lead, onSubmit, onCancel, isLoading = false }
     }
 
     try {
+      // Track form submission with Meta Pixel
+      trackFormSubmission({
+        form_name: 'Lead Form',
+        form_type: 'Lead Generation',
+        content_name: 'Contact Form Submission',
+        value: 1,
+        currency: 'USD',
+        email: formData.email,
+        phone: formData.phone,
+        destination: formData.countryOfInterest,
+        program: formData.programType,
+        source: formData.source
+      });
+
       await onSubmit(formData);
     } catch (error) {
       console.error('Error submitting form:', error);

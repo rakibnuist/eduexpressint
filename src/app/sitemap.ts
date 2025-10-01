@@ -4,7 +4,7 @@ import { DESTINATIONS } from '@/lib/data/destinations';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://eduexpress.info';
+  const base = 'https://eduexpressint.com';
   const now = new Date();
 
   // Static pages with priority and change frequency

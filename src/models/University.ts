@@ -16,21 +16,13 @@ export interface IUniversity extends Document {
 
   // Location and Type
   country: string;
-  destination: string;
+  destination?: string;
   city: string;
   type: 'Public' | 'Private' | 'Community' | 'Research' | 'Technical';
 
   // Visual Assets
   logoUrl?: string;
-  logo?: string;
   coverImageUrl?: string;
-  images?: string[];
-  website?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  founded?: number;
-  about?: string;
 
   // Rankings
   ranking?: {
@@ -43,44 +35,28 @@ export interface IUniversity extends Document {
     name: string;
     level: 'Bachelor' | 'Masters' | 'PhD' | 'Diploma' | 'Foundation' | 'Certificate';
     duration: number; // Duration in years
-    language: string;
     tuition: {
       amount: number;
       currency: string;
-      local: number;
-      international: number;
-      perYear: boolean;
     };
   }>;
 
   // Fees Information
-  fees: {
-    application: number;
-    tuition: {
-      amount: number;
-      currency: string;
-    };
-    entries: Array<{
-      type: string;
-      amount: string;
-      currency: string;
-      description: string;
-    }>;
-  };
+  fees: Array<{
+    type: string;
+    amount: string;
+    currency: string;
+    description: string;
+  }>;
 
   // Scholarships
   scholarships: Array<{
     name: string;
     value: {
       tuitionFee?: string;
-      accommodationFee?: string;
-      monthlyStipend?: string;
-      percentage?: number;
-      afterScholarshipFee?: string;
     };
     currency: string;
-    type: 'freshman' | 'university' | 'government' | 'provencial' | 'departmental' | 'external';
-    description?: string;
+    type: string;
   }>;
 
   // Scholarship Conditions
@@ -123,26 +99,18 @@ const UniversitySchema: Schema = new Schema({
   seo: {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    keywords: [{ type: String, required: true }]
+    keywords: [{ type: String }]
   },
 
   // Location and Type
   country: { type: String, required: true },
-  destination: { type: String, required: true },
+  destination: { type: String },
   city: { type: String, required: true },
   type: { type: String, enum: ['Public', 'Private', 'Community', 'Research', 'Technical'], required: true },
 
   // Visual Assets
   logoUrl: { type: String },
-  logo: { type: String },
   coverImageUrl: { type: String },
-  images: [{ type: String }],
-  website: { type: String },
-  email: { type: String },
-  phone: { type: String },
-  address: { type: String },
-  founded: { type: Number },
-  about: { type: String },
 
   // Rankings
   ranking: {
@@ -155,56 +123,37 @@ const UniversitySchema: Schema = new Schema({
     name: { type: String, required: true },
     level: { type: String, enum: ['Bachelor', 'Masters', 'PhD', 'Diploma', 'Foundation', 'Certificate'], required: true },
     duration: { type: Number, required: true },
-    language: { type: String, required: true },
     tuition: {
       amount: { type: Number, required: true },
-      currency: { type: String, required: true },
-      local: { type: Number, required: true },
-      international: { type: Number, required: true },
-      perYear: { type: Boolean, required: true }
+      currency: { type: String, required: true }
     }
   }],
 
   // Fees Information
-  fees: {
-    application: { type: Number, required: true },
-    tuition: {
-      amount: { type: Number, required: true },
-      currency: { type: String, required: true }
-    },
-    entries: [{
-      type: { type: String, required: true },
-      amount: { type: String, required: true },
-      currency: { type: String, required: true },
-      description: { type: String, required: true }
-    }]
-  },
+  fees: [{
+    type: { type: String, required: true },
+    amount: { type: String, required: true },
+    currency: { type: String, required: true },
+    description: { type: String, required: true }
+  }],
 
   // Scholarships
   scholarships: [{
     name: { type: String, required: true },
     value: {
-      tuitionFee: { type: String },
-      accommodationFee: { type: String },
-      monthlyStipend: { type: String },
-      afterScholarshipFee: { type: String },
+      tuitionFee: { type: String }
     },
-    currency: { type: String, required: true, default: 'USD' },
-    type: {
-      type: String,
-      enum: ['freshman', 'university', 'government', 'provencial', 'departmental', 'external'],
-      required: true
-    },
-    description: { type: String },
+    currency: { type: String, required: true },
+    type: { type: String, required: true }
   }],
 
   // Scholarship Conditions
-  conditions: [{ type: String, required: true }],
+  conditions: [{ type: String }],
 
   // Requirements
   requirements: {
-    general: [{ type: String, required: true }],
-    documents: [{ type: String, required: true }],
+    general: [{ type: String }],
+    documents: [{ type: String }],
     languageTests: [{
       test: { type: String, required: true },
       minScore: { type: Schema.Types.Mixed, required: true }

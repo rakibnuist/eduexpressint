@@ -24,6 +24,8 @@ const Navbar = () => {
   const { openCTA } = useCTA();
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };

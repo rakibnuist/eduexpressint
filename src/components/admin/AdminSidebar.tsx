@@ -10,7 +10,6 @@ import {
   FaHandshake,
   FaSignOutAlt,
   FaHome,
-  FaChartLine,
   FaUserShield,
   FaGraduationCap
 } from 'react-icons/fa';
@@ -38,8 +37,6 @@ export default function AdminSidebar() {
     { name: 'B2B Leads', href: '/admin/b2b-leads', icon: FaHandshake, permission: 'b2b:read' },
     // Admin Users - only show to superusers (no permission check needed since page handles it)
     ...(user?.role === 'superuser' ? [{ name: 'Admin Users', href: '/admin/admins', icon: FaUserShield }] : []),
-    // Debug page - only show to superusers for troubleshooting
-    ...(user?.role === 'superuser' ? [{ name: 'Debug Info', href: '/admin/debug', icon: FaChartLine }] : []),
   ];
 
   const isActive = (href: string) => {

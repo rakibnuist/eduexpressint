@@ -15,7 +15,6 @@ export class DatabaseUtils {
   static async initialize() {
     try {
       await dbConnect();
-      console.log('Database initialized successfully');
       return true;
     } catch (error) {
       console.error('Database initialization failed:', error);

@@ -42,7 +42,7 @@ export default function robots(): MetadataRoute.Robots {
         ]
       }
     ],
-    sitemap: 'https://eduexpress.info/sitemap.xml',
-    host: 'https://eduexpress.info'
+    sitemap: 'https://eduexpressint.com/sitemap.xml',
+    host: 'https://eduexpressint.com'
   };
 }

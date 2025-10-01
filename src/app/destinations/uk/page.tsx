@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { findDestination } from '@/lib/data/destinations';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
-import FloatingElements from '@/components/FloatingElements';
 import { 
   FaGraduationCap, 
   FaDollarSign, 
@@ -70,7 +69,6 @@ export default function UKPage() {
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       {/* Floating Elements */}
-      <FloatingElements variant="destinations" intensity="medium" />
       
       {/* Enhanced Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden min-h-screen flex items-center">
@@ -106,7 +104,7 @@ export default function UKPage() {
             <div className="flex justify-center mb-8">
               <div className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-full text-xl font-bold shadow-2xl animate-bounce hover:animate-none transition-all duration-300 transform hover:scale-105">
                 <FaCalendarAlt className="h-6 w-6" />
-                January, May & September 2026 Intakes Available
+                Multiple Intakes Available
                 <FaStar className="h-5 w-5 animate-spin" />
               </div>
             </div>
@@ -226,7 +224,7 @@ export default function UKPage() {
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold shadow-lg">
                 <FaCalendarAlt className="h-5 w-5" />
-                January, May & September 2026 Intakes Available
+                Multiple Intakes Available
               </div>
             </div>
             <h2 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
@@ -328,11 +326,11 @@ export default function UKPage() {
 
           <div className="text-center">
             <button
-              onClick={() => handleCTAClick('UK Intake - Apply Now')}
+              onClick={() => handleCTAClick('UK Programs - Apply Now')}
               className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-4 px-12 rounded-xl transition-all duration-300 transform hover:scale-105 flex items-center gap-3 mx-auto shadow-xl text-lg"
             >
               <FaRocket className="h-6 w-6" />
-              Apply for UK Intake
+              Apply for UK Programs
             </button>
           </div>
         </div>
@@ -451,7 +449,7 @@ export default function UKPage() {
                       <div className="bg-white p-6 rounded-xl shadow-sm">
                         <h5 className="font-bold text-gray-900 mb-3">Available Intakes</h5>
                         <div className="space-y-2">
-                          {["January 2026", "May 2026", "September 2026"].map((intake, index) => (
+                          {["Multiple Intakes Available"].map((intake, index) => (
                             <div key={index} className="flex items-center gap-3">
                               <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
                               <span className="text-gray-700 font-medium">{intake}</span>
@@ -491,8 +489,8 @@ export default function UKPage() {
                 <p className="text-xl text-blue-100">The UK government's global scholarship programme - Funded by the Foreign, Commonwealth & Development Office</p>
                 <div className="mt-4 p-4 bg-yellow-500/20 rounded-xl border border-yellow-500/30">
                   <div className="text-center">
-                    <div className="text-sm text-yellow-200 mb-1">2025-2026 Application Deadlines</div>
-                    <div className="text-lg font-bold text-yellow-400">September 2025 Intake: June 2025 | January 2026 Intake: October 2025</div>
+                    <div className="text-sm text-yellow-200 mb-1">Application Timeline</div>
+                    <div className="text-lg font-bold text-yellow-400">Apply Early for Best Results</div>
                   </div>
                 </div>
               </div>
@@ -689,7 +687,7 @@ export default function UKPage() {
               <h3 className="text-3xl font-bold text-center mb-8">Scholarship Application Tips & Timeline</h3>
               <div className="grid md:grid-cols-2 gap-6">
                 {[
-                  "Start application 6-8 months before your preferred intake",
+                  "Start application well in advance for best results",
                   "Maintain excellent academic records (2:1 or equivalent for Chevening)",
                   "Prepare strong personal statement and 2-3 recommendation letters",
                   "Obtain IELTS 6.5+ or equivalent for English proficiency",
@@ -789,7 +787,7 @@ export default function UKPage() {
               <h2 className="text-4xl font-bold mb-4">Top Universities in the UK</h2>
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-3 rounded-full text-lg font-bold mb-8 shadow-lg">
                 <FaCalendarAlt className="h-5 w-5" />
-                🎓 JANUARY, MAY & SEPTEMBER 2026 INTAKES - APPLY NOW! 🎓
+                🎓 MULTIPLE INTAKES AVAILABLE - APPLY NOW! 🎓
               </div>
             </div>
             
@@ -801,10 +799,10 @@ export default function UKPage() {
                   programs: "Business, Engineering, Medicine, Law, Arts", 
                   city: "Oxford, England", 
                   scholarship: "Clarendon Scholarships Available", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£25,000-35,000/year",
-                  deadline: "Oct 15, 2025"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Cambridge", 
@@ -812,10 +810,10 @@ export default function UKPage() {
                   programs: "Business, Engineering, Medicine, Law, Arts", 
                   city: "Cambridge, England", 
                   scholarship: "Gates Scholarships Available", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£25,000-35,000/year",
-                  deadline: "Oct 15, 2025"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "Imperial College London", 
@@ -823,10 +821,10 @@ export default function UKPage() {
                   programs: "Engineering, Medicine, Business, Computer Science", 
                   city: "London, England", 
                   scholarship: "Merit Scholarships up to £10,000", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£30,000-40,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "London School of Economics (LSE)", 
@@ -834,10 +832,10 @@ export default function UKPage() {
                   programs: "Economics, Business, Law, Social Sciences", 
                   city: "London, England", 
                   scholarship: "Graduate Support Scheme up to £15,000", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£20,000-30,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University College London (UCL)", 
@@ -845,10 +843,10 @@ export default function UKPage() {
                   programs: "Engineering, Medicine, Business, Arts, Sciences", 
                   city: "London, England", 
                   scholarship: "Global Excellence Scholarships", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£25,000-35,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Edinburgh", 
@@ -856,10 +854,10 @@ export default function UKPage() {
                   programs: "Business, Engineering, Medicine, Arts, Sciences", 
                   city: "Edinburgh, Scotland", 
                   scholarship: "Edinburgh Global Scholarships", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£20,000-30,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "King's College London", 
@@ -867,10 +865,10 @@ export default function UKPage() {
                   programs: "Medicine, Law, Business, Arts, Sciences", 
                   city: "London, England", 
                   scholarship: "International Scholarships", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£25,000-35,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Manchester", 
@@ -878,10 +876,10 @@ export default function UKPage() {
                   programs: "Engineering, Business, Medicine, Arts, Sciences", 
                   city: "Manchester, England", 
                   scholarship: "International Excellence Scholarships", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£20,000-30,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 },
                 { 
                   name: "University of Bristol", 
@@ -889,10 +887,10 @@ export default function UKPage() {
                   programs: "Engineering, Business, Medicine, Arts, Sciences", 
                   city: "Bristol, England", 
                   scholarship: "Think Big Scholarships", 
-                  march2026: false,
+                  available: true,
                   foundation: "N/A",
                   bachelor: "£20,000-30,000/year",
-                  deadline: "Jan 15, 2026"
+                  deadline: "Apply Early"
                 }
               ].map((university, index) => (
                 <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group">
@@ -913,7 +911,7 @@ export default function UKPage() {
                   
                   {/* Foundation Program */}
                   <div className="bg-blue-50 rounded-lg p-3 mb-3">
-                    <div className="text-sm font-semibold text-blue-800">Foundation Program (March-July)</div>
+                    <div className="text-sm font-semibold text-blue-800">Foundation Program Available</div>
                     <div className="text-xs text-blue-600">Tuition: {university.foundation}</div>
                   </div>
                   
@@ -930,7 +928,7 @@ export default function UKPage() {
                   
                   {/* Deadline */}
                   <div className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded-full">
-                    📅 Deadline: {university.deadline}
+                    📅 Apply: {university.deadline}
                   </div>
                 </div>
               ))}
@@ -1129,7 +1127,7 @@ export default function UKPage() {
                 {
                   step: 3,
                   title: "Apply for Scholarships",
-                  description: "We handle all scholarship applications including Chevening, Commonwealth, and university scholarships. Apply 6-8 months before your preferred intake."
+                  description: "We handle all scholarship applications including Chevening, Commonwealth, and university scholarships. Apply well in advance for best results."
                 },
                 {
                   step: 4,

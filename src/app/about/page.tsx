@@ -2,7 +2,6 @@
 
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
-import FloatingElements from '@/components/FloatingElements';
 import { useRouter } from 'next/navigation';
 import { 
   FaGraduationCap, 
@@ -44,7 +43,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-gray-50" style={{ paddingTop: '35px' }}>
       {/* Floating Elements */}
-      <FloatingElements variant="about" intensity="medium" />
       
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-blue-900 via-indigo-900 to-purple-900 text-white overflow-hidden">

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import FloatingElements from '@/components/FloatingElements';
 
 export const metadata: Metadata = {
   title: "Privacy Policy | EduExpress International",
@@ -9,7 +8,6 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="bg-gray-50 pt-24 pb-16">
       {/* Floating Elements */}
-      <FloatingElements variant="general" intensity="low" />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-md p-8 md:p-12">

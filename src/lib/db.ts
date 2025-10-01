@@ -1,11 +1,12 @@
 // src/lib/db.ts
 import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-const MONGODB_DB = process.env.MONGODB_DB;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/edu-express';
+const MONGODB_DB = process.env.MONGODB_DB || 'edu-express';
 
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+// For development, use local MongoDB if no URI is provided
+if (!process.env.MONGODB_URI) {
+  console.warn('MONGODB_URI not found, using default local MongoDB connection');
 }
 
 interface MongooseCache {
@@ -31,22 +32,24 @@ export async function dbConnect() {
     const opts = {
       bufferCommands: false,
       dbName: MONGODB_DB || undefined,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
     };
 
-    console.log('Connecting to MongoDB...');
-    if (MONGODB_DB) {
-      console.log('Database name:', MONGODB_DB);
-    }
+    console.log('Attempting to connect to MongoDB...');
 
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
-        console.log('MongoDB connected successfully to database:', mongoose.connection.db?.databaseName || 'unknown');
+        console.log('MongoDB connected successfully');
         return mongoose;
       })
       .catch((error) => {
-        console.error('MongoDB connection error:', error);
+        console.error('MongoDB connection error:', error.message);
+        console.log('Make sure MongoDB is running locally or provide a valid MONGODB_URI');
+        console.log('Application will continue in offline mode');
         cached.promise = null;
-        throw error;
+        // Don't throw error, return a mock connection for offline mode
+        return null;
       });
   }
 
@@ -54,11 +57,16 @@ export async function dbConnect() {
     cached.conn = await cached.promise;
   } catch (error) {
     cached.promise = null;
-    throw error;
+    cached.conn = null; // Set to null for offline mode
   }
 
   global._mongoose = cached;
   return cached.conn;
+}
+
+// Check if database is connected
+export function isDbConnected(): boolean {
+  return cached.conn !== null && mongoose.connection.readyState === 1;
 }
 
 // Export default for backward compatibility

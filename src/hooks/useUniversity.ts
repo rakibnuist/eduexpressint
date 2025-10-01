@@ -69,7 +69,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
       setLoading(true);
       setSaveState(prev => ({ ...prev, error: null }));
 
-      console.log('Fetching university with ID:', universityId);
+      // Fetching university with ID
 
       const response = await fetch(`/api/universities?id=${universityId}&admin=true`, {
         method: 'GET',
@@ -79,7 +79,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
         cache: 'no-cache',
       });
       
-      console.log('University fetch response status:', response.status);
+      // University fetch response status
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -88,7 +88,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
       }
 
       const data = await response.json();
-      console.log('University data received:', data);
+      // University data received
       
       if (data.success && data.data) {
         const normalizedData = normalizeUniversityData(data.data);
@@ -122,8 +122,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
   const saveUniversity = useCallback(async (data?: Partial<University>) => {
     const dataToSave = data || formData;
     
-    console.log('Save university called with data:', dataToSave);
-    console.log('University ID:', universityId);
+    // Save university called
     
     if (!dataToSave.name || !dataToSave.country || !dataToSave.destination || !dataToSave.city || !dataToSave.type) {
       const error = 'Required fields are missing (name, country, destination, city, type)';
@@ -141,7 +140,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
         slug: dataToSave.slug || dataToSave.name?.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
       };
 
-      console.log('Sending payload to API:', payload);
+      // Sending payload to API
 
       const response = await fetch(`/api/universities?id=${universityId}`, {
         method: 'PUT',
@@ -151,7 +150,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
         body: JSON.stringify(payload),
       });
 
-      console.log('Save response status:', response.status);
+      // Save response status
 
       if (!response.ok) {
         const errorText = await response.text();
@@ -160,7 +159,7 @@ export function useUniversity(universityId: string, options: UseUniversityOption
       }
 
       const result = await response.json();
-      console.log('Save response data:', result);
+      // Save response data
       
       if (result.success) {
         setSaveState({
