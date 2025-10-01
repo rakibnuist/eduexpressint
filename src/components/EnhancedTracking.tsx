@@ -195,12 +195,14 @@ export default function EnhancedTracking() {
 
   // Expose tracking functions globally for use in other components
   useEffect(() => {
-    (window as any).trackEvent = trackEvent;
-    (window as any).trackFormSubmission = trackFormSubmission;
-    (window as any).trackLeadGeneration = trackLeadGeneration;
-    (window as any).trackContentView = trackContentView;
-    (window as any).trackSearch = trackSearch;
-    (window as any).trackEngagement = trackEngagement;
+    if (typeof window !== 'undefined') {
+      (window as any).trackEvent = trackEvent;
+      (window as any).trackFormSubmission = trackFormSubmission;
+      (window as any).trackLeadGeneration = trackLeadGeneration;
+      (window as any).trackContentView = trackContentView;
+      (window as any).trackSearch = trackSearch;
+      (window as any).trackEngagement = trackEngagement;
+    }
   }, []);
 
   return null; // This component doesn't render anything
@@ -209,11 +211,11 @@ export default function EnhancedTracking() {
 // Hook for using enhanced tracking
 export const useEnhancedTracking = () => {
   return {
-    trackEvent: (window as any).trackEvent,
-    trackFormSubmission: (window as any).trackFormSubmission,
-    trackLeadGeneration: (window as any).trackLeadGeneration,
-    trackContentView: (window as any).trackContentView,
-    trackSearch: (window as any).trackSearch,
-    trackEngagement: (window as any).trackEngagement
+    trackEvent: typeof window !== 'undefined' ? (window as any).trackEvent : () => {},
+    trackFormSubmission: typeof window !== 'undefined' ? (window as any).trackFormSubmission : () => {},
+    trackLeadGeneration: typeof window !== 'undefined' ? (window as any).trackLeadGeneration : () => {},
+    trackContentView: typeof window !== 'undefined' ? (window as any).trackContentView : () => {},
+    trackSearch: typeof window !== 'undefined' ? (window as any).trackSearch : () => {},
+    trackEngagement: typeof window !== 'undefined' ? (window as any).trackEngagement : () => {}
   };
 };
