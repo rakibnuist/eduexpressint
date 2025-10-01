@@ -6,14 +6,14 @@ import { useLeadTracker } from '@/components/LeadTracker';
 import { useCTA } from '@/context/CTAContext';
 import { useFormTracking } from '@/hooks/usePageTracking';
 // import { addTrackingToJsonData } from '@/components/TrackingCapture';
-// import { useEnhancedTracking } from '@/components/EnhancedTracking';
+import { useEnhancedTracking } from '@/components/EnhancedTracking';
 
 export default function CTAForm() {
   const { isOpen, closeCTA, source } = useCTA();
   const [showCongratulationPopup, setShowCongratulationPopup] = useState(false);
   const { trackLead, trackFormSubmission } = useLeadTracker();
   const { trackFormSubmission: trackMetaPixelForm } = useFormTracking();
-  // const { trackFormSubmission: trackFormSubmissionEnhanced, trackLeadGeneration } = useEnhancedTracking();
+  const { trackFormSubmission: trackFormSubmissionEnhanced, trackLeadGeneration } = useEnhancedTracking();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
