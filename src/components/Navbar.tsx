@@ -81,7 +81,7 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 ${
         scrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
           : 'bg-white/90 backdrop-blur-sm'
@@ -239,7 +239,8 @@ const Navbar = () => {
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              className="p-3 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 bg-white shadow-sm"
+              aria-label="Toggle mobile menu"
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
@@ -277,7 +278,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-30"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-[9999]"
             onClick={() => setIsOpen(false)}
           >
             <motion.div
@@ -285,7 +286,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-80 bg-white shadow-2xl"
+              className="absolute right-0 top-0 h-full w-80 sm:w-96 bg-white shadow-2xl z-[9999] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col h-full p-6">
@@ -359,7 +360,7 @@ const Navbar = () => {
                       openCTA('Mobile Navbar Apply Now');
                       setIsOpen(false);
                     }}
-                    className="w-full shiny-button text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-lg"
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-4 rounded-xl transition-all duration-300 shadow-lg"
                   >
                     <span className="flex items-center justify-center">
                       <FaRocket className="mr-2 h-5 w-5" />
