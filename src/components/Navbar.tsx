@@ -77,10 +77,7 @@ const Navbar = () => {
   ];
 
   return (
-    <motion.nav 
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <nav 
       className={`fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 ${
         scrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
@@ -229,15 +226,8 @@ const Navbar = () => {
           </motion.div>
 
           {/* Mobile Menu Button */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="lg:hidden"
-          >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+          <div className="lg:hidden">
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-3 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 bg-white shadow-sm"
               aria-label="Toggle mobile menu"
@@ -265,8 +255,8 @@ const Navbar = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </motion.button>
-          </motion.div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -373,7 +363,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.nav>
+    </nav>
   );
 };
 
