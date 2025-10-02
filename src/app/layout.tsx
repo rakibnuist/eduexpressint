@@ -7,9 +7,7 @@ import CTAForm from '@/components/CTAForm';
 import MetaPixelProvider from '@/components/MetaPixel';
 import GoogleTagManagerProvider from '@/components/GoogleTagManager';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import MetaPixelTester from '@/components/MetaPixelTester';
 import ServerSideTrackingProvider from '@/components/ServerSideTracking';
-import ServerSideTrackingTester from '@/components/ServerSideTrackingTester';
 import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking';
 import FreeTrackingTester from '@/components/FreeTrackingTester';
 import StapeTrackingProvider from '@/components/StapeTracking';
@@ -282,8 +280,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <main className="pt-20 min-h-screen">{children}</main>
                         <Footer />
                         <CTAForm />
-                        <MetaPixelTester />
-                        <ServerSideTrackingTester />
                         <FreeTrackingTester />
                         <StapeTester />
                         {/* <SEOTestComponent /> */}
