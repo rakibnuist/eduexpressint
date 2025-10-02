@@ -39,6 +39,36 @@ declare global {
 
 // Enhanced server-side tracking functions
 export const serverSideTracking = {
+  // Send events to your own FREE server-side API
+  sendToServerSide: async (events: any[]) => {
+    if (typeof window === 'undefined') return false;
+
+    try {
+      const response = await fetch('/api/tracking/events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          events,
+          platforms: ['meta'], // Add 'google', etc. as needed
+        }),
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        console.log('FREE Server-side tracking successful:', result);
+        return true;
+      } else {
+        console.error('FREE Server-side tracking failed:', result);
+        return false;
+      }
+    } catch (error) {
+      console.error('FREE Server-side tracking error:', error);
+      return false;
+    }
+  },
   // Initialize data layer
   initDataLayer: () => {
     if (typeof window !== 'undefined') {

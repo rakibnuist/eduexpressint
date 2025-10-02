@@ -10,6 +10,8 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import MetaPixelTester from '@/components/MetaPixelTester';
 import ServerSideTrackingProvider from '@/components/ServerSideTracking';
 import ServerSideTrackingTester from '@/components/ServerSideTrackingTester';
+import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking';
+import FreeTrackingTester from '@/components/FreeTrackingTester';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -268,19 +270,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ErrorBoundary>
             <GoogleTagManagerProvider>
               <MetaPixelProvider>
-                <ServerSideTrackingProvider>
-                  <CTAProvider>
-                    {/* <TrackingCapture /> */}
-                    {/* <EnhancedTracking /> */}
-                    <Navbar />
-                    <main className="pt-20 min-h-screen">{children}</main>
-                    <Footer />
-                    <CTAForm />
-                    <MetaPixelTester />
-                    <ServerSideTrackingTester />
-                    {/* <SEOTestComponent /> */}
-                  </CTAProvider>
-                </ServerSideTrackingProvider>
+                <FreeServerSideTrackingProvider>
+                  <ServerSideTrackingProvider>
+                    <CTAProvider>
+                      {/* <TrackingCapture /> */}
+                      {/* <EnhancedTracking /> */}
+                      <Navbar />
+                      <main className="pt-20 min-h-screen">{children}</main>
+                      <Footer />
+                      <CTAForm />
+                      <MetaPixelTester />
+                      <ServerSideTrackingTester />
+                      <FreeTrackingTester />
+                      {/* <SEOTestComponent /> */}
+                    </CTAProvider>
+                  </ServerSideTrackingProvider>
+                </FreeServerSideTrackingProvider>
               </MetaPixelProvider>
             </GoogleTagManagerProvider>
           </ErrorBoundary>
