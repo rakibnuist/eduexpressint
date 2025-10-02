@@ -269,7 +269,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   {/* <TrackingCapture /> */}
                   {/* <EnhancedTracking /> */}
                   <Navbar />
-                  <main className="pt-0 min-h-screen">{children}</main>
+                  <main className="pt-20 min-h-screen">{children}</main>
                   <Footer />
                   <CTAForm />
                   {/* <SEOTestComponent /> */}
