@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useState } from 'react';
 import { FaPhone, FaEnvelope, FaUser, FaGraduationCap, FaGlobe, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 

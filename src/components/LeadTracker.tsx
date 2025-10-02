@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useEffect } from 'react';
 import { metaPixel } from './MetaPixel';
 import { gtm } from './GoogleTagManager';

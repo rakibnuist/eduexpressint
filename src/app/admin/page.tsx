@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import DashboardStats from '@/components/admin/DashboardStats';

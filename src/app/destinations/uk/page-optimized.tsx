@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import OptimizedDestinationPage from '@/components/destinations/OptimizedDestinationPage';
 
 export default function UKPageOptimized() {
