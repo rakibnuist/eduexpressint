@@ -7,6 +7,7 @@ import CTAForm from '@/components/CTAForm';
 import MetaPixelProvider from '@/components/MetaPixel';
 import GoogleTagManagerProvider from '@/components/GoogleTagManager';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import MetaPixelTester from '@/components/MetaPixelTester';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -272,6 +273,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <main className="pt-20 min-h-screen">{children}</main>
                   <Footer />
                   <CTAForm />
+                  <MetaPixelTester />
                   {/* <SEOTestComponent /> */}
                 </CTAProvider>
               </MetaPixelProvider>

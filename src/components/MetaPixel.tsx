@@ -190,6 +190,75 @@ export const metaPixel = {
         console.error('Failed to track add to cart:', error);
       }
     }
+  },
+
+  // Test event for Facebook Events Manager validation
+  trackTestEvent: (testCode: string = 'TEST65812') => {
+    if (typeof window !== 'undefined' && window.fbq) {
+      try {
+        // Send test event with the specific test code
+        window.fbq('track', 'Lead', {
+          test_event_code: testCode,
+          content_name: 'Meta Pixel Test Event',
+          content_category: 'Testing',
+          value: 1,
+          currency: 'USD',
+          source: 'Test Button'
+        });
+        
+        // Also track as custom event for additional verification
+        window.fbq('trackCustom', 'TestEvent', {
+          test_event_code: testCode,
+          event_source: 'Website Test',
+          timestamp: new Date().toISOString()
+        });
+        
+        console.log('Meta Pixel Test Event tracked with code:', testCode);
+        return true;
+      } catch (error) {
+        console.error('Failed to track test event:', error);
+        return false;
+      }
+    }
+    return false;
+  },
+
+  // Trigger multiple test events for comprehensive testing
+  runTestSuite: (testCode: string = 'TEST65812') => {
+    if (typeof window !== 'undefined' && window.fbq) {
+      try {
+        // Test PageView
+        window.fbq('track', 'PageView', { test_event_code: testCode });
+        
+        // Test Lead
+        window.fbq('track', 'Lead', {
+          test_event_code: testCode,
+          content_name: 'Test Lead Generation',
+          value: 1,
+          currency: 'USD'
+        });
+        
+        // Test ViewContent
+        window.fbq('track', 'ViewContent', {
+          test_event_code: testCode,
+          content_name: 'Test Content View',
+          content_category: 'Education'
+        });
+        
+        // Test CompleteRegistration
+        window.fbq('track', 'CompleteRegistration', {
+          test_event_code: testCode,
+          content_name: 'Test Form Submission'
+        });
+        
+        console.log('Meta Pixel Test Suite completed with code:', testCode);
+        return true;
+      } catch (error) {
+        console.error('Failed to run test suite:', error);
+        return false;
+      }
+    }
+    return false;
   }
 };
 
