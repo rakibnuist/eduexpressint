@@ -9,9 +9,7 @@ import GoogleTagManagerProvider from '@/components/GoogleTagManager';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import ServerSideTrackingProvider from '@/components/ServerSideTracking';
 import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking';
-import FreeTrackingTester from '@/components/FreeTrackingTester';
 import StapeTrackingProvider from '@/components/StapeTracking';
-import StapeTester from '@/components/StapeTester';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -280,8 +278,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <main className="pt-20 min-h-screen">{children}</main>
                         <Footer />
                         <CTAForm />
-                        <FreeTrackingTester />
-                        <StapeTester />
                         {/* <SEOTestComponent /> */}
                       </CTAProvider>
                     </ServerSideTrackingProvider>
