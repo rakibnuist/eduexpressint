@@ -9,22 +9,42 @@ interface TrackingEvent {
   event_name: string;
   event_time: number;
   user_data: {
-    email?: string;
-    phone?: string;
-    first_name?: string;
-    last_name?: string;
+    em?: string; // hashed email
+    ph?: string; // hashed phone
+    fn?: string; // hashed first name
+    ln?: string; // hashed last name
+    ct?: string; // hashed city
+    st?: string; // hashed state
     country?: string;
+    zp?: string; // hashed zip code
+    db?: string; // hashed date of birth
+    ge?: string; // hashed gender
     external_id?: string;
+    client_ip_address?: string;
+    client_user_agent?: string;
   };
   custom_data: {
     content_name?: string;
     content_category?: string;
+    content_type?: string;
+    content_ids?: string[];
+    contents?: any[];
     value?: number;
     currency?: string;
-    destination?: string;
+    num_items?: number;
+    search_string?: string;
+    status?: string;
+    // Education-specific fields
+    destination_country?: string;
     study_level?: string;
     program_type?: string;
+    program_field?: string;
     source?: string;
+    lead_source?: string;
+    application_type?: string;
+    contact_method?: string;
+    registration_type?: string;
+    [key: string]: any;
   };
   event_source_url: string;
   action_source: string;
@@ -56,31 +76,49 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Prepare events for Meta Conversions API
-    const metaEvents: TrackingEvent[] = events.map((event: any) => ({
-      event_name: event.event_name,
-      event_time: Math.floor(Date.now() / 1000),
-      user_data: {
-        email: event.user_data?.email ? hashEmail(event.user_data.email) : undefined,
-        phone: event.user_data?.phone ? hashPhone(event.user_data.phone) : undefined,
-        first_name: event.user_data?.first_name ? hashString(event.user_data.first_name) : undefined,
-        last_name: event.user_data?.last_name ? hashString(event.user_data.last_name) : undefined,
-        country: event.user_data?.country,
-        external_id: event.user_data?.external_id,
-      },
-      custom_data: {
-        content_name: event.custom_data?.content_name,
-        content_category: event.custom_data?.content_category || 'Education',
-        value: event.custom_data?.value || 1,
-        currency: event.custom_data?.currency || 'USD',
-        destination: event.custom_data?.destination,
-        study_level: event.custom_data?.study_level,
-        program_type: event.custom_data?.program_type,
-        source: event.custom_data?.source,
-      },
-      event_source_url: event.event_source_url || 'https://www.eduexpressint.com',
-      action_source: 'website',
-    }));
+    // Get client information from headers
+    const userAgent = request.headers.get('user-agent') || '';
+    const clientIP = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '';
+    const referer = request.headers.get('referer') || '';
+
+    // Prepare events for Meta Conversions API with proper field mapping
+    const metaEvents: TrackingEvent[] = events.map((event: any) => {
+      // Process user data with proper Meta field names
+      const userData: any = {
+        client_ip_address: clientIP,
+        client_user_agent: userAgent,
+      };
+
+      if (event.user_data) {
+        if (event.user_data.email) userData.em = hashEmail(event.user_data.email);
+        if (event.user_data.phone) userData.ph = hashPhone(event.user_data.phone);
+        if (event.user_data.firstName) userData.fn = hashString(event.user_data.firstName);
+        if (event.user_data.lastName) userData.ln = hashString(event.user_data.lastName);
+        if (event.user_data.city) userData.ct = hashString(event.user_data.city);
+        if (event.user_data.state) userData.st = hashString(event.user_data.state);
+        if (event.user_data.country) userData.country = event.user_data.country;
+        if (event.user_data.zipCode) userData.zp = hashString(event.user_data.zipCode);
+        if (event.user_data.dateOfBirth) userData.db = hashString(event.user_data.dateOfBirth);
+        if (event.user_data.gender) userData.ge = hashString(event.user_data.gender);
+        if (event.user_data.external_id) userData.external_id = event.user_data.external_id;
+      }
+
+      return {
+        event_name: event.event_name,
+        event_time: event.event_time || Math.floor(Date.now() / 1000),
+        user_data: userData,
+        custom_data: {
+          content_category: 'Education',
+          currency: 'USD',
+          ...event.custom_data,
+          // Add server-side enhancement
+          server_enhanced: true,
+          processing_timestamp: new Date().toISOString(),
+        },
+        event_source_url: event.event_source_url || referer || 'https://www.eduexpressint.com',
+        action_source: 'website',
+      };
+    });
 
     // Send to Meta Conversions API
     const metaPayload = {

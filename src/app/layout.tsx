@@ -10,6 +10,7 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import ServerSideTrackingProvider from '@/components/ServerSideTracking';
 import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking';
 import StapeTrackingProvider from '@/components/StapeTracking';
+import MetaConversionsAPIProvider from '@/components/MetaConversionsAPI';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -268,21 +269,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ErrorBoundary>
             <GoogleTagManagerProvider>
               <MetaPixelProvider>
-                <StapeTrackingProvider>
-                  <FreeServerSideTrackingProvider>
-                    <ServerSideTrackingProvider>
-                      <CTAProvider>
-                        {/* <TrackingCapture /> */}
-                        {/* <EnhancedTracking /> */}
-                        <Navbar />
-                        <main className="pt-20 min-h-screen">{children}</main>
-                        <Footer />
-                        <CTAForm />
-                        {/* <SEOTestComponent /> */}
-                      </CTAProvider>
-                    </ServerSideTrackingProvider>
-                  </FreeServerSideTrackingProvider>
-                </StapeTrackingProvider>
+                <MetaConversionsAPIProvider>
+                  <StapeTrackingProvider>
+                    <FreeServerSideTrackingProvider>
+                      <ServerSideTrackingProvider>
+                          <CTAProvider>
+                          {/* <TrackingCapture /> */}
+                          {/* <EnhancedTracking /> */}
+                          <Navbar />
+                          <main className="pt-20 min-h-screen">{children}</main>
+                          <Footer />
+                          <CTAForm />
+                          {/* <SEOTestComponent /> */}
+                        </CTAProvider>
+                      </ServerSideTrackingProvider>
+                    </FreeServerSideTrackingProvider>
+                  </StapeTrackingProvider>
+                </MetaConversionsAPIProvider>
               </MetaPixelProvider>
             </GoogleTagManagerProvider>
           </ErrorBoundary>

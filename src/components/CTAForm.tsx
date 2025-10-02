@@ -7,6 +7,7 @@ import { useCTA } from '@/context/CTAContext';
 import { useFormTracking } from '@/hooks/usePageTracking';
 // import { addTrackingToJsonData } from '@/components/TrackingCapture';
 import { useEnhancedTracking } from '@/components/EnhancedTracking';
+import { useMetaConversionsAPI } from '@/components/MetaConversionsAPI';
 
 export default function CTAForm() {
   const { isOpen, closeCTA, source } = useCTA();
@@ -14,6 +15,7 @@ export default function CTAForm() {
   const { trackLead, trackFormSubmission } = useLeadTracker();
   const { trackFormSubmission: trackMetaPixelForm } = useFormTracking();
   const { trackFormSubmission: trackFormSubmissionEnhanced, trackLeadGeneration } = useEnhancedTracking();
+  const metaAPI = useMetaConversionsAPI();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +87,65 @@ export default function CTAForm() {
         throw new Error(result.message || result.error || 'Failed to save lead');
       }
 
+      // === META CONVERSIONS API TRACKING ===
+      
+      // 1. Track LEAD event
+      await metaAPI.trackLead(
+        {
+          email: leadData.email,
+          phone: leadData.phone,
+          firstName: leadData.name.split(' ')[0],
+          lastName: leadData.name.split(' ').slice(1).join(' '),
+          country: leadData.countryOfInterest,
+        },
+        {
+          content_name: 'Study Abroad Lead - CTA Form',
+          destination: leadData.countryOfInterest,
+          studyLevel: leadData.programType,
+          programType: leadData.major,
+          source: source || 'CTA Form',
+          value: 50,
+          quality: 'high',
+        }
+      );
+
+      // 2. Track CONTACT event
+      await metaAPI.trackContact(
+        {
+          email: leadData.email,
+          phone: leadData.phone,
+          firstName: leadData.name.split(' ')[0],
+          lastName: leadData.name.split(' ').slice(1).join(' '),
+        },
+        {
+          content_name: 'Contact Inquiry - CTA Form',
+          method: 'form',
+          inquiry_type: 'consultation_request',
+          destination: leadData.countryOfInterest,
+          studyLevel: leadData.programType,
+          urgency: 'high',
+          source: source || 'CTA Form',
+          value: 25,
+        }
+      );
+
+      // 3. Track COMPLETE REGISTRATION event (if this is considered registration)
+      await metaAPI.trackCompleteRegistration(
+        {
+          email: leadData.email,
+          phone: leadData.phone,
+          firstName: leadData.name.split(' ')[0],
+          lastName: leadData.name.split(' ').slice(1).join(' '),
+        },
+        {
+          content_name: 'Lead Registration - CTA Form',
+          type: 'lead_registration',
+          method: 'form',
+          source: source || 'CTA Form',
+          value: 75,
+          onboarding_completed: true,
+        }
+      );
 
       // Track form submission with enhanced tracking
       trackFormSubmissionEnhanced({

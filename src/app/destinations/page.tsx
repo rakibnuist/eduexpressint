@@ -21,8 +21,9 @@ import {
   FaShieldAlt,
   FaBookOpen
 } from "react-icons/fa";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DESTINATIONS } from "@/lib/data/destinations";
+import { useMetaConversionsAPI } from '@/components/MetaConversionsAPI';
 
 interface Destination {
   slug: string;
@@ -47,6 +48,18 @@ export default function DestinationsIndex() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const [loadingStates, setLoadingStates] = useState<{[key: string]: boolean}>({});
+  const metaAPI = useMetaConversionsAPI();
+
+  // Track page view on component mount
+  useEffect(() => {
+    metaAPI.trackViewContent(undefined, {
+      content_name: 'Study Destinations Page',
+      category: 'Education',
+      type: 'destination_listing',
+      page_type: 'destinations_overview',
+      engagement_score: 5,
+    });
+  }, [metaAPI]);
   
   // Handle loading states for buttons
   const handleButtonClick = (buttonId: string, callback: () => void) => {
@@ -230,7 +243,24 @@ export default function DestinationsIndex() {
                 <Input
                   placeholder="Search destinations..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setSearchTerm(value);
+                    
+                    // Track FIND LOCATION event when user searches
+                    if (value.length > 2) {
+                      metaAPI.trackFindLocation(undefined, {
+                        content_name: 'Destination Search',
+                        search_query: value,
+                        destination: value,
+                        type: 'country_search',
+                        results_count: filteredDestinations.filter(dest => 
+                          dest.name.toLowerCase().includes(value.toLowerCase()) ||
+                          dest.tagline?.toLowerCase().includes(value.toLowerCase())
+                        ).length,
+                      });
+                    }
+                  }}
                   className="pl-10 h-12 text-lg sm:text-base"
                   aria-label="Search destinations by name or tagline"
                   role="searchbox"
