@@ -1,0 +1,5 @@
+🎓 EduExpress International - Complete study abroad platform connecting students with world-class universities worldwide. Live at https://www.eduexpressint.com
+
+Built with Next.js, React, TypeScript, and MongoDB. Features university search, admin dashboard, lead management, and multi-country support.
+
+#studyabroad #nextjs #react #typescript #mongodb #education #vercel
