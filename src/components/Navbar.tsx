@@ -29,8 +29,21 @@ const Navbar = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+    
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (!target.closest('.dropdown-container')) {
+        setActiveDropdown(null);
+      }
+    };
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleClickOutside);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, []);
 
   const destinations = [
@@ -78,13 +91,13 @@ const Navbar = () => {
 
   return (
     <nav 
-      className={`fixed top-0 left-0 right-0 z-[9998] transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled 
           ? 'bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-200/50' 
           : 'bg-white/90 backdrop-blur-sm'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Clean and Minimal */}
           <motion.div
@@ -93,7 +106,7 @@ const Navbar = () => {
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             <Link href="/" className="flex items-center">
-              <div className="w-24 h-12 relative">
+              <div className="w-20 h-10 sm:w-24 sm:h-12 relative">
                 <Image
                   src="/brand/logo.png"
                   alt="EduExpress International Logo"
@@ -114,7 +127,7 @@ const Navbar = () => {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
+                className="relative dropdown-container"
               >
                 <motion.div
                   whileHover={{ y: -2 }}
@@ -125,6 +138,12 @@ const Navbar = () => {
                     className="relative px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors duration-200 group"
                     onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.label)}
                     onMouseLeave={() => setActiveDropdown(null)}
+                    onClick={(e) => {
+                      if (item.hasDropdown && window.innerWidth <= 1024) {
+                        e.preventDefault();
+                        setActiveDropdown(activeDropdown === item.label ? null : item.label);
+                      }
+                    }}
                   >
                     {item.label}
                     {item.hasDropdown && (
@@ -151,7 +170,7 @@ const Navbar = () => {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: 10, scale: 0.95 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-30"
+                      className="absolute top-full left-0 mt-2 w-80 bg-white rounded-2xl shadow-2xl border border-gray-100 p-6 z-[60]"
                       onMouseEnter={() => setActiveDropdown(item.label)}
                       onMouseLeave={() => setActiveDropdown(null)}
                     >
@@ -268,7 +287,7 @@ const Navbar = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-[9999]"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-[100]"
             onClick={() => setIsOpen(false)}
           >
             <motion.div
@@ -276,7 +295,7 @@ const Navbar = () => {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 h-full w-80 sm:w-96 bg-white shadow-2xl z-[9999] overflow-y-auto"
+              className="absolute right-0 top-0 h-full w-[85vw] max-w-sm bg-white shadow-2xl z-[110] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex flex-col h-full p-6">
