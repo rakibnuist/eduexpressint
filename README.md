@@ -1,8 +1,8 @@
 # 🎓 EduExpress International
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rakibnuist/eduexpressint)
 [![Live Website](https://img.shields.io/badge/Live-Website-brightgreen)](https://www.eduexpressint.com)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue)](https://github.com/rakibnuist/eduexpressint)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/rakibnuist/eduexpressint)
 
 > **🌐 Live Website**: [https://www.eduexpressint.com](https://www.eduexpressint.com)
 
@@ -78,11 +78,12 @@ npm start
 
 ## 🌐 Deployment
 
-This project is automatically deployed to Vercel:
+This project is automatically deployed to Vercel with seamless GitHub integration:
 
 - **Production**: [https://www.eduexpressint.com](https://www.eduexpressint.com)
-- **Auto-deploy**: Every push to `main` branch triggers deployment
+- **Auto-deploy**: Every push to `main` branch triggers deployment via Vercel's GitHub integration
 - **Preview**: Pull requests get preview deployments
+- **No CI/CD complexity**: Simple, reliable deployment pipeline
 
 ### Deploy Your Own
 
@@ -121,7 +122,7 @@ NEXT_PUBLIC_META_PIXEL_ID=your_meta_pixel_id
 - 🚀 **Static Generation**: Pre-rendered pages for speed
 - 📱 **Mobile First**: Responsive design
 - 🔍 **SEO Optimized**: Meta tags, structured data
-- 🌐 **Global CDN**: Fast worldwide delivery
+- 🌐 **Global CDN**: Fast worldwide delivery via Vercel Edge Network
 
 ## 🤝 Contributing
 
