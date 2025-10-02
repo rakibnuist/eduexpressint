@@ -8,6 +8,8 @@ import MetaPixelProvider from '@/components/MetaPixel';
 import GoogleTagManagerProvider from '@/components/GoogleTagManager';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import MetaPixelTester from '@/components/MetaPixelTester';
+import ServerSideTrackingProvider from '@/components/ServerSideTracking';
+import ServerSideTrackingTester from '@/components/ServerSideTrackingTester';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -266,16 +268,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ErrorBoundary>
             <GoogleTagManagerProvider>
               <MetaPixelProvider>
-                <CTAProvider>
-                  {/* <TrackingCapture /> */}
-                  {/* <EnhancedTracking /> */}
-                  <Navbar />
-                  <main className="pt-20 min-h-screen">{children}</main>
-                  <Footer />
-                  <CTAForm />
-                  <MetaPixelTester />
-                  {/* <SEOTestComponent /> */}
-                </CTAProvider>
+                <ServerSideTrackingProvider>
+                  <CTAProvider>
+                    {/* <TrackingCapture /> */}
+                    {/* <EnhancedTracking /> */}
+                    <Navbar />
+                    <main className="pt-20 min-h-screen">{children}</main>
+                    <Footer />
+                    <CTAForm />
+                    <MetaPixelTester />
+                    <ServerSideTrackingTester />
+                    {/* <SEOTestComponent /> */}
+                  </CTAProvider>
+                </ServerSideTrackingProvider>
               </MetaPixelProvider>
             </GoogleTagManagerProvider>
           </ErrorBoundary>
