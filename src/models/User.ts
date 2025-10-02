@@ -28,7 +28,6 @@ const UserSchema: Schema = new Schema({
   username: { 
     type: String, 
     required: true, 
-    unique: true,
     trim: true,
     minlength: 3,
     maxlength: 30
@@ -36,7 +35,6 @@ const UserSchema: Schema = new Schema({
   email: { 
     type: String, 
     required: true, 
-    unique: true,
     trim: true,
     lowercase: true
   },
@@ -128,8 +126,8 @@ UserSchema.methods.toJSON = function() {
 };
 
 // Indexes for better performance
-UserSchema.index({ email: 1 });
-UserSchema.index({ username: 1 });
+UserSchema.index({ email: 1 }, { unique: true });
+UserSchema.index({ username: 1 }, { unique: true });
 UserSchema.index({ role: 1 });
 UserSchema.index({ isActive: 1 });
 UserSchema.index({ createdAt: -1 });

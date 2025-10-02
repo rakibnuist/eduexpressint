@@ -9,7 +9,7 @@ import {
   FaExclamationTriangle,
   FaSpinner,
   FaDownload,
-  FaRefresh
+  FaRedo
 } from 'react-icons/fa';
 import { universitySyncService, type UniversitySyncStatus } from '@/lib/universitySync';
 
@@ -147,7 +147,7 @@ export default function UniversitySyncStatus({
               className="p-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors duration-200 disabled:opacity-50"
               title="Check Status"
             >
-              <FaRefresh className="w-3 h-3" />
+              <FaRedo className="w-3 h-3" />
             </button>
             <button
               onClick={handleForceSync}
@@ -219,7 +219,7 @@ export default function UniversitySyncStatus({
               disabled={loading}
               className="px-3 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors duration-200 disabled:opacity-50 flex items-center space-x-2"
             >
-              <FaRefresh className="w-3 h-3" />
+              <FaRedo className="w-3 h-3" />
               <span>Check Status</span>
             </button>
             
@@ -228,7 +228,7 @@ export default function UniversitySyncStatus({
               disabled={syncing}
               className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors duration-200 disabled:opacity-50 flex items-center space-x-2"
             >
-              <FaRefresh className={`w-3 h-3 ${syncing ? 'animate-spin' : ''}`} />
+              <FaRedo className={`w-3 h-3 ${syncing ? 'animate-spin' : ''}`} />
               <span>Refresh</span>
             </button>
             

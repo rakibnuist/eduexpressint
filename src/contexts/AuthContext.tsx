@@ -47,22 +47,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuthStatus = async () => {
     try {
-      // Check if we have a token in localStorage
-      const token = localStorage.getItem('adminToken');
-      if (!token) {
-        setUser(null);
-        setLoading(false);
-        return;
-      }
-
+      console.log('Checking auth status...');
+      // Check authentication status using cookies
       const response = await fetch('/api/auth/me', {
         credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
+      console.log('Auth response status:', response.status);
+      
       if (response.ok) {
         const userData = await response.json();
-        setUser(userData.user);
+        console.log('User data received:', userData);
+        if (userData.success && userData.user) {
+          setUser(userData.user);
+          // Store a flag in localStorage to indicate we're authenticated
+          localStorage.setItem('adminToken', 'authenticated');
+        } else {
+          console.log('Auth failed, invalid user data');
+          setUser(null);
+          localStorage.removeItem('adminToken');
+        }
       } else {
+        console.log('Auth failed, response not ok');
         setUser(null);
         localStorage.removeItem('adminToken');
       }
@@ -93,7 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(data.user);
         // Store token in localStorage for API calls
         localStorage.setItem('adminToken', 'authenticated');
+        console.log('Login successful, user set:', data.user);
       } else {
+        console.error('Login failed:', data.error);
         throw new Error(data.error || 'Login failed');
       }
     } catch (error) {

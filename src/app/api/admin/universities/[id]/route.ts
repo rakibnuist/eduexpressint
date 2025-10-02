@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { dbConnect } from '@/lib/db';
 import University from '@/models/University';
 
@@ -7,6 +8,17 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication first
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session')?.value;
+    
+    if (!session) {
+      return NextResponse.json({
+        success: false,
+        error: 'Not authenticated'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const body = await request.json();
@@ -47,6 +59,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication first
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session')?.value;
+    
+    if (!session) {
+      return NextResponse.json({
+        success: false,
+        error: 'Not authenticated'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const { id } = params;
@@ -82,6 +105,17 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication first
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session')?.value;
+    
+    if (!session) {
+      return NextResponse.json({
+        success: false,
+        error: 'Not authenticated'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const { id } = params;

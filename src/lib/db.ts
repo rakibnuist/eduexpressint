@@ -43,7 +43,7 @@ export async function dbConnect() {
     cached.promise = mongoose.connect(MONGODB_URI, opts)
       .then((mongoose) => {
         console.log('MongoDB connected successfully');
-        console.log('Database name:', mongoose.connection.db.databaseName);
+        console.log('Database name:', mongoose.connection.db?.databaseName || 'Unknown');
         return mongoose;
       })
       .catch((error) => {

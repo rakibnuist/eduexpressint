@@ -1,9 +1,21 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { dbConnect } from '@/lib/db';
 import University from '@/models/University';
 
 export async function POST(request: Request) {
   try {
+    // Check authentication first
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session')?.value;
+    
+    if (!session) {
+      return NextResponse.json({
+        success: false,
+        error: 'Not authenticated'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const body = await request.json();
@@ -29,6 +41,17 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
+    // Check authentication first
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session')?.value;
+    
+    if (!session) {
+      return NextResponse.json({
+        success: false,
+        error: 'Not authenticated'
+      }, { status: 401 });
+    }
+
     // Try to connect to database
     await dbConnect();
     

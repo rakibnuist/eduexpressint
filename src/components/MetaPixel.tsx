@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Meta Pixel configuration
 const PIXEL_ID = '1444050970227269';

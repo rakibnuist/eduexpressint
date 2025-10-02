@@ -91,7 +91,7 @@ export interface IUniversity extends Document {
 const UniversitySchema: Schema = new Schema({
   // Basic Information
   name: { type: String, required: true, trim: true, maxlength: 200 },
-  slug: { type: String, required: true, unique: true, lowercase: true, trim: true },
+  slug: { type: String, required: true, lowercase: true, trim: true },
   description: { type: String, required: true },
   shortDescription: { type: String, required: true, maxlength: 500 },
 
@@ -175,6 +175,7 @@ const UniversitySchema: Schema = new Schema({
 });
 
 // Indexes for better SEO and performance
+UniversitySchema.index({ slug: 1 }, { unique: true });
 UniversitySchema.index({ name: 'text', description: 'text', shortDescription: 'text', 'seo.title': 'text', 'seo.description': 'text', 'seo.keywords': 'text' });
 UniversitySchema.index({ country: 1, city: 1 });
 UniversitySchema.index({ type: 1, isActive: 1 });

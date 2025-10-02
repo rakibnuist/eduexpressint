@@ -7,16 +7,17 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import DataTable from '@/components/admin/DataTable';
 import UniversityForm from '@/components/UniversityForm';
 import UniversitySyncStatus from '@/components/UniversitySyncStatus';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { FaPlus, FaTimes, FaSync } from 'react-icons/fa';
 
 import { IUniversity } from '@/models/University';
 
-interface University extends IUniversity {
+interface University extends Omit<IUniversity, 'createdAt' | 'updatedAt'> {
   _id: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export default function AdminUniversities() {
@@ -47,11 +48,10 @@ export default function AdminUniversities() {
   const handleDeleteUniversity = async (university: University) => {
     if (window.confirm(`Are you sure you want to delete ${university.name}?`)) {
       try {
-        const token = localStorage.getItem('adminToken');
         const response = await fetch(`/api/admin/universities/${university._id}`, {
           method: 'DELETE',
+          credentials: 'include',
           headers: {
-            'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         });
@@ -72,7 +72,6 @@ export default function AdminUniversities() {
   const handleFormSubmit = async (universityData: any) => {
     try {
       setSubmitting(true);
-      const token = localStorage.getItem('adminToken');
       
       const url = editingUniversity 
         ? `/api/admin/universities/${editingUniversity._id}`
@@ -82,8 +81,8 @@ export default function AdminUniversities() {
       
       const response = await fetch(url, {
         method,
+        credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(universityData)
@@ -138,20 +137,32 @@ export default function AdminUniversities() {
     try {
       setLoading(true);
       
-      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/admin/universities', {
+        credentials: 'include',
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Content-Type': 'application/json',
         }
       });
 
+      console.log('Universities API response status:', response.status);
+
       if (!response.ok) {
+        if (response.status === 401) {
+          console.log('Authentication failed, redirecting to login');
+          // Clear any stored auth data
+          localStorage.removeItem('adminToken');
+          // The AuthContext will handle the redirect
+          return;
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      if (data.success) {
+      console.log('Universities API response data:', data);
+      
+      if (data.success && data.data && data.data.universities) {
         setUniversities(data.data.universities);
+        console.log(`Successfully loaded ${data.data.universities.length} universities`);
       } else {
         throw new Error(data.error || 'Failed to fetch universities data');
       }
@@ -171,9 +182,11 @@ export default function AdminUniversities() {
     { 
       key: 'ranking', 
       label: 'Ranking',
-      render: (value: number | { global: number; national: number }) => {
-        if (typeof value === 'object' && value !== null) {
-          return `Global: ${value.global}, National: ${value.national}`;
+      render: (value: number | { global?: number; national?: number } | null | undefined) => {
+        if (typeof value === 'object' && value !== null && value !== undefined) {
+          const global = value.global || 'N/A';
+          const national = value.national || 'N/A';
+          return `Global: ${global}, National: ${national}`;
         }
         return value?.toString() || 'N/A';
       }
@@ -181,15 +194,15 @@ export default function AdminUniversities() {
     { 
       key: 'programs', 
       label: 'Programs',
-      render: (value: any[]) => {
+      render: (value: any[] | null | undefined) => {
         if (!Array.isArray(value)) return 'N/A';
         if (value.length === 0) return 'No programs';
         
         // Handle both string arrays and object arrays
         if (typeof value[0] === 'string') {
           return value.join(', ');
-        } else if (typeof value[0] === 'object' && value[0].name) {
-          return value.map(program => program.name).join(', ');
+        } else if (typeof value[0] === 'object' && value[0] && value[0].name) {
+          return value.map(program => program?.name || 'Unknown').join(', ');
         }
         
         return `${value.length} programs`;
@@ -199,79 +212,96 @@ export default function AdminUniversities() {
       key: 'status', 
       label: 'Status',
       render: (value: any, row: any) => {
-        // Handle both status and isActive fields
-        const status = value || (row.isActive ? 'active' : 'inactive');
+        // Handle both status and isActive fields with proper null checks
+        const status = value || (row?.isActive ? 'active' : 'inactive');
         return (
           <span className={`px-2 py-1 text-xs rounded-full ${
             status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
           }`}>
-            {status}
+            {status || 'unknown'}
           </span>
         );
       }
     },
-    { key: 'createdAt', label: 'Created' }
+    { 
+      key: 'createdAt', 
+      label: 'Created',
+      render: (value: string | Date | null | undefined) => {
+        if (!value) return 'N/A';
+        try {
+          return new Date(value).toLocaleDateString();
+        } catch (error) {
+          return 'Invalid Date';
+        }
+      }
+    }
   ];
 
   return (
     <ProtectedRoute requiredPermission="universities:read">
-      <div className="min-h-screen bg-gray-50">
-        <AdminHeader 
-          title="Universities Management"
-          subtitle="Manage university information and programs"
-        />
-        <div className="flex">
-          <AdminSidebar />
-          <main className="flex-1 p-6">
-            <div className="max-w-7xl mx-auto">
-              {/* Sync Status Section */}
-              <div className="mb-6">
-                <UniversitySyncStatus 
-                  onSyncComplete={handleSyncComplete}
-                  className="mb-4"
-                />
-              </div>
-
-              <div className="mb-8 flex justify-between items-center">
-                <div className="flex items-center space-x-4">
-                  <h2 className="text-2xl font-bold text-gray-900">Universities</h2>
-                  <span className="text-sm text-gray-500">
-                    {universities.length} total universities
-                  </span>
+      <ErrorBoundary>
+        <div className="min-h-screen bg-gray-50">
+          <AdminHeader 
+            title="Universities Management"
+            subtitle="Manage university information and programs"
+          />
+          <div className="flex">
+            <AdminSidebar />
+            <main className="flex-1 p-6">
+              <div className="max-w-7xl mx-auto">
+                {/* Sync Status Section */}
+                <div className="mb-6">
+                  <ErrorBoundary>
+                    <UniversitySyncStatus 
+                      onSyncComplete={handleSyncComplete}
+                      className="mb-4"
+                    />
+                  </ErrorBoundary>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button 
-                    onClick={fetchUniversities}
-                    disabled={loading}
-                    variant="outline"
-                    className="flex items-center space-x-2"
-                  >
-                    <FaSync className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-                    <span>Refresh</span>
-                  </Button>
-                  <Button 
-                    onClick={handleAddUniversity}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <FaPlus className="mr-2" /> Add University
-                  </Button>
+
+                <div className="mb-8 flex justify-between items-center">
+                  <div className="flex items-center space-x-4">
+                    <h2 className="text-2xl font-bold text-gray-900">Universities</h2>
+                    <span className="text-sm text-gray-500">
+                      {Array.isArray(universities) ? universities.length : 0} total universities
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button 
+                      onClick={fetchUniversities}
+                      disabled={loading}
+                      variant="outline"
+                      className="flex items-center space-x-2"
+                    >
+                      <FaSync className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                      <span>Refresh</span>
+                    </Button>
+                    <Button 
+                      onClick={handleAddUniversity}
+                      className="bg-blue-600 hover:bg-blue-700"
+                    >
+                      <FaPlus className="mr-2" /> Add University
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg shadow">
+                  <ErrorBoundary>
+                    <DataTable
+                      title="Universities"
+                      data={Array.isArray(universities) ? universities : []}
+                      columns={columns}
+                      loading={loading}
+                      onEdit={handleEditUniversity}
+                      onDelete={handleDeleteUniversity}
+                    />
+                  </ErrorBoundary>
                 </div>
               </div>
-
-              <div className="bg-white rounded-lg shadow">
-                <DataTable
-                  title="Universities"
-                  data={universities}
-                  columns={columns}
-                  loading={loading}
-                  onEdit={handleEditUniversity}
-                  onDelete={handleDeleteUniversity}
-                />
-              </div>
-            </div>
-          </main>
+            </main>
+          </div>
         </div>
-      </div>
+      </ErrorBoundary>
 
       {/* Add University Modal */}
       {isAddModalOpen && (
@@ -287,11 +317,13 @@ export default function AdminUniversities() {
               </Button>
             </div>
             
-            <UniversityForm
-              onSubmit={handleFormSubmit}
-              onCancel={handleCancelForm}
-              isLoading={submitting}
-            />
+            <ErrorBoundary>
+              <UniversityForm
+                onSubmit={handleFormSubmit}
+                onCancel={handleCancelForm}
+                isLoading={submitting}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       )}
@@ -310,12 +342,14 @@ export default function AdminUniversities() {
               </Button>
             </div>
             
-            <UniversityForm
-              university={editingUniversity}
-              onSubmit={handleFormSubmit}
-              onCancel={handleCancelForm}
-              isLoading={submitting}
-            />
+            <ErrorBoundary>
+              <UniversityForm
+                university={editingUniversity as any}
+                onSubmit={handleFormSubmit}
+                onCancel={handleCancelForm}
+                isLoading={submitting}
+              />
+            </ErrorBoundary>
           </div>
         </div>
       )}

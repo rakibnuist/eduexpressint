@@ -6,6 +6,7 @@ import { CTAProvider } from '@/context/CTAContext';
 import CTAForm from '@/components/CTAForm';
 import MetaPixelProvider from '@/components/MetaPixel';
 import GoogleTagManagerProvider from '@/components/GoogleTagManager';
+import ErrorBoundary from '@/components/ErrorBoundary';
 // import { TrackingCapture } from '@/components/TrackingCapture';
 // import EnhancedTracking from '@/components/EnhancedTracking';
 // import SEOTestComponent from '@/components/SEOTestComponent';
@@ -261,19 +262,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </noscript>
         )}
         <Providers>
-          <GoogleTagManagerProvider>
-            <MetaPixelProvider>
-              <CTAProvider>
-                {/* <TrackingCapture /> */}
-                {/* <EnhancedTracking /> */}
-                <Navbar />
-                <main className="pt-0 min-h-screen">{children}</main>
-                <Footer />
-                <CTAForm />
-                {/* <SEOTestComponent /> */}
-              </CTAProvider>
-            </MetaPixelProvider>
-          </GoogleTagManagerProvider>
+          <ErrorBoundary>
+            <GoogleTagManagerProvider>
+              <MetaPixelProvider>
+                <CTAProvider>
+                  {/* <TrackingCapture /> */}
+                  {/* <EnhancedTracking /> */}
+                  <Navbar />
+                  <main className="pt-0 min-h-screen">{children}</main>
+                  <Footer />
+                  <CTAForm />
+                  {/* <SEOTestComponent /> */}
+                </CTAProvider>
+              </MetaPixelProvider>
+            </GoogleTagManagerProvider>
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

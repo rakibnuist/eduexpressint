@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FaGraduationCap, FaUsers, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBookOpen, FaStar, FaRocket, FaArrowRight, FaTimes, FaCheckCircle } from 'react-icons/fa';
 import { useLeadTracker } from '@/components/LeadTracker';
 import { useCTA } from '@/context/CTAContext';

@@ -182,7 +182,6 @@ const DestinationSchema: Schema = new Schema({
   slug: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
     trim: true
   },
@@ -433,7 +432,7 @@ const DestinationSchema: Schema = new Schema({
 });
 
 // Indexes for better performance
-DestinationSchema.index({ slug: 1 });
+DestinationSchema.index({ slug: 1 }, { unique: true });
 DestinationSchema.index({ isActive: 1, isFeatured: 1 });
 DestinationSchema.index({ tags: 1 });
 

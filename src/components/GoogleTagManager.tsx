@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import Script from 'next/script';
 
 // Google Tag Manager configuration

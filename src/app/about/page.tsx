@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useCTA } from '@/context/CTAContext';
 import { trackViewContent } from '@/components/TrackLead';
 import { useRouter } from 'next/navigation';

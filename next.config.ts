@@ -6,11 +6,12 @@ const isDev = process.env.NODE_ENV !== 'production';
 // Loosened CSP so Next.js inline runtime works; add 'unsafe-eval' only in dev
 const csp = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ''}`,
+  `script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://connect.facebook.net${isDev ? " 'unsafe-eval'" : ''}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' https: data: blob:",
   "connect-src 'self' https: ws: wss:",
   "font-src 'self' data:",
+  "frame-src 'self' https://www.googletagmanager.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",

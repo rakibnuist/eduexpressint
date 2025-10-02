@@ -92,7 +92,6 @@ const UniversitySimplifiedSchema: Schema = new Schema({
   slug: { 
     type: String, 
     required: [true, 'Slug is required'], 
-    unique: true, 
     lowercase: true, 
     trim: true,
     match: [/^[a-z0-9-]+$/, 'Slug can only contain lowercase letters, numbers, and hyphens']
@@ -222,6 +221,7 @@ const UniversitySimplifiedSchema: Schema = new Schema({
 });
 
 // Indexes for better performance
+UniversitySimplifiedSchema.index({ slug: 1 }, { unique: true });
 UniversitySimplifiedSchema.index({ name: 'text', description: 'text', shortDescription: 'text' });
 
 export default mongoose.models.UniversitySimplified || mongoose.model<IUniversitySimplified>('UniversitySimplified', UniversitySimplifiedSchema);
