@@ -151,10 +151,13 @@ export default function AdminContent() {
         });
 
         if (response.ok) {
+          const result = await response.json();
           setContent(content.filter(c => c._id !== item._id));
           alert('Content deleted successfully');
         } else {
-          alert('Failed to delete content');
+          const errorText = await response.text();
+          console.error('Delete error:', response.status, errorText);
+          alert(`Failed to delete content: ${response.status}`);
         }
       } catch (error) {
         console.error('Error deleting content:', error);

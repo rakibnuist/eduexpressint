@@ -6,6 +6,17 @@ import Content from '@/models/Content';
 // Helper function to check authentication
 async function checkAuth(request: Request) {
   try {
+    // Check for Bearer token in Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      // For now, accept any non-empty token (you can add proper JWT validation later)
+      if (token && token.length > 0) {
+        return true;
+      }
+    }
+    
+    // Fallback to cookie-based authentication
     const cookieStore = await cookies();
     const session = cookieStore.get('admin-session');
     

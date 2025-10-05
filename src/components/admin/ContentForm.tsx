@@ -161,7 +161,9 @@ export default function ContentForm({ content, onSave, onCancel, onAutoOpen }: C
       });
 
       if (!response.ok) {
-        throw new Error('Failed to save content');
+        const errorText = await response.text();
+        console.error('Response error:', response.status, errorText);
+        throw new Error(`Failed to save content: ${response.status} ${errorText}`);
       }
 
       const result = await response.json();
