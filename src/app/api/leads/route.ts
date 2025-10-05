@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { dbConnect } from '@/lib/db';
 import Lead from '@/models/Lead';
+import { metaConversionsAPI } from '@/components/MetaConversionsAPI';
 
 export async function POST(request: Request) {
   try {
@@ -95,6 +96,42 @@ export async function POST(request: Request) {
       programType: newLead.programType,
       source: newLead.source
     });
+
+    // Track lead creation with Meta Pixel and Conversions API
+    try {
+      await metaConversionsAPI.sendEvent(
+        {
+          event_name: 'Lead',
+          event_time: Math.floor(Date.now() / 1000),
+          event_source_url: request.headers.get('referer') || 'https://www.eduexpressint.com',
+          action_source: 'website'
+        },
+        {
+          email: newLead.email,
+          phone: newLead.phone,
+          first_name: newLead.name.split(' ')[0],
+          last_name: newLead.name.split(' ').slice(1).join(' ') || '',
+          country: newLead.countryOfInterest
+        },
+        {
+          content_name: 'Lead Generated',
+          content_category: 'Education',
+          content_type: 'lead',
+          value: 1,
+          currency: 'USD',
+          destination: newLead.countryOfInterest,
+          program_type: newLead.programType,
+          major: newLead.major,
+          source: newLead.source,
+          lead_id: newLead._id.toString()
+        }
+      );
+      
+      console.log('✅ Meta tracking: Lead creation tracked successfully');
+    } catch (trackingError) {
+      console.error('❌ Meta tracking error:', trackingError);
+      // Don't fail the lead creation if tracking fails
+    }
 
     return NextResponse.json({
       ok: true,

@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { dbConnect } from '@/lib/db';
 import B2BLead from '@/models/B2BLead';
 import { extractTrackingFromRequest } from '@/lib/trackingUtils';
+import { metaConversionsAPI } from '@/components/MetaConversionsAPI';
 
 // Helper function to check authentication
 async function checkAuth(request: Request) {
@@ -214,6 +215,45 @@ export async function POST(request: Request) {
     });
 
     const savedLead = await newLead.save();
+
+    // Track B2B lead creation with Meta Pixel and Conversions API
+    try {
+      await metaConversionsAPI.sendEvent(
+        {
+          event_name: 'Lead',
+          event_time: Math.floor(Date.now() / 1000),
+          event_source_url: request.headers.get('referer') || 'https://www.eduexpressint.com',
+          action_source: 'website'
+        },
+        {
+          email: savedLead.email,
+          phone: savedLead.phone,
+          first_name: savedLead.contactPerson.split(' ')[0],
+          last_name: savedLead.contactPerson.split(' ').slice(1).join(' ') || '',
+          country: savedLead.country
+        },
+        {
+          content_name: 'B2B Lead Generated',
+          content_category: 'Business Partnership',
+          content_type: 'b2b_lead',
+          value: 5, // Higher value for B2B leads
+          currency: 'USD',
+          company_name: savedLead.companyName,
+          industry: savedLead.industry,
+          country: savedLead.country,
+          services: savedLead.services?.join(', '),
+          source: savedLead.source,
+          lead_id: savedLead._id.toString(),
+          deal_stage: savedLead.dealStage,
+          priority: savedLead.priority
+        }
+      );
+      
+      console.log('✅ Meta tracking: B2B Lead creation tracked successfully');
+    } catch (trackingError) {
+      console.error('❌ Meta tracking error:', trackingError);
+      // Don't fail the lead creation if tracking fails
+    }
 
     return NextResponse.json({
       success: true,

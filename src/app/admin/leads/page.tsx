@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
+import { metaPixel } from '@/components/MetaPixel';
 
 interface Lead {
   _id: string;
@@ -54,6 +55,17 @@ export default function AdminLeads() {
         const data = await response.json();
         if (data.success) {
           setLeads(data.data.leads);
+          
+          // Track admin page view
+          metaPixel.trackCustomEvent('AdminPageView', {
+            content_name: 'Admin Leads Management',
+            content_category: 'Admin Dashboard',
+            page_type: 'lead_management',
+            admin_user: user?.firstName || 'Admin',
+            total_leads: data.data.leads?.length || 0
+          });
+          
+          console.log('✅ Meta Pixel: Admin leads page view tracked');
         } else {
           throw new Error(data.error || 'Failed to fetch leads data');
         }
@@ -67,7 +79,7 @@ export default function AdminLeads() {
     };
 
     fetchLeads();
-  }, []);
+  }, [user]);
 
   // Handler functions
   const handleViewLead = (lead: Lead) => {
@@ -109,6 +121,10 @@ export default function AdminLeads() {
     try {
       setUpdating(true);
       const token = localStorage.getItem('adminToken');
+      
+      // Get the current lead data for tracking
+      const currentLead = leads.find(lead => lead._id === leadId);
+      
       const response = await fetch(`/api/admin/leads/${leadId}`, {
         method: 'PATCH',
         headers: {
@@ -126,6 +142,26 @@ export default function AdminLeads() {
         setIsEditModalOpen(false);
         setEditingLead(null);
         setIsViewModalOpen(false);
+        
+        // Track lead status update with Meta Pixel
+        if (currentLead) {
+          metaPixel.trackCustomEvent('LeadStatusUpdated', {
+            content_name: `Lead Status Updated: ${newStatus}`,
+            content_category: 'Lead Management',
+            lead_id: leadId,
+            previous_status: currentLead.status,
+            new_status: newStatus,
+            lead_name: currentLead.name,
+            lead_email: currentLead.email,
+            destination: currentLead.country,
+            program: currentLead.program,
+            value: newStatus === 'Converted' || newStatus === 'Enrolled' ? 10 : 1,
+            currency: 'USD'
+          });
+          
+          console.log('✅ Meta Pixel: Lead status update tracked');
+        }
+        
         alert('Status updated successfully');
       } else {
         alert('Failed to update status');
