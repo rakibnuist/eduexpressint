@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FaPlus, FaEye, FaEdit, FaTrash, FaSearch, FaFilter, FaGlobe, FaFileAlt } from 'react-icons/fa';
+import { FaPlus, FaEye, FaEdit, FaTrash, FaSearch, FaFilter, FaGlobe, FaFileAlt, FaExternalLinkAlt } from 'react-icons/fa';
 import { metaPixel } from '@/components/MetaPixel';
 import ContentForm from '@/components/admin/ContentForm';
 
@@ -178,6 +178,18 @@ export default function AdminContent() {
       setContent([newContent, ...content]);
       setIsAddModalOpen(false);
     }
+  };
+
+  const handleAutoOpen = (slug: string) => {
+    // Open the content page in a new tab
+    const baseUrl = window.location.origin;
+    window.open(`${baseUrl}/content/${slug}`, '_blank');
+  };
+
+  const handleViewPage = (content: Content) => {
+    // Open the content page in a new tab
+    const baseUrl = window.location.origin;
+    window.open(`${baseUrl}/content/${content.slug}`, '_blank');
   };
 
   const getTypeColor = (type: string) => {
@@ -370,12 +382,14 @@ export default function AdminContent() {
           {/* Data Table */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <DataTable
+              title="Content Management"
               data={filteredContent}
               columns={columns}
               loading={loading}
               onEdit={handleEditContent}
               onView={handleViewContent}
               onDelete={handleDeleteContent}
+              onViewPage={handleViewPage}
             />
           </div>
         </div>
@@ -518,6 +532,7 @@ export default function AdminContent() {
             setIsEditModalOpen(false);
             setEditingContent(null);
           }}
+          onAutoOpen={handleAutoOpen}
         />
       )}
     </ProtectedRoute>

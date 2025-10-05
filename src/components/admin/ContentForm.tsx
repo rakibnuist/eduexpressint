@@ -32,6 +32,7 @@ interface ContentFormProps {
   content?: Content | null;
   onSave: (content: Content) => void;
   onCancel: () => void;
+  onAutoOpen?: (slug: string) => void;
 }
 
 const CONTENT_TYPES = ['Page', 'Blog', 'Landing Page', 'News', 'Announcement'];
@@ -47,7 +48,7 @@ const AVAILABLE_CATEGORIES = [
   'Application'
 ];
 
-export default function ContentForm({ content, onSave, onCancel }: ContentFormProps) {
+export default function ContentForm({ content, onSave, onCancel, onAutoOpen }: ContentFormProps) {
   const [formData, setFormData] = useState<Content>({
     title: '',
     slug: '',
@@ -166,6 +167,11 @@ export default function ContentForm({ content, onSave, onCancel }: ContentFormPr
       const result = await response.json();
       if (result.success) {
         onSave(result.data);
+        
+        // Auto-open the page if it's a new Page type content and published
+        if (!content && formData.type === 'Page' && formData.published && onAutoOpen) {
+          onAutoOpen(result.data.slug);
+        }
       } else {
         throw new Error(result.error || 'Failed to save content');
       }

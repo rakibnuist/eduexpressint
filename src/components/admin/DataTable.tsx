@@ -15,7 +15,8 @@ import {
   FaTrash,
   FaSort,
   FaSortUp,
-  FaSortDown
+  FaSortDown,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 
 interface Column {
@@ -33,7 +34,7 @@ interface Filter {
 }
 
 interface DataTableProps {
-  title: string;
+  title?: string;
   data: any[];
   columns: Column[];
   filters?: Filter[];
@@ -42,6 +43,7 @@ interface DataTableProps {
   onEdit?: (item: any) => void;
   onView?: (item: any) => void;
   onDelete?: (item: any) => void;
+  onViewPage?: (item: any) => void;
   onSearch?: (value: string) => void;
   onFilter?: (key: string, value: string) => void;
   actions?: React.ReactNode;
@@ -58,6 +60,7 @@ export default function DataTable({
   onEdit,
   onView,
   onDelete,
+  onViewPage,
   onSearch,
   onFilter,
   actions,
@@ -220,7 +223,7 @@ export default function DataTable({
                       </div>
                     </th>
                   ))}
-                  {(onEdit || onView || onDelete) && (
+                  {(onEdit || onView || onDelete || onViewPage) && (
                     <th className="text-right py-3 px-4 font-medium text-gray-700">
                       Actions
                     </th>
@@ -235,7 +238,7 @@ export default function DataTable({
                         {renderCell(column, row)}
                       </td>
                     ))}
-                    {(onEdit || onView || onDelete) && (
+                    {(onEdit || onView || onDelete || onViewPage) && (
                       <td className="py-3 px-4">
                         <div className="flex items-center justify-end space-x-2">
                           {onView && (
@@ -244,8 +247,20 @@ export default function DataTable({
                               size="sm"
                               onClick={() => onView(row)}
                               className="h-8 w-8 p-0"
+                              title="View Details"
                             >
                               <FaEye className="h-3 w-3" />
+                            </Button>
+                          )}
+                          {onViewPage && row.type === 'Page' && row.published && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => onViewPage(row)}
+                              className="h-8 w-8 p-0 text-blue-600 hover:text-blue-700"
+                              title="View Page"
+                            >
+                              <FaExternalLinkAlt className="h-3 w-3" />
                             </Button>
                           )}
                           {onEdit && (
@@ -254,6 +269,7 @@ export default function DataTable({
                               size="sm"
                               onClick={() => onEdit(row)}
                               className="h-8 w-8 p-0"
+                              title="Edit"
                             >
                               <FaEdit className="h-3 w-3" />
                             </Button>
@@ -264,6 +280,7 @@ export default function DataTable({
                               size="sm"
                               onClick={() => onDelete(row)}
                               className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                              title="Delete"
                             >
                               <FaTrash className="h-3 w-3" />
                             </Button>
