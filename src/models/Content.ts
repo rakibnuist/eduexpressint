@@ -87,8 +87,7 @@ const ContentSchema = new Schema<IContent>({
   toObject: { virtuals: true }
 });
 
-// Index for better query performance
-ContentSchema.index({ slug: 1 });
+// Index for better query performance (slug index is already created by unique: true)
 ContentSchema.index({ type: 1 });
 ContentSchema.index({ published: 1 });
 ContentSchema.index({ categories: 1 });
