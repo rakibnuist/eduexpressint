@@ -95,31 +95,29 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         />
       )}
 
-      <div className="flex">
-        {/* Sidebar */}
-        <AdminSidebar 
-          user={user} 
+      {/* Sidebar */}
+      <AdminSidebar 
+        user={user} 
+        onLogout={handleLogout}
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+      
+      {/* Main Content */}
+      <div className="lg:ml-64 min-h-screen">
+        {/* Top Navigation */}
+        <AdminTopBar 
+          user={user}
+          onMenuClick={() => setSidebarOpen(true)}
           onLogout={handleLogout}
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
         />
         
-        {/* Main Content */}
-        <div className="flex-1 lg:ml-64 min-h-screen">
-          {/* Top Navigation */}
-          <AdminTopBar 
-            user={user}
-            onMenuClick={() => setSidebarOpen(true)}
-            onLogout={handleLogout}
-          />
-          
-          {/* Page Content */}
-          <main className="p-6 min-h-screen">
-            <div className="max-w-7xl mx-auto">
-              {children}
-            </div>
-          </main>
-        </div>
+        {/* Page Content */}
+        <main className="p-6 min-h-screen">
+          <div className="max-w-7xl mx-auto">
+            {children}
+          </div>
+        </main>
       </div>
     </div>
   );

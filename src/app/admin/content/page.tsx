@@ -46,9 +46,9 @@ export default function AdminContent() {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingContent, setEditingContent] = useState<Content | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [typeFilter, setTypeFilter] = useState('');
-  const [publishedFilter, setPublishedFilter] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [publishedFilter, setPublishedFilter] = useState('all');
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -110,18 +110,18 @@ export default function AdminContent() {
     }
 
     // Filter by type
-    if (typeFilter) {
+    if (typeFilter && typeFilter !== 'all') {
       filtered = filtered.filter(item => item.type === typeFilter);
     }
 
     // Filter by published status
-    if (publishedFilter !== '') {
+    if (publishedFilter && publishedFilter !== 'all') {
       const isPublished = publishedFilter === 'true';
       filtered = filtered.filter(item => item.published === isPublished);
     }
 
     // Filter by category
-    if (categoryFilter) {
+    if (categoryFilter && categoryFilter !== 'all') {
       filtered = filtered.filter(item => item.categories.includes(categoryFilter));
     }
 
@@ -273,7 +273,7 @@ export default function AdminContent() {
                         <SelectValue placeholder="Filter by type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Types</SelectItem>
+                        <SelectItem value="all">All Types</SelectItem>
                         {uniqueTypes.map(type => (
                           <SelectItem key={type} value={type}>
                             {type}
@@ -289,7 +289,7 @@ export default function AdminContent() {
                         <SelectValue placeholder="Filter by status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Status</SelectItem>
+                        <SelectItem value="all">All Status</SelectItem>
                         <SelectItem value="true">Published</SelectItem>
                         <SelectItem value="false">Draft</SelectItem>
                       </SelectContent>
@@ -302,7 +302,7 @@ export default function AdminContent() {
                         <SelectValue placeholder="Filter by category" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Categories</SelectItem>
+                        <SelectItem value="all">All Categories</SelectItem>
                         {uniqueCategories.map(category => (
                           <SelectItem key={category} value={category}>
                             {category}
@@ -313,13 +313,13 @@ export default function AdminContent() {
                   </div>
 
                   {/* Clear Filters Button */}
-                  {(typeFilter || publishedFilter || categoryFilter || searchTerm) && (
+                  {(typeFilter !== 'all' || publishedFilter !== 'all' || categoryFilter !== 'all' || searchTerm) && (
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setTypeFilter('');
-                        setPublishedFilter('');
-                        setCategoryFilter('');
+                        setTypeFilter('all');
+                        setPublishedFilter('all');
+                        setCategoryFilter('all');
                         setSearchTerm('');
                       }}
                       className="w-full sm:w-auto"
