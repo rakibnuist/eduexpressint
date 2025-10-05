@@ -1,12 +1,25 @@
 'use client';
 
-import React from 'react';
-
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import AdminLayout from '@/components/admin/AdminLayout';
 import DashboardStats from '@/components/admin/DashboardStats';
 import DataVisualization from '@/components/admin/DataVisualization';
-import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { 
+  FaUsers, 
+  FaUniversity, 
+  FaNewspaper, 
+  FaHandshake,
+  FaGraduationCap,
+  FaArrowUp,
+  FaArrowDown,
+  FaEye,
+  FaRefresh
+} from 'react-icons/fa';
 
 interface DashboardData {
   totalLeads: number;

@@ -57,8 +57,16 @@ export async function POST(request: NextRequest) {
 
     // For testing without Meta Access Token
     if (!META_ACCESS_TOKEN) {
-      console.log('Meta Access Token not configured - running in test mode');
-      console.log('Events that would be sent to Meta:', events);
+      console.log('⚠️ Meta Access Token not configured - running in test mode');
+      console.log('📊 Events that would be sent to Meta:', {
+        count: events.length,
+        events: events.map(e => ({
+          event_name: e.event_name,
+          event_time: e.event_time,
+          has_user_data: !!e.user_data,
+          has_custom_data: !!e.custom_data
+        }))
+      });
       
       return NextResponse.json({
         success: true,
@@ -66,6 +74,7 @@ export async function POST(request: NextRequest) {
         message: 'Events processed in test mode - configure META_ACCESS_TOKEN for production',
         events_received: events.length,
         events: events,
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -126,10 +135,12 @@ export async function POST(request: NextRequest) {
       ...(test_event_code && { test_event_code }),
     };
 
-    console.log('Sending to Meta Conversions API:', {
+    console.log('🚀 Sending to Meta Conversions API:', {
       url: META_API_URL,
-      events: metaEvents.length,
-      test_event_code,
+      events_count: metaEvents.length,
+      test_event_code: test_event_code || 'none',
+      pixel_id: META_PIXEL_ID,
+      timestamp: new Date().toISOString(),
     });
 
     const response = await fetch(META_API_URL, {
@@ -144,14 +155,30 @@ export async function POST(request: NextRequest) {
     const result = await response.json();
 
     if (!response.ok) {
-      console.error('Meta API Error:', result);
+      console.error('❌ Meta API Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: result,
+        events_sent: metaEvents.length,
+        timestamp: new Date().toISOString(),
+      });
       return NextResponse.json(
-        { error: 'Failed to send events to Meta', details: result },
+        { 
+          error: 'Failed to send events to Meta', 
+          details: result,
+          events_count: metaEvents.length,
+          timestamp: new Date().toISOString(),
+        },
         { status: response.status }
       );
     }
 
-    console.log('Meta Conversions API Success:', result);
+    console.log('✅ Meta Conversions API Success:', {
+      events_received: result.events_received || metaEvents.length,
+      fbtrace_id: result.fbtrace_id,
+      messages: result.messages || [],
+      timestamp: new Date().toISOString(),
+    });
 
     return NextResponse.json({
       success: true,

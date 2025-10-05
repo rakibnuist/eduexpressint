@@ -90,10 +90,12 @@ export const metaConversionsAPI = {
         };
         
         window.fbq('track', event.event_name, pixelData);
-        console.log(`Client-side Meta Pixel: ${event.event_name}`, pixelData);
+        console.log(`✅ Client-side Meta Pixel: ${event.event_name}`, pixelData);
       } catch (error) {
-        console.error('Client-side pixel error:', error);
+        console.error('❌ Client-side pixel error:', error);
       }
+    } else {
+      console.warn('⚠️ Meta Pixel not loaded - client-side tracking skipped');
     }
 
     // 2. Send to server-side Meta Conversions API
@@ -105,18 +107,49 @@ export const metaConversionsAPI = {
         },
         body: JSON.stringify({
           events: [event],
-          test_event_code: 'TEST65812', // For testing
+          test_event_code: process.env.NODE_ENV === 'production' ? undefined : 'TEST65812',
         }),
       });
 
       if (response.ok) {
         const result = await response.json();
-        console.log(`Server-side Meta API: ${event.event_name}`, result);
+        console.log(`✅ Server-side Meta API: ${event.event_name}`, result);
+        
+        // Track successful API calls for monitoring
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'meta_api_success',
+            event_name: event.event_name,
+            timestamp: new Date().toISOString(),
+          });
+        }
       } else {
-        console.error('Server-side API error:', await response.text());
+        const errorText = await response.text();
+        console.error('❌ Server-side API error:', response.status, errorText);
+        
+        // Track API errors for monitoring
+        if (window.dataLayer) {
+          window.dataLayer.push({
+            event: 'meta_api_error',
+            event_name: event.event_name,
+            error_status: response.status,
+            error_message: errorText,
+            timestamp: new Date().toISOString(),
+          });
+        }
       }
     } catch (error) {
-      console.error('Meta Conversions API error:', error);
+      console.error('❌ Meta Conversions API network error:', error);
+      
+      // Track network errors for monitoring
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: 'meta_api_network_error',
+          event_name: event.event_name,
+          error_message: error.message,
+          timestamp: new Date().toISOString(),
+        });
+      }
     }
 
     // 3. Send to Stape (if configured)
@@ -293,6 +326,148 @@ export const metaConversionsAPI = {
       {
         content_category: 'Education',
         ...customData,
+      }
+    );
+  },
+
+  // 7. UNIVERSITY SEARCH EVENT - When someone searches for universities
+  trackUniversitySearch: async (userData?: UserData, searchData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'Search' },
+      userData,
+      {
+        content_name: searchData?.content_name || 'University Search',
+        content_category: 'Education',
+        content_type: 'university_search',
+        search_string: searchData?.search_query || searchData?.university_name,
+        value: searchData?.value || 0,
+        currency: 'USD',
+        // Search-specific data
+        search_type: 'university_search',
+        destination_country: searchData?.destination,
+        study_level: searchData?.studyLevel,
+        program_field: searchData?.programField,
+        search_results_count: searchData?.results_count,
+        user_intent: 'university_research',
+        search_filters: searchData?.filters,
+      }
+    );
+  },
+
+  // 8. SCHOLARSHIP VIEW EVENT - When someone views scholarship information
+  trackScholarshipView: async (userData?: UserData, scholarshipData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'ViewContent' },
+      userData,
+      {
+        content_name: scholarshipData?.content_name || 'Scholarship Information',
+        content_category: 'Education',
+        content_type: 'scholarship',
+        content_ids: scholarshipData?.scholarship_ids || [],
+        value: scholarshipData?.value || 0,
+        currency: 'USD',
+        // Scholarship-specific data
+        scholarship_type: scholarshipData?.type,
+        scholarship_amount: scholarshipData?.amount,
+        destination_country: scholarshipData?.destination,
+        study_level: scholarshipData?.studyLevel,
+        eligibility_criteria: scholarshipData?.eligibility,
+        application_deadline: scholarshipData?.deadline,
+        user_eligibility_score: scholarshipData?.eligibility_score,
+      }
+    );
+  },
+
+  // 9. VISA CONSULTATION EVENT - When someone requests visa consultation
+  trackVisaConsultation: async (userData?: UserData, visaData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'Contact' },
+      userData,
+      {
+        content_name: visaData?.content_name || 'Visa Consultation Request',
+        content_category: 'Education',
+        content_type: 'visa_consultation',
+        value: visaData?.value || 25, // Higher value for visa consultations
+        currency: 'USD',
+        // Visa-specific data
+        visa_type: visaData?.visa_type,
+        destination_country: visaData?.destination,
+        study_level: visaData?.studyLevel,
+        consultation_type: visaData?.consultation_type || 'initial',
+        urgency_level: visaData?.urgency || 'high',
+        previous_visa_history: visaData?.previous_history,
+        estimated_processing_time: visaData?.processing_time,
+      }
+    );
+  },
+
+  // 10. APPLICATION STATUS CHECK EVENT - When someone checks application status
+  trackApplicationStatusCheck: async (userData?: UserData, statusData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'ViewContent' },
+      userData,
+      {
+        content_name: statusData?.content_name || 'Application Status Check',
+        content_category: 'Education',
+        content_type: 'application_status',
+        value: statusData?.value || 0,
+        currency: 'USD',
+        // Status-specific data
+        application_id: statusData?.application_id,
+        current_status: statusData?.current_status,
+        destination_country: statusData?.destination,
+        university_name: statusData?.university,
+        program_type: statusData?.program_type,
+        days_since_submission: statusData?.days_since_submission,
+        expected_decision_date: statusData?.expected_date,
+        user_engagement_level: statusData?.engagement_level,
+      }
+    );
+  },
+
+  // 11. DESTINATION COMPARISON EVENT - When someone compares destinations
+  trackDestinationComparison: async (userData?: UserData, comparisonData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'ViewContent' },
+      userData,
+      {
+        content_name: comparisonData?.content_name || 'Destination Comparison',
+        content_category: 'Education',
+        content_type: 'destination_comparison',
+        value: comparisonData?.value || 0,
+        currency: 'USD',
+        // Comparison-specific data
+        compared_destinations: comparisonData?.destinations || [],
+        comparison_criteria: comparisonData?.criteria || [],
+        study_level: comparisonData?.studyLevel,
+        program_field: comparisonData?.programField,
+        budget_range: comparisonData?.budget_range,
+        comparison_duration: comparisonData?.duration_seconds,
+        user_preference_score: comparisonData?.preference_score,
+      }
+    );
+  },
+
+  // 12. PROGRAM RECOMMENDATION EVENT - When someone receives program recommendations
+  trackProgramRecommendation: async (userData?: UserData, recommendationData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'ViewContent' },
+      userData,
+      {
+        content_name: recommendationData?.content_name || 'Program Recommendation',
+        content_category: 'Education',
+        content_type: 'program_recommendation',
+        value: recommendationData?.value || 0,
+        currency: 'USD',
+        // Recommendation-specific data
+        recommended_programs: recommendationData?.programs || [],
+        recommendation_algorithm: recommendationData?.algorithm,
+        user_profile_match_score: recommendationData?.match_score,
+        destination_country: recommendationData?.destination,
+        study_level: recommendationData?.studyLevel,
+        program_field: recommendationData?.programField,
+        recommendation_confidence: recommendationData?.confidence,
+        user_interaction_with_recommendations: recommendationData?.interaction_type,
       }
     );
   },

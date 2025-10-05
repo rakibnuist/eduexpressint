@@ -3,6 +3,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
+import AdminTopBar from './AdminTopBar';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -29,6 +30,7 @@ interface User {
 export default function AdminLayout({ children }: AdminLayoutProps) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -66,10 +68,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
+          <div className="relative">
+            <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-6"></div>
+            <div className="absolute inset-0 rounded-full h-16 w-16 border-4 border-transparent border-t-blue-400 animate-ping"></div>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Loading Admin Panel</h3>
+          <p className="text-gray-600">Please wait while we prepare your dashboard...</p>
         </div>
       </div>
     );
@@ -81,35 +87,37 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       <div className="flex">
         {/* Sidebar */}
-        <AdminSidebar user={user} onLogout={handleLogout} />
+        <AdminSidebar 
+          user={user} 
+          onLogout={handleLogout}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
         
         {/* Main Content */}
         <div className="flex-1 lg:ml-64">
           {/* Top Navigation */}
-          <nav className="bg-white shadow-sm border-b border-gray-200">
-            <div className="px-6 py-4">
-              <div className="flex items-center justify-between">
-                <h1 className="text-2xl font-semibold text-gray-900">Admin Dashboard</h1>
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-gray-600">
-                    Welcome, {user.firstName} {user.lastName}
-                  </span>
-                  <button
-                    onClick={handleLogout}
-                    className="text-sm text-red-600 hover:text-red-800 transition-colors"
-                  >
-                    Logout
-                  </button>
-                </div>
-              </div>
-            </div>
-          </nav>
+          <AdminTopBar 
+            user={user}
+            onMenuClick={() => setSidebarOpen(true)}
+            onLogout={handleLogout}
+          />
           
           {/* Page Content */}
-          <main className="p-6">
-            {children}
+          <main className="p-4 lg:p-6">
+            <div className="max-w-7xl mx-auto">
+              {children}
+            </div>
           </main>
         </div>
       </div>
