@@ -4,8 +4,7 @@ import React from 'react';
 
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import AdminHeader from '@/components/admin/AdminHeader';
-import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
@@ -273,12 +272,8 @@ export default function AdminLeads() {
 
   return (
     <ProtectedRoute requiredPermission="leads:read">
-      <div className="min-h-screen bg-gray-50">
-        <AdminHeader />
-        <div className="flex">
-          <AdminSidebar />
-          <main className="flex-1 p-4 lg:p-6">
-            <div className="max-w-7xl mx-auto">
+      <AdminLayout>
+        <div className="space-y-8">
               {/* Header Section - Mobile Responsive */}
               <div className="mb-6 lg:mb-8">
                 <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
@@ -314,8 +309,8 @@ export default function AdminLeads() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Countries</SelectItem>
-                        {uniqueCountries.map(country => (
-                          <SelectItem key={country} value={country}>
+                        {uniqueCountries.map((country, index) => (
+                          <SelectItem key={`country-${index}-${country}`} value={country}>
                             {country}
                           </SelectItem>
                         ))}
@@ -330,8 +325,8 @@ export default function AdminLeads() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">All Statuses</SelectItem>
-                        {uniqueStatuses.map(status => (
-                          <SelectItem key={status} value={status}>
+                        {uniqueStatuses.map((status, index) => (
+                          <SelectItem key={`status-${index}-${status}`} value={status}>
                             {status}
                           </SelectItem>
                         ))}
