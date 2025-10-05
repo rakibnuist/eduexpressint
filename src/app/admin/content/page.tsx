@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePathname } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminHeader from '@/components/admin/AdminHeader';
 import AdminSidebar from '@/components/admin/AdminSidebar';
@@ -37,6 +38,7 @@ interface Content {
 
 export default function AdminContent() {
   const { user } = useAuth();
+  const pathname = usePathname();
   const [content, setContent] = useState<Content[]>([]);
   const [filteredContent, setFilteredContent] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
@@ -49,6 +51,12 @@ export default function AdminContent() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [publishedFilter, setPublishedFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Auto-hide sidebar when navigating to different pages
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -231,10 +239,26 @@ export default function AdminContent() {
   return (
     <ProtectedRoute requiredPermission="content:read">
       <div className="min-h-screen bg-gray-50">
-        <AdminHeader />
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div 
+            className="fixed inset-0 z-40 bg-black/50 lg:hidden transition-opacity"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+        
+        <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
         <div className="flex">
-          <AdminSidebar />
-          <main className="flex-1 p-4 lg:p-6">
+          <AdminSidebar 
+            user={user}
+            onLogout={() => {
+              localStorage.removeItem('adminToken');
+              window.location.href = '/admin/login';
+            }}
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+          <main className="flex-1 p-4 lg:p-6 lg:ml-64">
             <div className="max-w-7xl mx-auto">
               {/* Header Section */}
               <div className="mb-6 lg:mb-8">

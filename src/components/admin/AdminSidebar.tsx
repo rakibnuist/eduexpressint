@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -39,6 +39,13 @@ export default function AdminSidebar({ user, onLogout, isOpen = false, onClose }
   const router = useRouter();
   const pathname = usePathname();
   const { hasPermission } = useAuth();
+
+  // Auto-hide sidebar when navigating to different pages
+  useEffect(() => {
+    if (onClose) {
+      onClose();
+    }
+  }, [pathname, onClose]);
 
   const navigationItems: SidebarItem[] = [
     { 

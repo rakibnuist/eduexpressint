@@ -39,8 +39,8 @@ export default function AdminLeads() {
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
   const [updating, setUpdating] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [countryFilter, setCountryFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [countryFilter, setCountryFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -103,12 +103,12 @@ export default function AdminLeads() {
     }
 
     // Filter by country
-    if (countryFilter) {
+    if (countryFilter && countryFilter !== 'all') {
       filtered = filtered.filter(lead => lead.country === countryFilter);
     }
 
     // Filter by status
-    if (statusFilter) {
+    if (statusFilter && statusFilter !== 'all') {
       filtered = filtered.filter(lead => lead.status === statusFilter);
     }
 
@@ -313,7 +313,7 @@ export default function AdminLeads() {
                         <SelectValue placeholder="Filter by country" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Countries</SelectItem>
+                        <SelectItem value="all">All Countries</SelectItem>
                         {uniqueCountries.map(country => (
                           <SelectItem key={country} value={country}>
                             {country}
@@ -329,7 +329,7 @@ export default function AdminLeads() {
                         <SelectValue placeholder="Filter by status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Statuses</SelectItem>
+                        <SelectItem value="all">All Statuses</SelectItem>
                         {uniqueStatuses.map(status => (
                           <SelectItem key={status} value={status}>
                             {status}
@@ -340,12 +340,12 @@ export default function AdminLeads() {
                   </div>
 
                   {/* Clear Filters Button */}
-                  {(countryFilter || statusFilter || searchTerm) && (
+                  {(countryFilter !== 'all' || statusFilter !== 'all' || searchTerm) && (
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setCountryFilter('');
-                        setStatusFilter('');
+                        setCountryFilter('all');
+                        setStatusFilter('all');
                         setSearchTerm('');
                       }}
                       className="w-full sm:w-auto"
