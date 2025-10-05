@@ -1,13 +1,50 @@
 import { NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { dbConnect } from '@/lib/db';
 import Lead from '@/models/Lead';
 import { metaConversionsAPI } from '@/components/MetaConversionsAPI';
+
+// Helper function to check authentication
+async function checkAuth(request: Request) {
+  try {
+    // Check for Bearer token in Authorization header
+    const authHeader = request.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      const token = authHeader.substring(7);
+      // For now, accept any non-empty token (you can add proper JWT validation later)
+      if (token && token.length > 0) {
+        return true;
+      }
+    }
+    
+    // Fallback to cookie-based authentication
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session');
+    
+    if (!session || session.value !== 'authenticated') {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Auth check error:', error);
+    return false;
+  }
+}
 
 export async function PATCH(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication
+    const isAuthenticated = await checkAuth(request);
+    if (!isAuthenticated) {
+      return NextResponse.json({
+        success: false,
+        error: 'Unauthorized'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const { id } = params;
@@ -114,6 +151,15 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication
+    const isAuthenticated = await checkAuth(request);
+    if (!isAuthenticated) {
+      return NextResponse.json({
+        success: false,
+        error: 'Unauthorized'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const { id } = params;
@@ -146,6 +192,15 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Check authentication
+    const isAuthenticated = await checkAuth(request);
+    if (!isAuthenticated) {
+      return NextResponse.json({
+        success: false,
+        error: 'Unauthorized'
+      }, { status: 401 });
+    }
+
     await dbConnect();
     
     const { id } = params;

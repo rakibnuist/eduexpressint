@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
           server_enhanced: true,
           processing_timestamp: new Date().toISOString(),
         },
-        event_source_url: event.event_source_url || referer || 'https://www.eduexpressint.com',
+        event_source_url: event.event_source_url || referrer || 'https://www.eduexpressint.com',
         action_source: 'website',
         // Add GDPR compliance fields
         data_processing_options: ['LDU'], // Limited Data Use
