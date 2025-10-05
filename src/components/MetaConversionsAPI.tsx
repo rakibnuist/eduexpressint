@@ -53,32 +53,55 @@ const hashData = (data: string): string => {
   return Math.abs(hash).toString();
 };
 
-// Meta Conversions API Tracking Functions
+// Enhanced Meta Conversions API for Education Consultancy
 export const metaConversionsAPI = {
   // Initialize Meta Conversions API
   init: () => {
     if (typeof window !== 'undefined') {
-      console.log('Meta Conversions API tracking initialized');
+      console.log('Enhanced Meta Conversions API tracking initialized for Education Consultancy');
       console.log('Events will be sent to both client-side pixel and server-side API');
     }
   },
 
-  // Send event to both client-side pixel and server-side API
+  // Enhanced event sending with proper parameter structure
   sendEvent: async (eventData: Partial<EventData>, userData?: UserData, customData?: CustomData) => {
     if (typeof window === 'undefined') return;
+
+    // Get client IP and user agent for better attribution
+    const clientUserAgent = navigator.userAgent;
+    const eventId = `${eventData.event_name}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     const event: EventData = {
       event_name: eventData.event_name || 'PageView',
       event_time: Math.floor(Date.now() / 1000),
       event_source_url: window.location.href,
       action_source: 'website',
+      event_id: eventId, // Add event ID for deduplication
       user_data: userData ? {
-        ...userData,
-        // Hash PII data for privacy
-        email: userData.email ? hashData(userData.email) : undefined,
-        phone: userData.phone ? hashData(userData.phone.replace(/\D/g, '')) : undefined,
-      } : undefined,
-      custom_data: customData,
+        // Hash all PII data as required by Facebook
+        em: userData.email ? hashData(userData.email.toLowerCase()) : undefined,
+        ph: userData.phone ? hashData(userData.phone.replace(/\D/g, '')) : undefined,
+        fn: userData.first_name ? hashData(userData.first_name.toLowerCase()) : undefined,
+        ln: userData.last_name ? hashData(userData.last_name.toLowerCase()) : undefined,
+        ct: userData.city ? hashData(userData.city.toLowerCase()) : undefined,
+        st: userData.state ? hashData(userData.state.toLowerCase()) : undefined,
+        country: userData.country ? hashData(userData.country.toLowerCase()) : undefined,
+        zp: userData.zip_code ? hashData(userData.zip_code) : undefined,
+        db: userData.date_of_birth ? hashData(userData.date_of_birth) : undefined,
+        ge: userData.gender ? hashData(userData.gender.toLowerCase()) : undefined,
+        external_id: userData.external_id ? hashData(userData.external_id) : undefined,
+        client_user_agent: clientUserAgent, // Don't hash
+        fbc: userData.fbc || undefined, // Facebook click ID
+        fbp: userData.fbp || undefined, // Facebook browser ID
+      } : {
+        client_user_agent: clientUserAgent,
+      },
+      custom_data: {
+        ...customData,
+        // Add education-specific custom data
+        content_category: customData?.content_category || 'Education',
+        content_type: customData?.content_type || 'consultation',
+      },
     };
 
     // 1. Send to client-side Meta Pixel
@@ -87,6 +110,7 @@ export const metaConversionsAPI = {
         const pixelData = {
           ...customData,
           event_source_url: event.event_source_url,
+          event_id: eventId,
         };
         
         window.fbq('track', event.event_name, pixelData);
@@ -314,6 +338,99 @@ export const metaConversionsAPI = {
         program_type: pageData?.program_type,
         user_journey_stage: pageData?.stage || 'awareness',
         page_category: pageData?.category,
+      }
+    );
+  },
+
+  // 7. SCHEDULE EVENT - When someone schedules a consultation
+  trackSchedule: async (userData?: UserData, scheduleData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'Schedule' },
+      userData,
+      {
+        content_name: scheduleData?.content_name || 'Consultation Scheduled',
+        content_category: 'Education',
+        content_type: 'appointment',
+        value: scheduleData?.value || 15, // High value for scheduled consultations
+        currency: 'USD',
+        // Schedule-specific data
+        appointment_type: scheduleData?.appointment_type || 'consultation',
+        consultation_duration: scheduleData?.duration || '30_minutes',
+        destination_country: scheduleData?.destination,
+        study_level: scheduleData?.studyLevel,
+        program_type: scheduleData?.programType,
+        consultation_topic: scheduleData?.topic,
+        scheduled_date: scheduleData?.scheduled_date,
+        timezone: scheduleData?.timezone,
+        meeting_platform: scheduleData?.platform || 'online',
+      }
+    );
+  },
+
+  // 8. PURCHASE EVENT - When someone purchases a service
+  trackPurchase: async (userData?: UserData, purchaseData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'Purchase' },
+      userData,
+      {
+        content_name: purchaseData?.content_name || 'Service Purchase',
+        content_category: 'Education',
+        content_type: 'service',
+        value: purchaseData?.value || 1,
+        currency: purchaseData?.currency || 'USD',
+        // Purchase-specific data
+        service_type: purchaseData?.service_type || 'consultation',
+        payment_method: purchaseData?.payment_method,
+        transaction_id: purchaseData?.transaction_id,
+        destination_country: purchaseData?.destination,
+        study_level: purchaseData?.studyLevel,
+        program_type: purchaseData?.programType,
+        service_package: purchaseData?.package,
+        payment_status: purchaseData?.payment_status || 'completed',
+      }
+    );
+  },
+
+  // 9. ADD TO CART EVENT - When someone adds a service to cart
+  trackAddToCart: async (userData?: UserData, cartData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'AddToCart' },
+      userData,
+      {
+        content_name: cartData?.content_name || 'Service Added to Cart',
+        content_category: 'Education',
+        content_type: 'service',
+        value: cartData?.value || 1,
+        currency: cartData?.currency || 'USD',
+        // Cart-specific data
+        service_type: cartData?.service_type || 'consultation',
+        destination_country: cartData?.destination,
+        study_level: cartData?.studyLevel,
+        program_type: cartData?.programType,
+        cart_value: cartData?.cart_value,
+        items_count: cartData?.items_count || 1,
+      }
+    );
+  },
+
+  // 10. INITIATE CHECKOUT EVENT - When someone starts checkout process
+  trackInitiateCheckout: async (userData?: UserData, checkoutData?: any) => {
+    await metaConversionsAPI.sendEvent(
+      { event_name: 'InitiateCheckout' },
+      userData,
+      {
+        content_name: checkoutData?.content_name || 'Checkout Initiated',
+        content_category: 'Education',
+        content_type: 'service',
+        value: checkoutData?.value || 1,
+        currency: checkoutData?.currency || 'USD',
+        // Checkout-specific data
+        service_type: checkoutData?.service_type || 'consultation',
+        destination_country: checkoutData?.destination,
+        study_level: checkoutData?.studyLevel,
+        program_type: checkoutData?.programType,
+        checkout_value: checkoutData?.checkout_value,
+        payment_method: checkoutData?.payment_method,
       }
     );
   },

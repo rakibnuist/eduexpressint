@@ -2,10 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { usePathname } from 'next/navigation';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import AdminHeader from '@/components/admin/AdminHeader';
-import AdminSidebar from '@/components/admin/AdminSidebar';
+import AdminLayout from '@/components/admin/AdminLayout';
 import DataTable from '@/components/admin/DataTable';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,7 +36,6 @@ interface Content {
 
 export default function AdminContent() {
   const { user } = useAuth();
-  const pathname = usePathname();
   const [content, setContent] = useState<Content[]>([]);
   const [filteredContent, setFilteredContent] = useState<Content[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,12 +48,6 @@ export default function AdminContent() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [publishedFilter, setPublishedFilter] = useState('all');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  // Auto-hide sidebar when navigating to different pages
-  useEffect(() => {
-    setSidebarOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -238,179 +229,157 @@ export default function AdminContent() {
 
   return (
     <ProtectedRoute requiredPermission="content:read">
-      <div className="min-h-screen bg-gray-50">
-        {/* Mobile sidebar overlay */}
-        {sidebarOpen && (
-          <div 
-            className="fixed inset-0 z-40 bg-black/50 lg:hidden transition-opacity"
-            onClick={() => setSidebarOpen(false)}
-          />
-        )}
-        
-        <AdminHeader onMenuClick={() => setSidebarOpen(true)} />
-        <div className="flex">
-          <AdminSidebar 
-            user={user}
-            onLogout={() => {
-              localStorage.removeItem('adminToken');
-              window.location.href = '/admin/login';
-            }}
-            isOpen={sidebarOpen}
-            onClose={() => setSidebarOpen(false)}
-          />
-          <main className="flex-1 p-4 lg:p-6 lg:ml-64">
-            <div className="max-w-7xl mx-auto">
-              {/* Header Section */}
-              <div className="mb-6 lg:mb-8">
-                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
-                  <div>
-                    <h1 className="text-xl lg:text-2xl font-bold text-gray-900">Content Management</h1>
-                    <p className="text-sm lg:text-base text-gray-600">Manage landing pages, blogs, and other content</p>
-                  </div>
-                  <Button 
-                    onClick={handleAddContent}
-                    className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto"
-                  >
-                    <FaPlus className="mr-2" /> Add Content
-                  </Button>
-                </div>
+      <AdminLayout>
+        <div className="space-y-8">
+          {/* Header Section */}
+          <div className="border-b border-gray-200 pb-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-900">Content Management</h1>
+                <p className="text-gray-600 mt-1">Manage landing pages, blogs, and other content</p>
               </div>
-
-              {/* Search and Filters */}
-              <div className="mb-6 space-y-4">
-                {/* Search Bar */}
-                <div className="relative">
-                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search content by title, content, or tags..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-full"
-                  />
-                </div>
-
-                {/* Filters Row */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <Select value={typeFilter} onValueChange={setTypeFilter}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        {uniqueTypes.map(type => (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div className="flex-1">
-                    <Select value={publishedFilter} onValueChange={setPublishedFilter}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Status</SelectItem>
-                        <SelectItem value="true">Published</SelectItem>
-                        <SelectItem value="false">Draft</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div className="flex-1">
-                    <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {uniqueCategories.map(category => (
-                          <SelectItem key={category} value={category}>
-                            {category}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Clear Filters Button */}
-                  {(typeFilter !== 'all' || publishedFilter !== 'all' || categoryFilter !== 'all' || searchTerm) && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setTypeFilter('all');
-                        setPublishedFilter('all');
-                        setCategoryFilter('all');
-                        setSearchTerm('');
-                      }}
-                      className="w-full sm:w-auto"
-                    >
-                      <FaFilter className="mr-2" />
-                      Clear Filters
-                    </Button>
-                  )}
-                </div>
-
-                {/* Results Count */}
-                <div className="text-sm text-gray-600">
-                  Showing {filteredContent.length} of {content.length} content items
-                </div>
-              </div>
-
-              {/* Summary Cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Total Content</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Published</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => c.published).length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Drafts</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => !c.published).length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Landing Pages</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => c.type === 'Landing Page').length}</div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Data Table */}
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <DataTable
-                  data={filteredContent}
-                  columns={columns}
-                  loading={loading}
-                  onEdit={handleEditContent}
-                  onView={handleViewContent}
-                  onDelete={handleDeleteContent}
-                />
-              </div>
+              <Button 
+                onClick={handleAddContent}
+                className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto"
+              >
+                <FaPlus className="mr-2" /> Add Content
+              </Button>
             </div>
-          </main>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search content by title, content, or tags..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-full"
+              />
+            </div>
+
+            {/* Filters Row */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <Select value={typeFilter} onValueChange={setTypeFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Filter by type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    {uniqueTypes.map(type => (
+                      <SelectItem key={type} value={type}>
+                        {type}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex-1">
+                <Select value={publishedFilter} onValueChange={setPublishedFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Status</SelectItem>
+                    <SelectItem value="true">Published</SelectItem>
+                    <SelectItem value="false">Draft</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex-1">
+                <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Filter by category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Categories</SelectItem>
+                    {uniqueCategories.map(category => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Clear Filters Button */}
+              {(typeFilter !== 'all' || publishedFilter !== 'all' || categoryFilter !== 'all' || searchTerm) && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setTypeFilter('all');
+                    setPublishedFilter('all');
+                    setCategoryFilter('all');
+                    setSearchTerm('');
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  <FaFilter className="mr-2" />
+                  Clear Filters
+                </Button>
+              )}
+            </div>
+
+            {/* Results Count */}
+            <div className="text-sm text-gray-600">
+              Showing {filteredContent.length} of {content.length} content items
+            </div>
+          </div>
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Total Content</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Published</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => c.published).length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Drafts</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => !c.published).length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Landing Pages</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : content.filter(c => c.type === 'Landing Page').length}</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Data Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <DataTable
+              data={filteredContent}
+              columns={columns}
+              loading={loading}
+              onEdit={handleEditContent}
+              onView={handleViewContent}
+              onDelete={handleDeleteContent}
+            />
+          </div>
         </div>
-      </div>
+      </AdminLayout>
 
       {/* View Content Modal */}
       {isViewModalOpen && selectedContent && (

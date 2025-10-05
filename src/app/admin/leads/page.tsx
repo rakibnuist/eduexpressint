@@ -274,140 +274,138 @@ export default function AdminLeads() {
     <ProtectedRoute requiredPermission="leads:read">
       <AdminLayout>
         <div className="space-y-8">
-              {/* Header Section - Mobile Responsive */}
-              <div className="mb-6 lg:mb-8">
-                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
-                  <div>
-                    <h1 className="text-xl lg:text-2xl font-bold text-gray-900">Leads Management</h1>
-                    <p className="text-sm lg:text-base text-gray-600">Manage student leads and inquiries</p>
-                  </div>
-                  <Button className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto">
-                    <FaPlus className="mr-2" /> Add Lead
-                  </Button>
-                </div>
+          {/* Header Section */}
+          <div className="border-b border-gray-200 pb-6">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-semibold text-gray-900">Leads Management</h1>
+                <p className="text-gray-600 mt-1">Manage student leads and inquiries</p>
               </div>
-
-              {/* Search and Filters - Mobile Responsive */}
-              <div className="mb-6 space-y-4">
-                {/* Search Bar */}
-                <div className="relative">
-                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search leads by name, email, or phone..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-full"
-                  />
-                </div>
-
-                {/* Filters Row */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <Select value={countryFilter} onValueChange={setCountryFilter}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by country" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Countries</SelectItem>
-                        {uniqueCountries.map((country, index) => (
-                          <SelectItem key={`country-${index}-${country}`} value={country}>
-                            {country}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  
-                  <div className="flex-1">
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Filter by status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Statuses</SelectItem>
-                        {uniqueStatuses.map((status, index) => (
-                          <SelectItem key={`status-${index}-${status}`} value={status}>
-                            {status}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Clear Filters Button */}
-                  {(countryFilter !== 'all' || statusFilter !== 'all' || searchTerm) && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setCountryFilter('all');
-                        setStatusFilter('all');
-                        setSearchTerm('');
-                      }}
-                      className="w-full sm:w-auto"
-                    >
-                      <FaFilter className="mr-2" />
-                      Clear Filters
-                    </Button>
-                  )}
-                </div>
-
-                {/* Results Count */}
-                <div className="text-sm text-gray-600">
-                  Showing {filteredLeads.length} of {leads.length} leads
-                </div>
-              </div>
-
-              {/* Summary Cards - Mobile Responsive */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Total Leads</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">New Leads</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'New').length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Contacted</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Contacted').length}</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Enrolled</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Enrolled').length}</div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Data Table - Mobile Responsive */}
-              <div className="bg-white rounded-lg shadow overflow-hidden">
-                <DataTable
-                  data={filteredLeads}
-                  columns={columns}
-                  loading={loading}
-                  onEdit={handleEditLead}
-                  onView={handleViewLead}
-                  onDelete={handleDeleteLead}
-                />
-              </div>
+              <Button className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto">
+                <FaPlus className="mr-2" /> Add Lead
+              </Button>
             </div>
-          </main>
+          </div>
+
+          {/* Search and Filters */}
+          <div className="space-y-4">
+            {/* Search Bar */}
+            <div className="relative">
+              <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search leads by name, email, or phone..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 w-full"
+              />
+            </div>
+
+            {/* Filters Row */}
+            <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex-1">
+                <Select value={countryFilter} onValueChange={setCountryFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Filter by country" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Countries</SelectItem>
+                    {uniqueCountries.map((country, index) => (
+                      <SelectItem key={`country-${index}-${country}`} value={country}>
+                        {country}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex-1">
+                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Filter by status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Statuses</SelectItem>
+                    {uniqueStatuses.map((status, index) => (
+                      <SelectItem key={`status-${index}-${status}`} value={status}>
+                        {status}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Clear Filters Button */}
+              {(countryFilter !== 'all' || statusFilter !== 'all' || searchTerm) && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setCountryFilter('all');
+                    setStatusFilter('all');
+                    setSearchTerm('');
+                  }}
+                  className="w-full sm:w-auto"
+                >
+                  <FaFilter className="mr-2" />
+                  Clear Filters
+                </Button>
+              )}
+            </div>
+
+            {/* Results Count */}
+            <div className="text-sm text-gray-600">
+              Showing {filteredLeads.length} of {leads.length} leads
+            </div>
+          </div>
+
+          {/* Summary Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Total Leads</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">New Leads</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'New').length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Contacted</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Contacted').length}</div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Enrolled</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Enrolled').length}</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Data Table */}
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <DataTable
+              data={filteredLeads}
+              columns={columns}
+              loading={loading}
+              onEdit={handleEditLead}
+              onView={handleViewLead}
+              onDelete={handleDeleteLead}
+            />
+          </div>
         </div>
-      </div>
+      </AdminLayout>
 
       {/* View Lead Modal - Mobile Responsive */}
       {isViewModalOpen && selectedLead && (
