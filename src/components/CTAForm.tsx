@@ -7,6 +7,7 @@ import { useCTA } from '@/context/CTAContext';
 import { useFormTracking } from '@/hooks/usePageTracking';
 import { useEnhancedTracking } from '@/components/EnhancedTracking';
 import { useMetaConversionsAPI } from '@/components/MetaConversionsAPI';
+import { EnhancedLeadTracking } from './EnhancedLeadTracking';
 
 export default function CTAForm() {
   const { isOpen, closeCTA, source } = useCTA();
@@ -86,45 +87,49 @@ export default function CTAForm() {
         throw new Error(result.message || result.error || 'Failed to save lead');
       }
 
-      // === META CONVERSIONS API TRACKING ===
+      // === ENHANCED META CONVERSIONS API TRACKING ===
       
-      // 1. Track LEAD event
-      await metaAPI.trackLead(
-        {
-          email: leadData.email,
-          phone: leadData.phone,
-          firstName: leadData.name.split(' ')[0],
-          lastName: leadData.name.split(' ').slice(1).join(' '),
-          country: leadData.countryOfInterest,
-        },
-        {
-          content_name: 'Study Abroad Lead - CTA Form',
-          destination: leadData.countryOfInterest,
-          studyLevel: leadData.programType,
-          programType: leadData.major,
-          source: source || 'CTA Form',
-          value: 50,
-          quality: 'high',
-        }
-      );
+      // 1. Track LEAD event with enhanced data
+      await EnhancedLeadTracking.trackLead({
+        name: leadData.name,
+        email: leadData.email,
+        phone: leadData.phone,
+        destinationCountry: leadData.countryOfInterest,
+        studyLevel: leadData.programType,
+        programType: leadData.major,
+        source: source || 'CTA Form',
+        landingPage: window.location.href,
+        referrer: document.referrer,
+        urgency: 'high',
+        leadQuality: 'high',
+        value: 50,
+        // Extract Facebook tracking parameters if available
+        fbc: leadData.fbc,
+        fbp: leadData.fbp,
+      });
 
-      // 2. Track CONTACT event
+      // 2. Track CONTACT event with enhanced data
       await metaAPI.trackContact(
         {
           email: leadData.email,
           phone: leadData.phone,
-          firstName: leadData.name.split(' ')[0],
-          lastName: leadData.name.split(' ').slice(1).join(' '),
+          first_name: leadData.name.split(' ')[0],
+          last_name: leadData.name.split(' ').slice(1).join(' '),
         },
         {
           content_name: 'Contact Inquiry - CTA Form',
+          content_category: 'Education',
+          content_type: 'contact_form',
           method: 'form',
           inquiry_type: 'consultation_request',
-          destination: leadData.countryOfInterest,
-          studyLevel: leadData.programType,
-          urgency: 'high',
+          destination_country: leadData.countryOfInterest,
+          study_level: leadData.programType,
+          urgency_level: 'high',
           source: source || 'CTA Form',
           value: 25,
+          currency: 'USD',
+          contact_method: 'form',
+          user_journey_stage: 'contact_initiated',
         }
       );
 

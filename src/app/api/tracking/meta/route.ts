@@ -8,6 +8,7 @@ const META_API_URL = `https://graph.facebook.com/v18.0/${META_PIXEL_ID}/events`;
 interface TrackingEvent {
   event_name: string;
   event_time: number;
+  event_id?: string; // For deduplication
   user_data: {
     em?: string; // hashed email
     ph?: string; // hashed phone
@@ -15,13 +16,23 @@ interface TrackingEvent {
     ln?: string; // hashed last name
     ct?: string; // hashed city
     st?: string; // hashed state
-    country?: string;
+    country?: string; // hashed country
     zp?: string; // hashed zip code
     db?: string; // hashed date of birth
     ge?: string; // hashed gender
-    external_id?: string;
-    client_ip_address?: string;
-    client_user_agent?: string;
+    external_id?: string; // hashed external ID
+    client_ip_address?: string; // Don't hash
+    client_user_agent?: string; // Don't hash
+    fbc?: string; // Facebook click ID - Don't hash
+    fbp?: string; // Facebook browser ID - Don't hash
+    subscription_id?: string; // Don't hash
+    fb_login_id?: string; // Don't hash
+    lead_id?: string; // Don't hash
+    page_id?: string; // Don't hash
+    page_scoped_user_id?: string; // Don't hash
+    ctwa_clid?: string; // Click to WhatsApp ID - Don't hash
+    ig_account_id?: string; // Don't hash
+    ig_sid?: string; // Click to Instagram ID - Don't hash
   };
   custom_data: {
     content_name?: string;
@@ -44,16 +55,57 @@ interface TrackingEvent {
     application_type?: string;
     contact_method?: string;
     registration_type?: string;
+    // Additional education fields
+    university_name?: string;
+    application_status?: string;
+    application_fee?: number;
+    service_type?: string;
+    payment_method?: string;
+    transaction_id?: string;
+    appointment_type?: string;
+    consultation_duration?: string;
+    consultation_topic?: string;
+    scheduled_date?: string;
+    timezone?: string;
+    meeting_platform?: string;
+    service_package?: string;
+    payment_status?: string;
+    cart_value?: number;
+    items_count?: number;
+    checkout_value?: number;
+    inquiry_type?: string;
+    urgency_level?: string;
+    user_type?: string;
+    account_status?: string;
+    onboarding_completed?: boolean;
     [key: string]: any;
   };
   event_source_url: string;
   action_source: string;
+  opt_out?: boolean;
+  data_processing_options?: string[];
+  data_processing_options_country?: number;
+  data_processing_options_state?: number;
+  referrer_url?: string;
+  customer_segmentation?: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { events, test_event_code } = body;
+
+    // Get client IP address for better attribution
+    const clientIP = request.headers.get('x-forwarded-for') || 
+                     request.headers.get('x-real-ip') || 
+                     request.ip || 
+                     '127.0.0.1';
+    
+    // Get user agent
+    const userAgent = request.headers.get('user-agent') || '';
+    
+    // Get referrer
+    const referrer = request.headers.get('referer') || '';
 
     // For testing without Meta Access Token
     if (!META_ACCESS_TOKEN) {
@@ -85,14 +137,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get client information from headers
-    const userAgent = request.headers.get('user-agent') || '';
-    const clientIP = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '';
-    const referer = request.headers.get('referer') || '';
-
-    // Prepare events for Meta Conversions API with proper field mapping
+    // Prepare events for Meta Conversions API with enhanced field mapping
     const metaEvents: TrackingEvent[] = events.map((event: any) => {
-      // Process user data with proper Meta field names
+      // Process user data with proper Meta field names and enhanced structure
       const userData: any = {
         client_ip_address: clientIP,
         client_user_agent: userAgent,
@@ -115,6 +162,7 @@ export async function POST(request: NextRequest) {
       return {
         event_name: event.event_name,
         event_time: event.event_time || Math.floor(Date.now() / 1000),
+        event_id: event.event_id, // For deduplication
         user_data: userData,
         custom_data: {
           content_category: 'Education',
@@ -126,6 +174,11 @@ export async function POST(request: NextRequest) {
         },
         event_source_url: event.event_source_url || referer || 'https://www.eduexpressint.com',
         action_source: 'website',
+        // Add GDPR compliance fields
+        data_processing_options: ['LDU'], // Limited Data Use
+        data_processing_options_country: 0, // US
+        data_processing_options_state: 0, // California
+        referrer_url: referer,
       };
     });
 
