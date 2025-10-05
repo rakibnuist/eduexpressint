@@ -11,7 +11,9 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes } from 'react-icons/fa';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes, FaPhone, FaSearch, FaFilter } from 'react-icons/fa';
 import { metaPixel } from '@/components/MetaPixel';
 
 interface Lead {
@@ -29,12 +31,16 @@ interface Lead {
 export default function AdminLeads() {
   const { user } = useAuth();
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | null>(null);
   const [updating, setUpdating] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [countryFilter, setCountryFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -55,6 +61,7 @@ export default function AdminLeads() {
         const data = await response.json();
         if (data.success) {
           setLeads(data.data.leads);
+          setFilteredLeads(data.data.leads);
           
           // Track admin page view
           metaPixel.trackCustomEvent('AdminPageView', {
@@ -73,6 +80,7 @@ export default function AdminLeads() {
         console.error('Error fetching leads:', error);
         // Fallback to empty array if API fails
         setLeads([]);
+        setFilteredLeads([]);
       } finally {
         setLoading(false);
       }
@@ -81,10 +89,53 @@ export default function AdminLeads() {
     fetchLeads();
   }, [user]);
 
+  // Filter leads based on search term, country, and status
+  useEffect(() => {
+    let filtered = leads;
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter(lead =>
+        lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lead.phone?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by country
+    if (countryFilter) {
+      filtered = filtered.filter(lead => lead.country === countryFilter);
+    }
+
+    // Filter by status
+    if (statusFilter) {
+      filtered = filtered.filter(lead => lead.status === statusFilter);
+    }
+
+    setFilteredLeads(filtered);
+  }, [leads, searchTerm, countryFilter, statusFilter]);
+
   // Handler functions
   const handleViewLead = (lead: Lead) => {
     setSelectedLead(lead);
     setIsViewModalOpen(true);
+  };
+
+  const handleCallLead = (phone: string) => {
+    if (phone) {
+      // Track call action
+      metaPixel.trackCustomEvent('LeadCall', {
+        content_name: 'Direct Call to Lead',
+        content_category: 'Lead Management',
+        action_type: 'call',
+        phone_number: phone,
+        value: 1,
+        currency: 'USD'
+      });
+      
+      // Open phone dialer
+      window.open(`tel:${phone}`, '_self');
+    }
   };
 
   const handleEditLead = (lead: Lead) => {
@@ -135,9 +186,10 @@ export default function AdminLeads() {
       });
 
       if (response.ok) {
-        setLeads(leads.map(lead => 
+        const updatedLeads = leads.map(lead => 
           lead._id === leadId ? { ...lead, status: newStatus as any } : lead
-        ));
+        );
+        setLeads(updatedLeads);
         setSelectedLead(prev => prev ? { ...prev, status: newStatus as any } : null);
         setIsEditModalOpen(false);
         setEditingLead(null);
@@ -195,6 +247,12 @@ export default function AdminLeads() {
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
+  // Get unique countries for filter
+  const uniqueCountries = Array.from(new Set(leads.map(lead => lead.country))).sort();
+  
+  // Get unique statuses for filter
+  const uniqueStatuses = Array.from(new Set(leads.map(lead => lead.status))).sort();
+
   const columns = [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
@@ -219,57 +277,131 @@ export default function AdminLeads() {
         <AdminHeader />
         <div className="flex">
           <AdminSidebar />
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-4 lg:p-6">
             <div className="max-w-7xl mx-auto">
-              <div className="mb-8 mt-8 flex justify-between items-end">
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Leads Management</h1>
-                  <p className="text-gray-600">Manage student leads and inquiries</p>
+              {/* Header Section - Mobile Responsive */}
+              <div className="mb-6 lg:mb-8">
+                <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-4">
+                  <div>
+                    <h1 className="text-xl lg:text-2xl font-bold text-gray-900">Leads Management</h1>
+                    <p className="text-sm lg:text-base text-gray-600">Manage student leads and inquiries</p>
+                  </div>
+                  <Button className="bg-blue-600 hover:bg-blue-700 w-full lg:w-auto">
+                    <FaPlus className="mr-2" /> Add Lead
+                  </Button>
                 </div>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  <FaPlus className="mr-2" /> Add Lead
-                </Button>
               </div>
 
-              {/* Summary Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              {/* Search and Filters - Mobile Responsive */}
+              <div className="mb-6 space-y-4">
+                {/* Search Bar */}
+                <div className="relative">
+                  <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder="Search leads by name, email, or phone..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 w-full"
+                  />
+                </div>
+
+                {/* Filters Row */}
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <Select value={countryFilter} onValueChange={setCountryFilter}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Filter by country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All Countries</SelectItem>
+                        {uniqueCountries.map(country => (
+                          <SelectItem key={country} value={country}>
+                            {country}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Filter by status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="">All Statuses</SelectItem>
+                        {uniqueStatuses.map(status => (
+                          <SelectItem key={status} value={status}>
+                            {status}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Clear Filters Button */}
+                  {(countryFilter || statusFilter || searchTerm) && (
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setCountryFilter('');
+                        setStatusFilter('');
+                        setSearchTerm('');
+                      }}
+                      className="w-full sm:w-auto"
+                    >
+                      <FaFilter className="mr-2" />
+                      Clear Filters
+                    </Button>
+                  )}
+                </div>
+
+                {/* Results Count */}
+                <div className="text-sm text-gray-600">
+                  Showing {filteredLeads.length} of {leads.length} leads
+                </div>
+              </div>
+
+              {/* Summary Cards - Mobile Responsive */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mb-6 lg:mb-8">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">Total Leads</CardTitle>
+                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Total Leads</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{loading ? '...' : leads.length}</div>
+                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.length}</div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">New Leads</CardTitle>
+                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">New Leads</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'New').length}</div>
+                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'New').length}</div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">Contacted</CardTitle>
+                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Contacted</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Contacted').length}</div>
+                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Contacted').length}</div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-medium text-gray-600">Enrolled</CardTitle>
+                    <CardTitle className="text-xs lg:text-sm font-medium text-gray-600">Enrolled</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Enrolled').length}</div>
+                    <div className="text-lg lg:text-2xl font-bold">{loading ? '...' : leads.filter(l => l.status === 'Enrolled').length}</div>
                   </CardContent>
                 </Card>
               </div>
 
-              <div className="bg-white rounded-lg shadow">
+              {/* Data Table - Mobile Responsive */}
+              <div className="bg-white rounded-lg shadow overflow-hidden">
                 <DataTable
-                  data={leads}
+                  data={filteredLeads}
                   columns={columns}
                   loading={loading}
                   onEdit={handleEditLead}
@@ -282,14 +414,15 @@ export default function AdminLeads() {
         </div>
       </div>
 
-      {/* View Lead Modal */}
+      {/* View Lead Modal - Mobile Responsive */}
       {isViewModalOpen && selectedLead && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 lg:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold">Lead Details</h2>
+              <h2 className="text-lg lg:text-xl font-bold">Lead Details</h2>
               <Button
                 variant="outline"
+                size="sm"
                 onClick={() => setIsViewModalOpen(false)}
               >
                 <FaTimes />
@@ -297,26 +430,63 @@ export default function AdminLeads() {
             </div>
             
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              {/* Quick Actions - Mobile Friendly */}
+              <div className="flex flex-col sm:flex-row gap-2 mb-4">
+                {selectedLead.phone && (
+                  <Button
+                    onClick={() => handleCallLead(selectedLead.phone!)}
+                    className="bg-green-600 hover:bg-green-700 flex-1 sm:flex-none"
+                  >
+                    <FaPhone className="mr-2" />
+                    Call {selectedLead.name}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setIsViewModalOpen(false);
+                    handleEditLead(selectedLead);
+                  }}
+                  className="flex-1 sm:flex-none"
+                >
+                  <FaEdit className="mr-2" />
+                  Edit Lead
+                </Button>
+              </div>
+
+              {/* Lead Information - Mobile Responsive Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium text-gray-600">Name</label>
-                  <p className="text-lg">{selectedLead.name}</p>
+                  <p className="text-base lg:text-lg font-medium">{selectedLead.name}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Email</label>
-                  <p className="text-lg">{selectedLead.email}</p>
+                  <p className="text-base lg:text-lg break-all">{selectedLead.email}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Phone</label>
-                  <p className="text-lg">{selectedLead.phone || 'N/A'}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-base lg:text-lg">{selectedLead.phone || 'N/A'}</p>
+                    {selectedLead.phone && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleCallLead(selectedLead.phone!)}
+                        className="text-green-600 border-green-600 hover:bg-green-50"
+                      >
+                        <FaPhone className="h-3 w-3" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Country</label>
-                  <p className="text-lg">{selectedLead.country}</p>
+                  <p className="text-base lg:text-lg">{selectedLead.country}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Program</label>
-                  <p className="text-lg">{selectedLead.program}</p>
+                  <p className="text-base lg:text-lg">{selectedLead.program}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Status</label>
@@ -328,24 +498,24 @@ export default function AdminLeads() {
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Created</label>
-                  <p className="text-lg">{new Date(selectedLead.createdAt).toLocaleDateString()}</p>
+                  <p className="text-base lg:text-lg">{new Date(selectedLead.createdAt).toLocaleDateString()}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Last Updated</label>
-                  <p className="text-lg">{new Date(selectedLead.updatedAt).toLocaleDateString()}</p>
+                  <p className="text-base lg:text-lg">{new Date(selectedLead.updatedAt).toLocaleDateString()}</p>
                 </div>
               </div>
 
-              {/* Status Update Section */}
+              {/* Status Update Section - Mobile Responsive */}
               <div className="border-t pt-4">
-                <h3 className="text-lg font-semibold mb-3">Update Status</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <h3 className="text-base lg:text-lg font-semibold mb-3">Update Status</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                   {['New', 'Contacted', 'Qualified', 'Application Submitted', 'Under Review', 'Interview Scheduled', 'Interview Completed', 'Accepted', 'Waitlisted', 'Rejected', 'VISA Processing', 'VISA Approved', 'Enrolled', 'Deferred', 'Withdrawn'].map((status) => (
                     <button
                       key={status}
                       onClick={() => handleUpdateStatus(selectedLead._id, status)}
                       disabled={updating}
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      className={`px-3 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors ${
                         selectedLead.status === status
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -357,10 +527,12 @@ export default function AdminLeads() {
                 </div>
               </div>
               
-              <div className="flex justify-end space-x-2 pt-4 border-t">
+              {/* Action Buttons - Mobile Responsive */}
+              <div className="flex flex-col sm:flex-row justify-end gap-2 pt-4 border-t">
                 <Button
                   variant="outline"
                   onClick={() => setIsViewModalOpen(false)}
+                  className="w-full sm:w-auto"
                 >
                   Close
                 </Button>
@@ -369,6 +541,7 @@ export default function AdminLeads() {
                     setIsViewModalOpen(false);
                     handleEditLead(selectedLead);
                   }}
+                  className="w-full sm:w-auto"
                 >
                   <FaEdit className="mr-2" /> Full Edit
                 </Button>
