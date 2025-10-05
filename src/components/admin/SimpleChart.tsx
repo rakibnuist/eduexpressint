@@ -46,24 +46,35 @@ export default function SimpleChart({
   };
 
   const renderBarChart = () => (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {data.map((item, index) => {
         const percentage = total > 0 ? (item.count / total) * 100 : 0;
         return (
-          <div key={item._id} className="space-y-1">
+          <div key={item._id} className="space-y-2 group">
             <div className="flex justify-between items-center text-sm">
-              <span className="font-medium capitalize">{item._id}</span>
-              <div className="flex items-center gap-2">
-                {showValue && <span className="text-gray-600">{item.count}</span>}
+              <span className="font-semibold capitalize text-gray-700 group-hover:text-gray-900 transition-colors">
+                {item._id}
+              </span>
+              <div className="flex items-center gap-3">
+                {showValue && (
+                  <span className="text-gray-600 font-medium bg-gray-100 px-2 py-1 rounded-full text-xs">
+                    {item.count}
+                  </span>
+                )}
                 {showPercentage && (
-                  <span className="text-gray-500 text-xs">{percentage.toFixed(1)}%</span>
+                  <span className="text-gray-500 text-xs font-medium">
+                    {percentage.toFixed(1)}%
+                  </span>
                 )}
               </div>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
               <div 
-                className={`h-2 rounded-full ${getColor(index)} transition-all duration-500`}
-                style={{ width: `${percentage}%` }}
+                className={`h-3 rounded-full ${getColor(index)} transition-all duration-1000 ease-out group-hover:shadow-lg`}
+                style={{ 
+                  width: `${percentage}%`,
+                  animationDelay: `${index * 100}ms`
+                }}
               ></div>
             </div>
           </div>
@@ -154,19 +165,28 @@ export default function SimpleChart({
   };
 
   return (
-    <Card>
-      <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-medium text-gray-600">{title}</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
+        <div className="flex items-center space-x-2">
+          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+          <span className="text-xs text-gray-500">Live</span>
+        </div>
+      </div>
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
         {data.length > 0 ? (
           renderChart()
         ) : (
-          <div className="text-center py-8 text-gray-500">
-            <p>No data available</p>
+          <div className="text-center py-12">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <p className="text-gray-500 text-sm">No data available</p>
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

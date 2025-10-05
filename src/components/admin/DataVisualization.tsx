@@ -56,33 +56,39 @@ export default function DataVisualization({ analytics }: DataVisualizationProps)
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Lead Status Distribution */}
-      <SimpleChart
-        title="Lead Status Distribution"
-        data={analytics.leadStatusDistribution}
-        type="bar"
-        showPercentage={true}
-        showValue={true}
-      />
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100">
+        <SimpleChart
+          title="Lead Status Distribution"
+          data={analytics.leadStatusDistribution}
+          type="bar"
+          showPercentage={true}
+          showValue={true}
+        />
+      </div>
 
       {/* University Country Distribution */}
-      <SimpleChart
-        title="Universities by Country"
-        data={analytics.universityCountryDistribution}
-        type="line"
-        showPercentage={true}
-        showValue={true}
-      />
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-100">
+        <SimpleChart
+          title="Universities by Country"
+          data={analytics.universityCountryDistribution}
+          type="line"
+          showPercentage={true}
+          showValue={true}
+        />
+      </div>
 
       {/* Update Type Distribution */}
-      <SimpleChart
-        title="Content Distribution"
-        data={analytics.updateTypeDistribution}
-        type="pie"
-        showPercentage={true}
-        showValue={true}
-      />
+      <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100">
+        <SimpleChart
+          title="Content Distribution"
+          data={analytics.updateTypeDistribution}
+          type="pie"
+          showPercentage={true}
+          showValue={true}
+        />
+      </div>
 
       {/* Performance Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

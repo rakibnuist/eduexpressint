@@ -86,11 +86,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           />
           
           {/* Page Content */}
-          <main className="p-4 lg:p-6 bg-gray-50 min-h-screen">
+          <main className="p-4 lg:p-8 min-h-screen">
             <div className="max-w-7xl mx-auto">
               {children}
             </div>
