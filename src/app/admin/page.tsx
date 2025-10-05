@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import AdminLayout from '@/components/admin/AdminLayout';
-import DashboardStats from '@/components/admin/DashboardStats';
 import DataVisualization from '@/components/admin/DataVisualization';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -180,8 +179,9 @@ export default function AdminDashboard() {
   return (
     <ProtectedRoute requiredPermission="dashboard:read">
       <AdminLayout>
-        {/* Welcome Section */}
-        <div className="mb-8">
+        <div className="space-y-8">
+          {/* Welcome Section */}
+          <div>
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -200,10 +200,10 @@ export default function AdminDashboard() {
               <span>Refresh</span>
             </Button>
           </div>
-        </div>
+          </div>
 
-        {/* Key Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Key Metrics Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="border-l-4 border-l-blue-500 hover:shadow-lg transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium text-gray-600">Total Leads</CardTitle>
@@ -267,10 +267,10 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
-        </div>
+          </div>
 
-        {/* Analytics Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Analytics Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <Card className="lg:col-span-2">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -328,10 +328,10 @@ export default function AdminDashboard() {
               </CardContent>
             </Card>
           </div>
-        </div>
+          </div>
 
-        {/* Recent Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* Recent Activity */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
@@ -401,10 +401,10 @@ export default function AdminDashboard() {
               )}
             </CardContent>
           </Card>
-        </div>
+          </div>
 
-        {/* Data Source Info */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          {/* Data Source Info */}
+          <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -425,7 +425,8 @@ export default function AdminDashboard() {
               </Button>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
       </AdminLayout>
     </ProtectedRoute>
   );

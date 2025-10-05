@@ -105,7 +105,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         />
         
         {/* Main Content */}
-        <div className="flex-1 lg:ml-64">
+        <div className="flex-1 lg:ml-64 min-h-screen">
           {/* Top Navigation */}
           <AdminTopBar 
             user={user}
@@ -114,7 +114,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           />
           
           {/* Page Content */}
-          <main className="p-4 lg:p-6">
+          <main className="p-4 lg:p-6 bg-gray-50 min-h-screen">
             <div className="max-w-7xl mx-auto">
               {children}
             </div>
