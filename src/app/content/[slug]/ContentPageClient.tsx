@@ -62,6 +62,20 @@ export default function ContentPageClient({ content }: ContentPageClientProps) {
     });
   };
 
+  // For Page type content, render as landing page with minimal layout
+  if (content.type === 'Page') {
+    return (
+      <div className="min-h-screen">
+        {/* Landing Page Content - Just the content data */}
+        <div 
+          className="prose prose-lg max-w-none"
+          dangerouslySetInnerHTML={{ __html: content.content }}
+        />
+      </div>
+    );
+  }
+
+  // For other content types, render the full layout with metadata
   return (
     <div className="min-h-screen bg-gray-50 pt-8">
       <div className="mx-auto max-w-4xl px-6 py-12">
@@ -92,23 +106,21 @@ export default function ContentPageClient({ content }: ContentPageClientProps) {
             </div>
           )}
 
-          {/* Meta Information - Only show for non-Page content types */}
-          {content.type !== 'Page' && (
-            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
-              <div className="flex items-center">
-                <FaUser className="mr-2" />
-                <span>{content.author}</span>
-              </div>
-              <div className="flex items-center">
-                <FaCalendarAlt className="mr-2" />
-                <span>{formatDate(content.publishedAt || content.createdAt)}</span>
-              </div>
-              <div className="flex items-center">
-                <FaEye className="mr-2" />
-                <span>Published</span>
-              </div>
+          {/* Meta Information */}
+          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
+            <div className="flex items-center">
+              <FaUser className="mr-2" />
+              <span>{content.author}</span>
             </div>
-          )}
+            <div className="flex items-center">
+              <FaCalendarAlt className="mr-2" />
+              <span>{formatDate(content.publishedAt || content.createdAt)}</span>
+            </div>
+            <div className="flex items-center">
+              <FaEye className="mr-2" />
+              <span>Published</span>
+            </div>
+          </div>
 
           {/* Categories and Tags */}
           <div className="mb-8">
