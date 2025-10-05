@@ -133,11 +133,11 @@ export default function HomePage() {
     fetchSuccessStories();
   }, []);
 
-  // Sample data
+  // Real data
   const stats = [
-    { number: "500+", label: "Universities", description: "Partner institutions worldwide" },
-    { number: "10K+", label: "Students", description: "Successfully placed abroad" },
-    { number: "18+", label: "Countries", description: "Study destinations available" },
+    { number: "300+", label: "Universities", description: "Partner institutions worldwide" },
+    { number: "3000+", label: "Students", description: "Successfully placed abroad" },
+    { number: "12+", label: "Countries", description: "Study destinations available" },
     { number: "95%", label: "Success Rate", description: "Visa approval success" }
   ];
 

@@ -85,7 +85,7 @@ export default function AboutPage() {
             {/* Key Stats */}
             <div className="grid grid-cols-2 md:grid-cols-6 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">10,000+</div>
+                <div className="text-3xl font-bold text-yellow-400">3000+</div>
                 <div className="text-sm text-gray-300">Students Placed</div>
               </div>
               <div className="text-center">
@@ -93,11 +93,11 @@ export default function AboutPage() {
                 <div className="text-sm text-gray-300">Success Rate</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">50+</div>
+                <div className="text-3xl font-bold text-yellow-400">300+</div>
                 <div className="text-sm text-gray-300">Partner Universities</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">25+</div>
+                <div className="text-3xl font-bold text-yellow-400">12+</div>
                 <div className="text-sm text-gray-300">Countries Served</div>
               </div>
               <div className="text-center">
@@ -105,7 +105,7 @@ export default function AboutPage() {
                 <div className="text-sm text-gray-300">Scholarships Secured</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400">15+</div>
+                <div className="text-3xl font-bold text-yellow-400">6+</div>
                 <div className="text-sm text-gray-300">Years Experience</div>
               </div>
             </div>
@@ -163,12 +163,12 @@ export default function AboutPage() {
               <h3 className="text-2xl font-bold mb-6 text-center">Our Impact</h3>
               <div className="space-y-4">
                 {[
-                  "10,000+ students successfully placed in top universities",
+                  "3000+ students successfully placed in top universities",
                   "95% visa success rate across all countries",
                   "€2M+ in scholarships secured for our students",
-                  "50+ partner universities worldwide",
-                  "25+ countries served with local expertise",
-                  "15+ years of proven track record"
+                  "300+ partner universities worldwide",
+                  "12+ countries served with local expertise",
+                  "6+ years of proven track record"
                 ].map((impact, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <FaCheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
@@ -257,7 +257,7 @@ export default function AboutPage() {
                   <FaHandshake className="h-8 w-8 text-purple-600" />
                 </div>
                 <h3 className="text-2xl font-bold mb-4">University Partnerships</h3>
-                <p className="text-gray-600">Direct partnerships with 50+ top universities worldwide.</p>
+                <p className="text-gray-600">Direct partnerships with 300+ top universities worldwide.</p>
               </div>
             </div>
           </div>
@@ -297,12 +297,12 @@ export default function AboutPage() {
             <div>
               <FaGraduationCap className="h-12 w-12 text-yellow-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Expert Guidance</h3>
-              <p className="text-gray-300">15+ years of experience in international education</p>
+              <p className="text-gray-300">6+ years of experience in international education</p>
             </div>
             <div>
               <FaTrophy className="h-12 w-12 text-green-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Proven Success</h3>
-              <p className="text-gray-300">95% success rate with 10,000+ students placed</p>
+              <p className="text-gray-300">95% success rate with 3000+ students placed</p>
             </div>
             <div>
               <FaHandshake className="h-12 w-12 text-blue-400 mx-auto mb-4" />
@@ -312,7 +312,7 @@ export default function AboutPage() {
             <div>
               <FaGlobe className="h-12 w-12 text-purple-400 mx-auto mb-4" />
               <h3 className="text-xl font-bold mb-2">Global Reach</h3>
-              <p className="text-gray-300">50+ partner universities in 25+ countries</p>
+              <p className="text-gray-300">300+ partner universities in 12+ countries</p>
             </div>
           </div>
         </div>

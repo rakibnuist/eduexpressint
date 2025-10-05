@@ -17,7 +17,7 @@ import ConditionalLayout from '@/components/ConditionalLayout';
 export const metadata = {
   title: 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
   description:
-    'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries. Free consultation available.',
+    'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries. Free consultation available.',
   keywords: [
     'study abroad',
     'international education',
@@ -72,7 +72,7 @@ export const metadata = {
   },
   openGraph: {
     title: 'EduExpress International — Study Abroad & Scholarships',
-    description: 'Transform your future with expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries.',
+    description: 'Transform your future with expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries.',
     url: 'https://eduexpressint.com',
     siteName: 'EduExpress International',
     images: [
@@ -126,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     "@type": "EducationalOrganization",
     "name": "EduExpress International",
     "alternateName": "EduExpress",
-    "description": "Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries.",
+    "description": "Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries.",
     "url": "https://eduexpressint.com",
     "logo": "https://eduexpressint.com/brand/logo.png",
     "image": "https://eduexpressint.com/brand/logo.png",

@@ -144,9 +144,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🎯 Live Statistics
 
-- 🏫 **500+ Universities** worldwide
-- 🌍 **18+ Countries** supported
-- 🎓 **10K+ Students** successfully placed
+- 🏫 **300+ Universities** worldwide
+- 🌍 **12+ Countries** supported
+- 🎓 **3000+ Students** successfully placed
 - ✅ **95% Success Rate** for visa approvals
 
 ---

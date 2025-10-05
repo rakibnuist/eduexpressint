@@ -19,7 +19,7 @@ interface SEOHeadProps {
 
 export default function SEOHead({
   title = 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
-  description = 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries. Free consultation available.',
+  description = 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries. Free consultation available.',
   keywords = [
     'study abroad',
     'international education',

@@ -127,9 +127,9 @@ export default function DestinationsIndex() {
   // Calculate dynamic stats
   const totalUniversities = destinations.reduce((sum, dest) => sum + (dest.stats?.universities || 0), 0);
   const stats = [
-    { icon: <FaGlobe className="h-5 w-5" />, value: `${destinations.length}+`, label: "Countries" },
-    { icon: <FaGraduationCap className="h-5 w-5" />, value: `${totalUniversities}+`, label: "Universities" },
-    { icon: <FaUsers className="h-5 w-5" />, value: "1,200+", label: "Students" },
+    { icon: <FaGlobe className="h-5 w-5" />, value: "12+", label: "Countries" },
+    { icon: <FaGraduationCap className="h-5 w-5" />, value: "300+", label: "Universities" },
+    { icon: <FaUsers className="h-5 w-5" />, value: "3000+", label: "Students" },
     { icon: <FaAward className="h-5 w-5" />, value: "95%", label: "Success Rate" }
   ];
 

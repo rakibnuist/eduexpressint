@@ -135,7 +135,7 @@ export default function PageSEO({
       '/b2b': 'Partner with EduExpress International for B2B education services. Corporate partnerships, institutional collaborations, and business education solutions.'
     };
 
-    return pathDescriptions[pathname] || 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries. Free consultation available.';
+    return pathDescriptions[pathname] || 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries. Free consultation available.';
   };
 
   // Generate page-specific title

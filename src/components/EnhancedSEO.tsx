@@ -43,7 +43,7 @@ interface EnhancedSEOProps {
 
 export default function EnhancedSEO({
   title = 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
-  description = 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries. Free consultation available.',
+  description = 'Transform your future with EduExpress International. Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries. Free consultation available.',
   keywords = [
     'study abroad',
     'international education',
@@ -161,7 +161,7 @@ export default function EnhancedSEO({
     "@type": "EducationalOrganization",
     "name": organizationData?.name || "EduExpress International",
     "alternateName": "EduExpress",
-    "description": "Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 18+ countries.",
+    "description": "Expert study abroad counseling, university selection, visa assistance, and scholarship opportunities in 12+ countries.",
     "url": organizationData?.url || baseUrl,
     "logo": organizationData?.logo || "https://eduexpressint.com/brand/logo.png",
     "image": "https://eduexpressint.com/brand/logo.png",

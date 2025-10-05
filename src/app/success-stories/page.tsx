@@ -141,7 +141,7 @@ export default function SuccessStoriesPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">2,500+</div>
+              <div className="text-4xl font-bold mb-2">3000+</div>
               <div className="text-lg opacity-90">Students Placed</div>
             </div>
             <div className="text-center">
@@ -149,11 +149,11 @@ export default function SuccessStoriesPage() {
               <div className="text-lg opacity-90">Visa Success Rate</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">150+</div>
+              <div className="text-4xl font-bold mb-2">300+</div>
               <div className="text-lg opacity-90">Partner Universities</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold mb-2">18</div>
+              <div className="text-4xl font-bold mb-2">12+</div>
               <div className="text-lg opacity-90">Countries</div>
             </div>
           </div>
