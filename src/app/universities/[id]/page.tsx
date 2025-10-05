@@ -9,6 +9,7 @@ export async function generateStaticParams() {
   // Return a minimal set of static params
   return [
     { id: 'zzu' },
+    { id: 'nuist' },
     { id: 'university-of-cambridge' },
     { id: 'seoul-national-university' }
   ];
