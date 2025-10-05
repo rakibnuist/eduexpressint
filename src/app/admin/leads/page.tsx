@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes, FaPhone, FaSearch, FaFilter, FaPhoneAlt, FaWhatsapp, FaSms } from 'react-icons/fa';
+import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes, FaPhone, FaSearch, FaFilter, FaPhoneAlt, FaWhatsapp } from 'react-icons/fa';
 import { metaPixel } from '@/components/MetaPixel';
 
 interface Lead {
@@ -183,35 +183,6 @@ export default function AdminLeads() {
     }
   };
 
-  const handleSMSLead = (phone: string, leadName?: string, leadId?: string) => {
-    if (phone) {
-      // Track SMS action
-      metaPixel.trackCustomEvent('LeadSMS', {
-        content_name: 'SMS Message to Lead',
-        content_category: 'Lead Management',
-        action_type: 'sms',
-        phone_number: phone,
-        lead_name: leadName || 'Unknown',
-        lead_id: leadId || 'Unknown',
-        value: 1,
-        currency: 'USD'
-      });
-      
-      // Add to call history
-      if (leadId && leadName) {
-        setCallHistory(prev => [...prev, {
-          leadId,
-          leadName,
-          phone,
-          action: 'SMS',
-          timestamp: new Date()
-        }]);
-      }
-      
-      // Open SMS app
-      window.open(`sms:${phone}`, '_self');
-    }
-  };
 
   const handleEditLead = (lead: Lead) => {
     setEditingLead({ ...lead });
@@ -330,15 +301,14 @@ export default function AdminLeads() {
 
   const columns = [
     { key: 'name', label: 'Name' },
-    { key: 'email', label: 'Email' },
     { 
       key: 'phone', 
       label: 'Phone',
       render: (value: string, row: Lead) => (
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
           {value ? (
             <>
-              <span className="text-sm font-medium">{value}</span>
+              <span className="text-sm font-medium truncate">{value}</span>
               <div className="flex items-center gap-1">
                 <Button
                   variant="ghost"
@@ -358,15 +328,6 @@ export default function AdminLeads() {
                 >
                   <FaWhatsapp className="h-3 w-3" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleSMSLead(value, row.name, row._id)}
-                  className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                  title="SMS"
-                >
-                  <FaSms className="h-3 w-3" />
-                </Button>
               </div>
             </>
           ) : (
@@ -376,7 +337,6 @@ export default function AdminLeads() {
       )
     },
     { key: 'country', label: 'Country' },
-    { key: 'program', label: 'Program' },
     { 
       key: 'status', 
       label: 'Status',
@@ -385,8 +345,7 @@ export default function AdminLeads() {
           {value.charAt(0).toUpperCase() + value.slice(1)}
         </Badge>
       )
-    },
-    { key: 'createdAt', label: 'Created' }
+    }
   ];
 
   return (
@@ -525,7 +484,6 @@ export default function AdminLeads() {
                           <div className="flex items-center gap-2">
                             {call.action === 'Call' && <FaPhoneAlt className="h-4 w-4 text-green-600" />}
                             {call.action === 'WhatsApp' && <FaWhatsapp className="h-4 w-4 text-green-500" />}
-                            {call.action === 'SMS' && <FaSms className="h-4 w-4 text-blue-600" />}
                             <span className="font-medium text-gray-900">{call.action}</span>
                           </div>
                           <div className="text-sm text-gray-600">
@@ -559,8 +517,8 @@ export default function AdminLeads() {
 
       {/* View Lead Modal - Mobile Responsive */}
       {isViewModalOpen && selectedLead && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-4 lg:p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-md sm:max-w-lg w-full max-h-[95vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg lg:text-xl font-bold">Lead Details</h2>
               <Button
@@ -591,13 +549,6 @@ export default function AdminLeads() {
                       <FaWhatsapp className="mr-2" />
                       WhatsApp
                     </Button>
-                    <Button
-                      onClick={() => handleSMSLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
-                      className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
-                    >
-                      <FaSms className="mr-2" />
-                      SMS
-                    </Button>
                   </>
                 )}
                 <Button
@@ -614,21 +565,18 @@ export default function AdminLeads() {
               </div>
 
               {/* Lead Information - Mobile Responsive Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="bg-gray-50 p-4 rounded-lg">
                   <label className="text-sm font-medium text-gray-600">Name</label>
-                  <p className="text-base lg:text-lg font-medium">{selectedLead.name}</p>
+                  <p className="text-lg font-semibold text-gray-900 mt-1">{selectedLead.name}</p>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Email</label>
-                  <p className="text-base lg:text-lg break-all">{selectedLead.email}</p>
-                </div>
-                <div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
                   <label className="text-sm font-medium text-gray-600">Phone</label>
-                  <div className="flex items-center gap-2">
-                    <p className="text-base lg:text-lg">{selectedLead.phone || 'N/A'}</p>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-lg font-medium text-gray-900">{selectedLead.phone || 'N/A'}</p>
                     {selectedLead.phone && (
-                      <div className="flex items-center gap-1">
+                      <div className="flex items-center gap-2">
                         <Button
                           size="sm"
                           variant="outline"
@@ -636,7 +584,8 @@ export default function AdminLeads() {
                           className="text-green-600 border-green-600 hover:bg-green-50"
                           title="Call"
                         >
-                          <FaPhoneAlt className="h-3 w-3" />
+                          <FaPhoneAlt className="h-4 w-4 mr-1" />
+                          Call
                         </Button>
                         <Button
                           size="sm"
@@ -645,30 +594,20 @@ export default function AdminLeads() {
                           className="text-green-500 border-green-500 hover:bg-green-50"
                           title="WhatsApp"
                         >
-                          <FaWhatsapp className="h-3 w-3" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleSMSLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
-                          className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                          title="SMS"
-                        >
-                          <FaSms className="h-3 w-3" />
+                          <FaWhatsapp className="h-4 w-4 mr-1" />
+                          WhatsApp
                         </Button>
                       </div>
                     )}
                   </div>
                 </div>
-                <div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
                   <label className="text-sm font-medium text-gray-600">Country</label>
-                  <p className="text-base lg:text-lg">{selectedLead.country}</p>
+                  <p className="text-lg font-medium text-gray-900 mt-1">{selectedLead.country}</p>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Program</label>
-                  <p className="text-base lg:text-lg">{selectedLead.program}</p>
-                </div>
-                <div>
+                
+                <div className="bg-gray-50 p-4 rounded-lg">
                   <label className="text-sm font-medium text-gray-600">Status</label>
                   <div className="mt-1">
                     <Badge className={getStatusColor(selectedLead.status)}>
@@ -676,26 +615,18 @@ export default function AdminLeads() {
                     </Badge>
                   </div>
                 </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Created</label>
-                  <p className="text-base lg:text-lg">{new Date(selectedLead.createdAt).toLocaleDateString()}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Last Updated</label>
-                  <p className="text-base lg:text-lg">{new Date(selectedLead.updatedAt).toLocaleDateString()}</p>
-                </div>
               </div>
 
               {/* Status Update Section - Mobile Responsive */}
               <div className="border-t pt-4">
-                <h3 className="text-base lg:text-lg font-semibold mb-3">Update Status</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+                <h3 className="text-base font-semibold mb-3">Update Status</h3>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {['New', 'Contacted', 'Qualified', 'Application Submitted', 'Under Review', 'Interview Scheduled', 'Interview Completed', 'Accepted', 'Waitlisted', 'Rejected', 'VISA Processing', 'VISA Approved', 'Enrolled', 'Deferred', 'Withdrawn'].map((status) => (
                     <button
                       key={status}
                       onClick={() => handleUpdateStatus(selectedLead._id, status)}
                       disabled={updating}
-                      className={`px-3 py-2 rounded-lg text-xs lg:text-sm font-medium transition-colors ${
+                      className={`px-2 py-2 rounded-lg text-xs font-medium transition-colors ${
                         selectedLead.status === status
                           ? 'bg-blue-600 text-white'
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
