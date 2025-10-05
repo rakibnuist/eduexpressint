@@ -14,8 +14,7 @@ export default function robots(): MetadataRoute.Robots {
           '/_next/',
           '/private/',
           '*.json',
-          '*.xml',
-          '/test/'
+          '*.xml'
         ],
         crawlDelay: 1
       },
@@ -27,7 +26,6 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/_next/',
           '/private/',
-          '/test/'
         ]
       },
       {
@@ -38,7 +36,6 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/_next/',
           '/private/',
-          '/test/'
         ]
       }
     ],
