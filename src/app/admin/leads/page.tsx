@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes, FaPhone, FaSearch, FaFilter } from 'react-icons/fa';
+import { FaPlus, FaEye, FaEdit, FaTrash, FaCheck, FaTimes, FaPhone, FaSearch, FaFilter, FaPhoneAlt, FaWhatsapp, FaSms } from 'react-icons/fa';
 import { metaPixel } from '@/components/MetaPixel';
 
 interface Lead {
@@ -40,6 +40,7 @@ export default function AdminLeads() {
   const [searchTerm, setSearchTerm] = useState('');
   const [countryFilter, setCountryFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [callHistory, setCallHistory] = useState<Array<{leadId: string, leadName: string, phone: string, action: string, timestamp: Date}>>([]);
 
   useEffect(() => {
     const fetchLeads = async () => {
@@ -120,7 +121,7 @@ export default function AdminLeads() {
     setIsViewModalOpen(true);
   };
 
-  const handleCallLead = (phone: string) => {
+  const handleCallLead = (phone: string, leadName?: string, leadId?: string) => {
     if (phone) {
       // Track call action
       metaPixel.trackCustomEvent('LeadCall', {
@@ -128,12 +129,87 @@ export default function AdminLeads() {
         content_category: 'Lead Management',
         action_type: 'call',
         phone_number: phone,
+        lead_name: leadName || 'Unknown',
+        lead_id: leadId || 'Unknown',
         value: 1,
         currency: 'USD'
       });
       
+      // Add to call history
+      if (leadId && leadName) {
+        setCallHistory(prev => [...prev, {
+          leadId,
+          leadName,
+          phone,
+          action: 'Call',
+          timestamp: new Date()
+        }]);
+      }
+      
       // Open phone dialer
       window.open(`tel:${phone}`, '_self');
+    }
+  };
+
+  const handleWhatsAppLead = (phone: string, leadName?: string, leadId?: string) => {
+    if (phone) {
+      // Track WhatsApp action
+      metaPixel.trackCustomEvent('LeadWhatsApp', {
+        content_name: 'WhatsApp Message to Lead',
+        content_category: 'Lead Management',
+        action_type: 'whatsapp',
+        phone_number: phone,
+        lead_name: leadName || 'Unknown',
+        lead_id: leadId || 'Unknown',
+        value: 1,
+        currency: 'USD'
+      });
+      
+      // Add to call history
+      if (leadId && leadName) {
+        setCallHistory(prev => [...prev, {
+          leadId,
+          leadName,
+          phone,
+          action: 'WhatsApp',
+          timestamp: new Date()
+        }]);
+      }
+      
+      // Open WhatsApp with pre-filled message
+      const message = `Hi ${leadName || 'there'}, I'm reaching out from EduExpress International regarding your study abroad inquiry. How can I help you today?`;
+      const encodedMessage = encodeURIComponent(message);
+      window.open(`https://wa.me/${phone.replace(/[^0-9]/g, '')}?text=${encodedMessage}`, '_blank');
+    }
+  };
+
+  const handleSMSLead = (phone: string, leadName?: string, leadId?: string) => {
+    if (phone) {
+      // Track SMS action
+      metaPixel.trackCustomEvent('LeadSMS', {
+        content_name: 'SMS Message to Lead',
+        content_category: 'Lead Management',
+        action_type: 'sms',
+        phone_number: phone,
+        lead_name: leadName || 'Unknown',
+        lead_id: leadId || 'Unknown',
+        value: 1,
+        currency: 'USD'
+      });
+      
+      // Add to call history
+      if (leadId && leadName) {
+        setCallHistory(prev => [...prev, {
+          leadId,
+          leadName,
+          phone,
+          action: 'SMS',
+          timestamp: new Date()
+        }]);
+      }
+      
+      // Open SMS app
+      window.open(`sms:${phone}`, '_self');
     }
   };
 
@@ -255,7 +331,50 @@ export default function AdminLeads() {
   const columns = [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
-    { key: 'phone', label: 'Phone' },
+    { 
+      key: 'phone', 
+      label: 'Phone',
+      render: (value: string, row: Lead) => (
+        <div className="flex items-center gap-2">
+          {value ? (
+            <>
+              <span className="text-sm font-medium">{value}</span>
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleCallLead(value, row.name, row._id)}
+                  className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                  title="Call"
+                >
+                  <FaPhoneAlt className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleWhatsAppLead(value, row.name, row._id)}
+                  className="h-6 w-6 p-0 text-green-500 hover:text-green-600 hover:bg-green-50"
+                  title="WhatsApp"
+                >
+                  <FaWhatsapp className="h-3 w-3" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleSMSLead(value, row.name, row._id)}
+                  className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                  title="SMS"
+                >
+                  <FaSms className="h-3 w-3" />
+                </Button>
+              </div>
+            </>
+          ) : (
+            <span className="text-gray-400 text-sm">No phone</span>
+          )}
+        </div>
+      )
+    },
     { key: 'country', label: 'Country' },
     { key: 'program', label: 'Program' },
     { 
@@ -393,6 +512,37 @@ export default function AdminLeads() {
             </Card>
           </div>
 
+          {/* Call History */}
+          {callHistory.length > 0 && (
+            <div>
+              <h2 className="text-lg font-medium text-gray-900 mb-4">Recent Communications</h2>
+              <Card className="border border-gray-200">
+                <CardContent className="p-4">
+                  <div className="space-y-2">
+                    {callHistory.slice(-5).reverse().map((call, index) => (
+                      <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            {call.action === 'Call' && <FaPhoneAlt className="h-4 w-4 text-green-600" />}
+                            {call.action === 'WhatsApp' && <FaWhatsapp className="h-4 w-4 text-green-500" />}
+                            {call.action === 'SMS' && <FaSms className="h-4 w-4 text-blue-600" />}
+                            <span className="font-medium text-gray-900">{call.action}</span>
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            <span className="font-medium">{call.leadName}</span> • {call.phone}
+                          </div>
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {call.timestamp.toLocaleTimeString()}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           {/* Data Table */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
             <DataTable
@@ -426,13 +576,29 @@ export default function AdminLeads() {
               {/* Quick Actions - Mobile Friendly */}
               <div className="flex flex-col sm:flex-row gap-2 mb-4">
                 {selectedLead.phone && (
-                  <Button
-                    onClick={() => handleCallLead(selectedLead.phone!)}
-                    className="bg-green-600 hover:bg-green-700 flex-1 sm:flex-none"
-                  >
-                    <FaPhone className="mr-2" />
-                    Call {selectedLead.name}
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() => handleCallLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                      className="bg-green-600 hover:bg-green-700 flex-1 sm:flex-none"
+                    >
+                      <FaPhoneAlt className="mr-2" />
+                      Call {selectedLead.name}
+                    </Button>
+                    <Button
+                      onClick={() => handleWhatsAppLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                      className="bg-green-500 hover:bg-green-600 flex-1 sm:flex-none"
+                    >
+                      <FaWhatsapp className="mr-2" />
+                      WhatsApp
+                    </Button>
+                    <Button
+                      onClick={() => handleSMSLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                      className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
+                    >
+                      <FaSms className="mr-2" />
+                      SMS
+                    </Button>
+                  </>
                 )}
                 <Button
                   variant="outline"
@@ -462,14 +628,35 @@ export default function AdminLeads() {
                   <div className="flex items-center gap-2">
                     <p className="text-base lg:text-lg">{selectedLead.phone || 'N/A'}</p>
                     {selectedLead.phone && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => handleCallLead(selectedLead.phone!)}
-                        className="text-green-600 border-green-600 hover:bg-green-50"
-                      >
-                        <FaPhone className="h-3 w-3" />
-                      </Button>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleCallLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                          className="text-green-600 border-green-600 hover:bg-green-50"
+                          title="Call"
+                        >
+                          <FaPhoneAlt className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleWhatsAppLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                          className="text-green-500 border-green-500 hover:bg-green-50"
+                          title="WhatsApp"
+                        >
+                          <FaWhatsapp className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleSMSLead(selectedLead.phone!, selectedLead.name, selectedLead._id)}
+                          className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                          title="SMS"
+                        >
+                          <FaSms className="h-3 w-3" />
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </div>
