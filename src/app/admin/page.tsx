@@ -179,27 +179,58 @@ export default function AdminDashboard() {
   return (
     <ProtectedRoute requiredPermission="dashboard:read">
       <AdminLayout>
-        <div className="space-y-4 lg:space-y-8">
-          {/* Welcome Section - Mobile Responsive */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 lg:p-6">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-              <div>
-                <h1 className="text-xl lg:text-3xl font-bold text-gray-900 mb-2">
-                  Welcome back, {user?.firstName || 'Admin'}! 👋
-                </h1>
-                <p className="text-sm lg:text-base text-gray-600">
-                  Here's what's happening with your platform today.
-                </p>
+        <div className="space-y-6 lg:space-y-8">
+          {/* Enhanced Welcome Section */}
+          <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 rounded-2xl p-6 lg:p-8 text-white">
+            <div className="absolute inset-0 bg-black/10"></div>
+            <div className="relative z-10">
+              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                      <span className="text-2xl">👋</span>
+                    </div>
+                    <div>
+                      <h1 className="text-2xl lg:text-4xl font-bold">
+                        Welcome back, {user?.firstName || 'Admin'}!
+                      </h1>
+                      <p className="text-blue-100 text-sm lg:text-base">
+                        Here's your platform overview for today
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                      <span className="text-blue-100">System Online</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-blue-100">Last updated: {new Date().toLocaleTimeString()}</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <Button 
+                    variant="secondary" 
+                    onClick={() => window.location.reload()}
+                    className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border-white/30 text-white"
+                  >
+                    <FaSync className="h-4 w-4 mr-2" />
+                    Refresh Data
+                  </Button>
+                  <Button 
+                    variant="outline"
+                    className="bg-transparent border-white/30 text-white hover:bg-white/10"
+                  >
+                    <FaEye className="h-4 w-4 mr-2" />
+                    View Reports
+                  </Button>
+                </div>
               </div>
-              <Button 
-                variant="outline" 
-                onClick={() => window.location.reload()}
-                className="flex items-center space-x-2 w-full lg:w-auto"
-              >
-                <FaSync className="h-4 w-4" />
-                <span>Refresh Data</span>
-              </Button>
             </div>
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-16 translate-x-16"></div>
+            <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full translate-y-12 -translate-x-12"></div>
           </div>
 
           {/* Key Metrics Cards - Mobile Responsive */}
