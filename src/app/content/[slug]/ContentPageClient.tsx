@@ -71,6 +71,31 @@ export default function ContentPageClient({ content }: ContentPageClientProps) {
           className="prose prose-lg max-w-none"
           dangerouslySetInnerHTML={{ __html: content.content }}
         />
+        
+        {/* CTA Section for Landing Pages */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-8 text-center text-white mt-8">
+          <h2 className="text-2xl font-bold mb-4">
+            Ready to Start Your Study Abroad Journey?
+          </h2>
+          <p className="text-lg mb-6 opacity-90">
+            Get personalized guidance and support for your international education goals.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              onClick={() => handleCTAClick('landing-page-cta')}
+              className="bg-white text-blue-600 hover:bg-gray-100 font-semibold px-8 py-3"
+            >
+              Get Free Consultation
+            </Button>
+            <Button
+              onClick={() => handleCTAClick('landing-page-contact')}
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-blue-600 font-semibold px-8 py-3"
+            >
+              Contact Us
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
