@@ -1,10 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
 import { dbConnect } from '@/lib/db';
 import Content from '@/models/Content';
+
+// Helper function to check authentication
+async function checkAuth(request: Request) {
+  try {
+    const cookieStore = await cookies();
+    const session = cookieStore.get('admin-session');
+    
+    if (!session || session.value !== 'authenticated') {
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Auth check error:', error);
+    return false;
+  }
+}
 
 // GET - Fetch all content with pagination and filtering
 export async function GET(request: NextRequest) {
   try {
+    // Check authentication
+    const isAuthenticated = await checkAuth(request);
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     // Ensure database connection
     const dbConnection = await dbConnect();
     
@@ -87,6 +113,15 @@ export async function GET(request: NextRequest) {
 // POST - Create new content
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const isAuthenticated = await checkAuth(request);
+    if (!isAuthenticated) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
     // Ensure database connection
     const dbConnection = await dbConnect();
     
