@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 import AdminTopBar from './AdminTopBar';
 
@@ -32,10 +32,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     checkAuth();
   }, []);
+
+  // Auto-hide sidebar when navigating to different pages
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [pathname]);
 
   const checkAuth = async () => {
     try {
@@ -60,9 +66,14 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     try {
       await fetch('/api/auth/logout', { method: 'POST' });
       setUser(null);
-      router.push('/admin/login');
+      // Clear any admin tokens from localStorage
+      localStorage.removeItem('adminToken');
+      // Redirect to homepage instead of admin login
+      router.push('/');
     } catch (error) {
       console.error('Logout failed:', error);
+      // Even if logout fails, redirect to homepage
+      router.push('/');
     }
   };
 

@@ -12,6 +12,7 @@ import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking'
 import StapeTrackingProvider from '@/components/StapeTracking';
 import MetaConversionsAPIProvider from '@/components/MetaConversionsAPI';
 import ComprehensiveTracking from '@/components/ComprehensiveTracking';
+import ConditionalLayout from '@/components/ConditionalLayout';
 
 export const metadata = {
   title: 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
@@ -272,12 +273,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <FreeServerSideTrackingProvider>
                       <ServerSideTrackingProvider>
                         <ComprehensiveTracking>
-                          <CTAProvider>
-                            <Navbar />
-                            <main className="pt-20 min-h-screen">{children}</main>
-                            <Footer />
-                            <CTAForm />
-                          </CTAProvider>
+                          <ConditionalLayout>
+                            {children}
+                          </ConditionalLayout>
                         </ComprehensiveTracking>
                       </ServerSideTrackingProvider>
                     </FreeServerSideTrackingProvider>
