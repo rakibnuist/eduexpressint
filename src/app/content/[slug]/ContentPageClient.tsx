@@ -92,21 +92,23 @@ export default function ContentPageClient({ content }: ContentPageClientProps) {
             </div>
           )}
 
-          {/* Meta Information */}
-          <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
-            <div className="flex items-center">
-              <FaUser className="mr-2" />
-              <span>{content.author}</span>
+          {/* Meta Information - Only show for non-Page content types */}
+          {content.type !== 'Page' && (
+            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-8">
+              <div className="flex items-center">
+                <FaUser className="mr-2" />
+                <span>{content.author}</span>
+              </div>
+              <div className="flex items-center">
+                <FaCalendarAlt className="mr-2" />
+                <span>{formatDate(content.publishedAt || content.createdAt)}</span>
+              </div>
+              <div className="flex items-center">
+                <FaEye className="mr-2" />
+                <span>Published</span>
+              </div>
             </div>
-            <div className="flex items-center">
-              <FaCalendarAlt className="mr-2" />
-              <span>{formatDate(content.publishedAt || content.createdAt)}</span>
-            </div>
-            <div className="flex items-center">
-              <FaEye className="mr-2" />
-              <span>Published</span>
-            </div>
-          </div>
+          )}
 
           {/* Categories and Tags */}
           <div className="mb-8">
