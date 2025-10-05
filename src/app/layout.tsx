@@ -12,9 +12,6 @@ import FreeServerSideTrackingProvider from '@/components/FreeServerSideTracking'
 import StapeTrackingProvider from '@/components/StapeTracking';
 import MetaConversionsAPIProvider from '@/components/MetaConversionsAPI';
 import ComprehensiveTracking from '@/components/ComprehensiveTracking';
-// import { TrackingCapture } from '@/components/TrackingCapture';
-// import EnhancedTracking from '@/components/EnhancedTracking';
-// import SEOTestComponent from '@/components/SEOTestComponent';
 
 export const metadata = {
   title: 'EduExpress International — Study Abroad & Scholarships | Global Education Experts',
@@ -276,13 +273,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                       <ServerSideTrackingProvider>
                         <ComprehensiveTracking>
                           <CTAProvider>
-                            {/* <TrackingCapture /> */}
-                            {/* <EnhancedTracking /> */}
                             <Navbar />
                             <main className="pt-20 min-h-screen">{children}</main>
                             <Footer />
                             <CTAForm />
-                            {/* <SEOTestComponent /> */}
                           </CTAProvider>
                         </ComprehensiveTracking>
                       </ServerSideTrackingProvider>

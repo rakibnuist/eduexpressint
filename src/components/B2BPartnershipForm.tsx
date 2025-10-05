@@ -20,7 +20,6 @@ import {
 } from 'react-icons/fa';
 import { trackLead, trackFormSubmission } from '@/components/TrackLead';
 import { metaPixel } from '@/components/MetaPixel';
-import { addTrackingToJsonData } from '@/components/TrackingCapture';
 
 interface B2BPartnershipFormProps {
   onSuccess?: () => void;
@@ -323,7 +322,7 @@ Additional Message: ${formData.message}
       // Submitting data
 
       // Add tracking data to submission data
-      const submissionDataWithTracking = addTrackingToJsonData(submissionData);
+      const submissionDataWithTracking = submissionData; // Simplified without tracking
 
       // Submit to API first
       const response = await fetch('/api/admin/b2b-leads', {

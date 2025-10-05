@@ -5,7 +5,6 @@ import { FaGraduationCap, FaUsers, FaEnvelope, FaPhone, FaMapMarkerAlt, FaBookOp
 import { useLeadTracker } from '@/components/LeadTracker';
 import { useCTA } from '@/context/CTAContext';
 import { useFormTracking } from '@/hooks/usePageTracking';
-// import { addTrackingToJsonData } from '@/components/TrackingCapture';
 import { useEnhancedTracking } from '@/components/EnhancedTracking';
 import { useMetaConversionsAPI } from '@/components/MetaConversionsAPI';
 

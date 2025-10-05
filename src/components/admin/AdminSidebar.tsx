@@ -14,7 +14,8 @@ import {
   FaGraduationCap,
   FaSync,
   FaTimes,
-  FaChartLine
+  FaChartLine,
+  FaFileAlt
 } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -73,6 +74,13 @@ export default function AdminSidebar({ user, onLogout, isOpen = false, onClose }
       icon: FaNewspaper, 
       permission: 'updates:read',
       description: 'News and announcements'
+    },
+    { 
+      name: 'Content', 
+      href: '/admin/content', 
+      icon: FaFileAlt, 
+      permission: 'content:read',
+      description: 'Landing pages & content'
     },
     { 
       name: 'B2B Leads', 
